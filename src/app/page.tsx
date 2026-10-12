@@ -13,7 +13,6 @@ import {
 } from "@/components/reservation-dialogs";
 import { ReservationDetails } from "@/components/reservation-details";
 import { RoomsTable } from "@/components/rooms-table";
-import { StatusLegend } from "@/components/status-legend";
 import { TablePagination } from "@/components/table-pagination";
 import { Button } from "@/components/ui/button";
 import { ExportActions } from "@/components/export-actions";
@@ -130,8 +129,7 @@ export default function Home() {
         hasFilter={!!range}
         onReset={() => setRange(undefined)}
       />
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <StatusLegend />
+      <div className="flex justify-end">
         <Button onClick={() => startReservation()}>+ Nowa rezerwacja</Button>
       </div>
       <RoomsTable

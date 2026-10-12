@@ -110,6 +110,9 @@ Jacek doprecyzował: chodziło o znaczniki „Przyjazd dziś" / „Wyjazd dziś"
 - Cofnięta moja błędna interpretacja z kroku 16: status znów jako wypełniona komórka (jak prosił Jacek wcześniej).
 - Weryfikacja w Chrome: tabela bez znaczników; panel Anny Nowak pokazuje „Wyjazd dziś".
 
+### 18. Usunięta legenda statusów
+Ocena: status ma tekst w wypełnionej komórce, więc legenda dubluje informację (PRD E2 dopuszcza „status czytelny bez legendy"; tekst jest też lepszy dla dostępności). Usunięty komponent z widoku (plik `status-legend.tsx` usunięty); „+ Nowa rezerwacja" w osobnym wąskim rzędzie nad tabelą, po prawej.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
