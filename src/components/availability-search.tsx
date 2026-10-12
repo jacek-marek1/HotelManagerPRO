@@ -25,6 +25,12 @@ import { STATUS_LABEL, STATUS_ORDER } from "./room-status-badge";
 
 export type StatusFilter = "all" | DayStatus;
 
+const FLOOR_ITEMS = [
+  { value: "all", label: "Wszystkie piętra" },
+  { value: "P1", label: "Piętro 1" },
+  { value: "P2", label: "Piętro 2" },
+];
+
 const STATUS_ITEMS = [
   { value: "all", label: "Wszystkie statusy" },
   ...STATUS_ORDER.map((s) => ({ value: s, label: STATUS_LABEL[s] })),
@@ -43,6 +49,8 @@ interface Props {
   onRangeChange: (r: DateRange | undefined) => void;
   guests: number | null;
   onGuestsChange: (n: number | null) => void;
+  floor: string;
+  onFloor: (f: string) => void;
   status: StatusFilter;
   onStatus: (s: StatusFilter) => void;
   noResultsOpen: boolean;
@@ -87,6 +95,25 @@ export function AvailabilitySearch(p: Props) {
               </SelectTrigger>
               <SelectContent>
                 {GUEST_ITEMS.map((i) => (
+                  <SelectItem key={i.value} value={i.value}>
+                    {i.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label>Piętro</Label>
+            <Select
+              value={p.floor}
+              onValueChange={(v) => p.onFloor(v ?? "all")}
+              items={FLOOR_ITEMS}
+            >
+              <SelectTrigger className="h-9 w-44">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {FLOOR_ITEMS.map((i) => (
                   <SelectItem key={i.value} value={i.value}>
                     {i.label}
                   </SelectItem>

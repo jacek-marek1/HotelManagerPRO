@@ -31,6 +31,7 @@ export default function Home() {
   const [isNew, setIsNew] = useState(false);
   const [deleting, setDeleting] = useState<Reservation | null>(null);
   const [dismissedKey, setDismissedKey] = useState("");
+  const [floor, setFloor] = useState("all");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [page, setPage] = useState(1);
 
@@ -56,10 +57,11 @@ export default function Home() {
         : r.capacity >= seats;
       return (
         fits &&
+        (floor === "all" || r.floor === floor) &&
         (status === "all" || dayStatus(r, reservations, TODAY) === status)
       );
     });
-  }, [search?.from, search?.to, guests, reservations, status]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [search?.from, search?.to, guests, reservations, status, floor]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
@@ -113,6 +115,11 @@ export default function Home() {
         }}
         noResultsOpen={noResults && dismissedKey !== key}
         onNoResultsDismiss={() => setDismissedKey(key)}
+        floor={floor}
+        onFloor={(f) => {
+          setFloor(f);
+          setPage(1);
+        }}
         status={status}
         onStatus={(st) => {
           setStatus(st);

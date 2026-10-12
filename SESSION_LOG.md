@@ -89,6 +89,9 @@ Decyzja Jacka: repozytorium https://github.com/jacek-marek1/HotelManagerPRO. Rem
 ### 13. Czyszczenie PRD i historii repo
 Na prośbę Jacka usunięto z PRD e-mail rekrutera, opis zadania/briefu i wszystkie wzmianki o firmie rekrutującej (w tym linki do zewnętrznego prototypu i boardu). Historia git przepisana (filter-branch), usunięty commit „PRD: usunięty e-mail…", wymuszony push (`--force-with-lease`). Aktualnie: 3 commity na `main`. Lokalna kopia sprzed przepisania w katalogu scratchpad (poza repo).
 
+### 14. Filtr „Piętro"
+Dodany dropdown „Piętro" (Wszystkie piętra / Piętro 1 / Piętro 2) w bloku „Wyszukiwanie". Łączy się z terminem, gośćmi i statusem. Uzasadnienie: filtr istniał w oryginale, a PRD (P1-4) wymaga tylko etykiet przed polami. Weryfikacja w Chrome: „Piętro 2" → 201, 202, 203.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
