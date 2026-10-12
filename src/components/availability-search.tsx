@@ -76,7 +76,7 @@ export function AvailabilitySearch(p: Props) {
         className="flex flex-col gap-3 rounded-lg border bg-card p-4"
       >
         <h2 className="text-sm font-semibold">Wyszukiwanie</h2>
-        <div className="flex items-start gap-4">
+        <div className="flex flex-wrap items-start gap-4">
           <div className="flex flex-col gap-2">
             <Label>Termin (przyjazd – wyjazd)</Label>
             <DatePicker {...p} label={label} />

@@ -113,6 +113,14 @@ Jacek doprecyzował: chodziło o znaczniki „Przyjazd dziś" / „Wyjazd dziś"
 ### 18. Usunięta legenda statusów
 Ocena: status ma tekst w wypełnionej komórce, więc legenda dubluje informację (PRD E2 dopuszcza „status czytelny bez legendy"; tekst jest też lepszy dla dostępności). Usunięty komponent z widoku (plik `status-legend.tsx` usunięty); „+ Nowa rezerwacja" w osobnym wąskim rzędzie nad tabelą, po prawej.
 
+### 19. Przejście scenariuszy T1–T4 w przeglądarce (stan po kroku 18)
+- T1 (30–31.12, 2 os.): 103, 105, 203 (bez 101, 104, 202, 102, 201). OK.
+- T2 (28–30.12, 2 os.): tylko 103 z „Sprzątanie – za chwilę gotowy" (203 zajęty, 105 w naprawie). OK.
+- T3 (podsumowanie 28.12): Zajęte 4 · Wolne 2 · Sprzątanie 1 · Naprawa 1; przyjazd 102 (Jan Kowalski); wyjazd 103 (Anna Nowak); jutro wyjazd 203 (Rodzina Schmidt). OK.
+- T4 (28–30.12, 4 os.): popover „Brak wolnych pokoi" + pusta tabela. OK.
+- Znaleziona usterka: przy oknie ~1000 px „Wyczyść" wychodziło poza ramkę → dodane `flex-wrap` w bloku wyszukiwania.
+- Uwaga do testów automatycznych: pierwsze kliknięcie po przeładowaniu nie otwierało kalendarza (artefakt narzędzia, nie aplikacji).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
