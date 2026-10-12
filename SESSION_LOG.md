@@ -97,6 +97,13 @@ Pytanie Jacka: gdzie pokazać płatność, telefon i e-mail bez ingerencji w akc
 Modal edycji rozszerzony o telefon, e-mail i płatność (dropdown: Nie wybrano / Karta / Gotówka / Faktura / Przelew).
 Weryfikacja w Chrome: nazwisko → panel z danymi Jana Kowalskiego → Edytuj → modal z nowymi polami. Poza zakresem PRD (rozszerzenie P1-5), zatwierdzone przez Jacka.
 
+### 16. Mniej nacisku na status, widoczny dostęp do szczegółów
+Uwaga Jacka: statusy mniej istotne, potrzebny widoczny element wskazujący na szczegóły i edycję.
+- Status: zamiast wypełnionej całej komórki mała etykieta (pigułka) w kolorze statusu; legenda bez zmian.
+- Przy każdym gościu: podkreślone nazwisko + przycisk ze strzałką (`title`/`aria-label` „Szczegóły i edycja") otwierający panel szczegółów (z przyciskiem „Edytuj"). Wersja z tekstem „Szczegóły" przywróciła poziomy scroll, więc przycisk jest samą ikoną.
+- Kolumna „Pojemność": tylko liczba osób (usunięty skrót typu pokoju, np. „2 os.+", zgodnie z P0-3 PRD).
+- Weryfikacja w Chrome: brak poziomego scrolla, kolumna Akcje w pełni widoczna.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

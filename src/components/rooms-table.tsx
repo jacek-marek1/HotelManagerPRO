@@ -5,7 +5,7 @@ import { TODAY, formatDate, formatNights, nightsBetween } from "@/lib/dates";
 import type { Reservation, Room } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { MoreVerticalIcon } from "lucide-react";
+import { ChevronRightIcon, MoreVerticalIcon } from "lucide-react";
 import { STATUS_FILL, STATUS_LABEL } from "./room-status-badge";
 
 interface Props {
@@ -48,35 +48,48 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, 
               </TableCell>
               <TableCell>
                 {room.capacity} {room.capacity === 1 ? "osoba" : "osoby"}
-                <span className="text-muted-foreground"> · {room.type}</span>
               </TableCell>
-              <TableCell
-                className={`font-medium ${
-                  search ? (isCleaningSoon(room, search.from) ? STATUS_FILL.cleaning : STATUS_FILL.free) : STATUS_FILL[status]
-                }`}
-              >
-                {search
-                  ? isCleaningSoon(room, search.from)
-                    ? "Sprzątanie – za chwilę gotowy"
-                    : "Wolny"
-                  : STATUS_LABEL[status]}
+              <TableCell>
+                <span
+                  className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    search ? (isCleaningSoon(room, search.from) ? STATUS_FILL.cleaning : STATUS_FILL.free) : STATUS_FILL[status]
+                  }`}
+                >
+                  {search
+                    ? isCleaningSoon(room, search.from)
+                      ? "Sprzątanie – za chwilę gotowy"
+                      : "Wolny"
+                    : STATUS_LABEL[status]}
+                </span>
               </TableCell>
               <TableCell>
                 {!search && res ? (
-                  <>
-                    <button
-                      type="button"
-                      className="rounded-sm font-medium underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-ring"
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <button
+                        type="button"
+                        className="rounded-sm font-medium underline underline-offset-2 hover:text-primary focus-visible:outline-2 focus-visible:outline-ring"
+                        onClick={() => onDetails(res)}
+                      >
+                        {res.guest.name}
+                      </button>
+                      {res.departure === TODAY && <Tag>Wyjazd dziś</Tag>}
+                      {res.arrival === TODAY && <Tag>Przyjazd dziś</Tag>}
+                      <div className="text-muted-foreground">
+                        {formatDate(res.arrival)} – {formatDate(res.departure)} · {formatNights(nightsBetween(res.arrival, res.departure))} · {money(stayTotal(res))}
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      className="shrink-0"
+                      title="Szczegóły i edycja"
+                      aria-label={`Szczegóły i edycja – ${res.guest.name}`}
                       onClick={() => onDetails(res)}
                     >
-                      {res.guest.name}
-                    </button>
-                    {res.departure === TODAY && <Tag>Wyjazd dziś</Tag>}
-                    {res.arrival === TODAY && <Tag>Przyjazd dziś</Tag>}
-                    <div className="text-muted-foreground">
-                      {formatDate(res.arrival)} – {formatDate(res.departure)} · {formatNights(nightsBetween(res.arrival, res.departure))} · {money(stayTotal(res))}
-                    </div>
-                  </>
+                      <ChevronRightIcon />
+                    </Button>
+                  </div>
                 ) : (
                   "–"
                 )}
