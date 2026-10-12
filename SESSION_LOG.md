@@ -121,6 +121,10 @@ Ocena: status ma tekst w wypełnionej komórce, więc legenda dubluje informacj�
 - Znaleziona usterka: przy oknie ~1000 px „Wyczyść" wychodziło poza ramkę → dodane `flex-wrap` w bloku wyszukiwania.
 - Uwaga do testów automatycznych: pierwsze kliknięcie po przeładowaniu nie otwierało kalendarza (artefakt narzędzia, nie aplikacji).
 
+### 20. CTA w nagłówku tabeli i uproszczenie dostępu do szczegółów
+- Rząd nad tabelą: po lewej tytuł z licznikiem („Pokoje · 8" / „Dostępne pokoje · N" przy wyszukiwaniu), po prawej „Nowa rezerwacja" w rozmiarze `lg` z ikoną plusa.
+- Menu z trzema kropkami: usunięta pozycja „Szczegóły" (zostają Edytuj i Usuń). Dostęp do szczegółów: klikalne nazwisko i strzałka obok.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

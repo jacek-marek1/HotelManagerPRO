@@ -108,7 +108,6 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, 
                       <MoreVerticalIcon />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => onDetails(res)}>Szczegóły</DropdownMenuItem>
                       <DropdownMenuItem onClick={() => onEdit(res)}>Edytuj</DropdownMenuItem>
                       <DropdownMenuItem
                         className="text-red-800 focus:text-red-900"

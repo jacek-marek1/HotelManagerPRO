@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { PlusIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import {
   AvailabilitySearch,
@@ -129,8 +130,17 @@ export default function Home() {
         hasFilter={!!range}
         onReset={() => setRange(undefined)}
       />
-      <div className="flex justify-end">
-        <Button onClick={() => startReservation()}>+ Nowa rezerwacja</Button>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-lg font-semibold">
+          {search ? "Dostępne pokoje" : "Pokoje"}{" "}
+          <span className="font-normal text-muted-foreground">
+            · {results.length}
+          </span>
+        </h2>
+        <Button size="lg" onClick={() => startReservation()}>
+          <PlusIcon />
+          Nowa rezerwacja
+        </Button>
       </div>
       <RoomsTable
         rooms={pageRooms}
