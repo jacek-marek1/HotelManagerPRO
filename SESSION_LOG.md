@@ -183,6 +183,10 @@ Weryfikacja: skrypt (T1–T4 bez zmian, jutro 3/3/1/1) i Chrome (karta Jutro z l
 ### 31. „Liczba osób" obok pola „Gość"
 W oknie rezerwacji (nowa i edycja) „Liczba osób" stoi w jednym rzędzie z „Gość" (szerokość 9 rem). W edycji rząd z „Miasto / kraj" i „Cena / noc" ma teraz dwie kolumny. Weryfikacja w Chrome (okno nowej rezerwacji); układ edycji nie był oglądany po zmianie.
 
+### 32. „Dziś" i „Jutro" jako rozwijane karty
+Prośba Jacka: oszczędzić miejsce nad tabelą. Karty są domyślnie zwinięte: nagłówek (dzień + data + strzałka), liczby statusów w jednej linii oraz liczba przyjazdów i wyjazdów; po kliknięciu rozwijają się nazwiska/pokoje przyjazdów i wyjazdów (`aria-expanded`). Świadomy kompromis względem PRD (P0-2: podsumowanie bez dodatkowych kliknięć): liczby i liczba przyjazdów/wyjazdów widoczne od razu, same nazwiska za jednym kliknięciem; domyślnie rozwinięte można przywrócić jedną zmianą (`useState(false)` → `true`).
+Weryfikacja w Chrome: zwinięte karty (tabela wyżej), rozwinięcie „Dziś" pokazuje 102 (Jan Kowalski) / 103 (Anna Nowak).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
