@@ -175,6 +175,11 @@ Pytanie Jacka o „Rezerwuj" przy każdym pokoju (rezerwacja na przyszłość). 
 5. Okno rezerwacji: dodane Miasto/kraj i Cena/noc (walidacja > 0; zmiana pokoju w nowej rezerwacji podstawia cenę pokoju, dopóki cena nie była edytowana).
 Weryfikacja: skrypt (T1–T4 bez zmian, jutro 3/3/1/1) i Chrome (karta Jutro z liczbami, „Naprawa do 30.12", panel Schmidtów z „Liczba osób 4", okno edycji z nowymi polami, błąd „Pokój 203 mieści maksymalnie 4 osoby"). Nie klikane: ukrywanie filtra statusu przy terminie, zapis zmienionej ceny/liczby osób.
 
+### 30. Okno nowej rezerwacji: mniej pól, błąd dopiero po „Zapisz"
+- W trybie nowej rezerwacji usunięte pola „Miasto / kraj" i „Cena / noc" (cena wynika z wybranego pokoju); w edycji rezerwacji zostają.
+- Brak imienia i nazwiska: bez wstępnej podpowiedzi; „Zapisz" jest aktywny, a po kliknięciu przy pustym polu pole robi się czerwone i pojawia się „Podaj imię i nazwisko gościa." (zapis wstrzymany). Pozostałe błędy (daty, kolizje, naprawa, telefon, e-mail, liczba osób) nadal blokują „Zapisz" od razu.
+- Weryfikacja w Chrome: okno bez cen i miasta, błąd po kliknięciu „Zapisz". W trakcie zmiany skrypt źle domknął JSX (błąd składni naprawiony od razu, `tsc`/`eslint` czyste).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

@@ -97,6 +97,7 @@ function EditForm({
   const [arrival, setArrival] = useState(reservation.arrival);
   const [departure, setDeparture] = useState(reservation.departure);
   const [datesTouched, setDatesTouched] = useState(false);
+  const [attempted, setAttempted] = useState(false);
   const nextFree = nextFreeStart(room, all);
   const freeHint =
     autoDates && !datesTouched && nextFree.reason
@@ -134,7 +135,7 @@ function EditForm({
     peopleNum !== null && (!Number.isInteger(peopleNum) || peopleNum < 1);
   const peopleOver =
     peopleNum !== null && !peopleBad && peopleNum > room.capacity;
-  const errors = [
+  const blockingErrors = [
     invalid && "Wyjazd musi być po przyjeździe.",
     conflict && "Ten termin koliduje z inną rezerwacją tego pokoju.",
     repairBlocked &&
@@ -146,7 +147,11 @@ function EditForm({
     peopleOver &&
       `Pokój ${room.number} mieści maksymalnie ${room.capacity} ${room.capacity === 1 ? "osobę" : "osoby"}.`,
   ].filter(Boolean) as string[];
-  const canSave = errors.length === 0 && name.trim() !== "";
+  const nameMissing = name.trim() === "";
+  const errors =
+    attempted && nameMissing
+      ? ["Podaj imię i nazwisko gościa.", ...blockingErrors]
+      : blockingErrors;
   const draft = {
     ...reservation,
     roomId,
@@ -217,6 +222,7 @@ function EditForm({
           <Label htmlFor="guest">Gość</Label>
           <Input
             id="guest"
+            aria-invalid={attempted && nameMissing}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -247,15 +253,17 @@ function EditForm({
             />
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="origin">Miasto / kraj</Label>
-            <Input
-              id="origin"
-              value={origin}
-              onChange={(e) => setOrigin(e.target.value)}
-            />
-          </div>
+        <div className={`grid gap-4 ${isNew ? "grid-cols-2" : "grid-cols-3"}`}>
+          {!isNew && (
+            <div className="grid gap-2">
+              <Label htmlFor="origin">Miasto / kraj</Label>
+              <Input
+                id="origin"
+                value={origin}
+                onChange={(e) => setOrigin(e.target.value)}
+              />
+            </div>
+          )}
           <div className="grid gap-2">
             <Label htmlFor="people">Liczba osób</Label>
             <Input
@@ -267,20 +275,22 @@ function EditForm({
               onChange={(e) => setPeople(e.target.value)}
             />
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="price">Cena / noc (PLN)</Label>
-            <Input
-              id="price"
-              type="number"
-              min={1}
-              aria-invalid={priceBad}
-              value={price}
-              onChange={(e) => {
-                setPriceTouched(true);
-                setPrice(e.target.value);
-              }}
-            />
-          </div>
+          {!isNew && (
+            <div className="grid gap-2">
+              <Label htmlFor="price">Cena / noc (PLN)</Label>
+              <Input
+                id="price"
+                type="number"
+                min={1}
+                aria-invalid={priceBad}
+                value={price}
+                onChange={(e) => {
+                  setPriceTouched(true);
+                  setPrice(e.target.value);
+                }}
+              />
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="grid gap-2">
@@ -339,11 +349,6 @@ function EditForm({
           </ul>
         ) : (
           <div className="space-y-1 text-sm" role="status">
-            {name.trim() === "" && (
-              <p className="text-muted-foreground">
-                Podaj imię i nazwisko gościa, aby zapisać rezerwację.
-              </p>
-            )}
             {cleaningNote && (
               <p className="text-amber-900">
                 Pokój jest w sprzątaniu i będzie gotowy po wyjeździe obecnego
@@ -361,7 +366,16 @@ function EditForm({
         <Button variant="outline" onClick={onClose}>
           Anuluj
         </Button>
-        <Button disabled={!canSave} onClick={() => onSave(draft)}>
+        <Button
+          disabled={blockingErrors.length > 0}
+          onClick={() => {
+            if (nameMissing) {
+              setAttempted(true);
+              return;
+            }
+            onSave(draft);
+          }}
+        >
           Zapisz
         </Button>
       </DialogFooter>
