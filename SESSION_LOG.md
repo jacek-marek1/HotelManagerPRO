@@ -92,6 +92,11 @@ Na prośbę Jacka usunięto z PRD e-mail rekrutera, opis zadania/briefu i wszyst
 ### 14. Filtr „Piętro"
 Dodany dropdown „Piętro" (Wszystkie piętra / Piętro 1 / Piętro 2) w bloku „Wyszukiwanie". Łączy się z terminem, gośćmi i statusem. Uzasadnienie: filtr istniał w oryginale, a PRD (P1-4) wymaga tylko etykiet przed polami. Weryfikacja w Chrome: „Piętro 2" → 201, 202, 203.
 
+### 15. Szczegóły rezerwacji (płatność i kontakt)
+Pytanie Jacka: gdzie pokazać płatność, telefon i e-mail bez ingerencji w akcje główne. Wybrane rozwiązanie: panel boczny (Sheet) otwierany kliknięciem w nazwisko gościa lub pozycją „Szczegóły" w menu z trzema kropkami (`reservation-details.tsx`). Tylko do odczytu: płatność, telefon (`tel:`), e-mail (`mailto:`), miasto/kraj, termin, pobyt i suma, uwagi; przycisk „Edytuj" w panelu otwiera modal.
+Modal edycji rozszerzony o telefon, e-mail i płatność (dropdown: Nie wybrano / Karta / Gotówka / Faktura / Przelew).
+Weryfikacja w Chrome: nazwisko → panel z danymi Jana Kowalskiego → Edytuj → modal z nowymi polami. Poza zakresem PRD (rozszerzenie P1-5), zatwierdzone przez Jacka.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

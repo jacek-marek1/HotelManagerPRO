@@ -11,6 +11,7 @@ import {
   DeleteReservationDialog,
   EditReservationDialog,
 } from "@/components/reservation-dialogs";
+import { ReservationDetails } from "@/components/reservation-details";
 import { RoomsTable } from "@/components/rooms-table";
 import { StatusLegend } from "@/components/status-legend";
 import { TablePagination } from "@/components/table-pagination";
@@ -28,6 +29,7 @@ export default function Home() {
   const [guests, setGuests] = useState<number | null>(null);
   const [reservations, setReservations] = useState(initialReservations);
   const [editing, setEditing] = useState<Reservation | null>(null);
+  const [detailsId, setDetailsId] = useState<string | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [deleting, setDeleting] = useState<Reservation | null>(null);
   const [dismissedKey, setDismissedKey] = useState("");
@@ -137,6 +139,7 @@ export default function Home() {
         reservations={reservations}
         search={search}
         onReserve={startReservation}
+        onDetails={(r) => setDetailsId(r.id)}
         onEdit={(r) => {
           setIsNew(false);
           setEditing(r);
@@ -153,6 +156,18 @@ export default function Home() {
       <div className="border-t pt-4">
         <ExportActions />
       </div>
+      <ReservationDetails
+        reservation={reservations.find((x) => x.id === detailsId) ?? null}
+        room={rooms.find(
+          (r) => r.id === reservations.find((x) => x.id === detailsId)?.roomId,
+        )}
+        onClose={() => setDetailsId(null)}
+        onEdit={(r) => {
+          setDetailsId(null);
+          setIsNew(false);
+          setEditing(r);
+        }}
+      />
       <EditReservationDialog
         reservation={editing}
         isNew={isNew}

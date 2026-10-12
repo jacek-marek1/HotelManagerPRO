@@ -14,13 +14,14 @@ interface Props {
   /** Aktywne wyszukiwanie: wyniki to pokoje dostępne w terminie. */
   search?: { from: string; to: string };
   onReserve: (room: Room) => void;
+  onDetails: (r: Reservation) => void;
   onEdit: (r: Reservation) => void;
   onDelete: (r: Reservation) => void;
 }
 
 const money = (n: number) => `${n} PLN`;
 
-export function RoomsTable({ rooms, reservations, search, onReserve, onEdit, onDelete }: Props) {
+export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, onEdit, onDelete }: Props) {
   return (
     <Table>
       <TableHeader>
@@ -63,7 +64,13 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onEdit, onD
               <TableCell>
                 {!search && res ? (
                   <>
-                    {res.guest.name}
+                    <button
+                      type="button"
+                      className="rounded-sm font-medium underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-ring"
+                      onClick={() => onDetails(res)}
+                    >
+                      {res.guest.name}
+                    </button>
                     {res.departure === TODAY && <Tag>Wyjazd dziś</Tag>}
                     {res.arrival === TODAY && <Tag>Przyjazd dziś</Tag>}
                     <div className="text-muted-foreground">
@@ -93,6 +100,7 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onEdit, onD
                       <MoreVerticalIcon />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => onDetails(res)}>Szczegóły</DropdownMenuItem>
                       <DropdownMenuItem onClick={() => onEdit(res)}>Edytuj</DropdownMenuItem>
                       <DropdownMenuItem
                         className="text-red-800 focus:text-red-900"

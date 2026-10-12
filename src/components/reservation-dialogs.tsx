@@ -10,6 +10,11 @@ import { overlapsOther, stayTotal } from "@/lib/availability";
 import { formatNights, nightsBetween } from "@/lib/dates";
 import type { Reservation, Room } from "@/lib/types";
 
+const PAYMENTS = [
+  { value: "none", label: "Nie wybrano" },
+  ...["Karta", "Gotówka", "Faktura", "Przelew"].map((v) => ({ value: v, label: v })),
+];
+
 interface EditProps {
   reservation: Reservation | null;
   isNew: boolean;
@@ -38,10 +43,13 @@ function EditForm({ reservation, isNew, rooms, all, onSave, onClose }: Omit<Edit
   const [arrival, setArrival] = useState(reservation.arrival);
   const [departure, setDeparture] = useState(reservation.departure);
   const [notes, setNotes] = useState(reservation.notes);
+  const [payment, setPayment] = useState(reservation.payment || "none");
+  const [phone, setPhone] = useState(reservation.guest.phone);
+  const [email, setEmail] = useState(reservation.guest.email);
 
   const invalid = !arrival || !departure || departure <= arrival;
   const conflict = !invalid && overlapsOther(all, reservation.id, roomId, arrival, departure);
-  const draft = { ...reservation, roomId, pricePerNight: isNew ? room.pricePerNight : reservation.pricePerNight, guest: { ...reservation.guest, name }, arrival, departure, notes };
+  const draft = { ...reservation, roomId, pricePerNight: isNew ? room.pricePerNight : reservation.pricePerNight, guest: { ...reservation.guest, name, phone, email }, payment: payment === "none" ? "" : payment, arrival, departure, notes };
 
   return (
     <>
@@ -86,6 +94,31 @@ function EditForm({ reservation, isNew, rooms, all, onSave, onClose }: Omit<Edit
             <Label htmlFor="departure">Wyjazd</Label>
             <Input id="departure" type="date" value={departure} onChange={(e) => setDeparture(e.target.value)} />
           </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="phone">Telefon</Label>
+            <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="email">E-mail</Label>
+            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="payment">Płatność</Label>
+          <Select value={payment} onValueChange={(v) => setPayment(v ?? "none")} items={PAYMENTS}>
+            <SelectTrigger id="payment" className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {PAYMENTS.map((i) => (
+                <SelectItem key={i.value} value={i.value}>
+                  {i.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="grid gap-2">
           <Label htmlFor="notes">Uwagi</Label>
