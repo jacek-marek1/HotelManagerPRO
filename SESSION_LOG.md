@@ -180,6 +180,9 @@ Weryfikacja: skrypt (T1–T4 bez zmian, jutro 3/3/1/1) i Chrome (karta Jutro z l
 - Brak imienia i nazwiska: bez wstępnej podpowiedzi; „Zapisz" jest aktywny, a po kliknięciu przy pustym polu pole robi się czerwone i pojawia się „Podaj imię i nazwisko gościa." (zapis wstrzymany). Pozostałe błędy (daty, kolizje, naprawa, telefon, e-mail, liczba osób) nadal blokują „Zapisz" od razu.
 - Weryfikacja w Chrome: okno bez cen i miasta, błąd po kliknięciu „Zapisz". W trakcie zmiany skrypt źle domknął JSX (błąd składni naprawiony od razu, `tsc`/`eslint` czyste).
 
+### 31. „Liczba osób" obok pola „Gość"
+W oknie rezerwacji (nowa i edycja) „Liczba osób" stoi w jednym rzędzie z „Gość" (szerokość 9 rem). W edycji rząd z „Miasto / kraj" i „Cena / noc" ma teraz dwie kolumny. Weryfikacja w Chrome (okno nowej rezerwacji); układ edycji nie był oglądany po zmianie.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

@@ -218,14 +218,27 @@ function EditForm({
             )}
           </div>
         )}
-        <div className="grid gap-2">
-          <Label htmlFor="guest">Gość</Label>
-          <Input
-            id="guest"
-            aria-invalid={attempted && nameMissing}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+        <div className="grid grid-cols-[1fr_9rem] gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="guest">Gość</Label>
+            <Input
+              id="guest"
+              aria-invalid={attempted && nameMissing}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="people">Liczba osób</Label>
+            <Input
+              id="people"
+              type="number"
+              min={1}
+              aria-invalid={peopleBad || peopleOver}
+              value={people}
+              onChange={(e) => setPeople(e.target.value)}
+            />
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="grid gap-2">
@@ -253,8 +266,8 @@ function EditForm({
             />
           </div>
         </div>
-        <div className={`grid gap-4 ${isNew ? "grid-cols-2" : "grid-cols-3"}`}>
-          {!isNew && (
+        {!isNew && (
+          <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="origin">Miasto / kraj</Label>
               <Input
@@ -263,19 +276,6 @@ function EditForm({
                 onChange={(e) => setOrigin(e.target.value)}
               />
             </div>
-          )}
-          <div className="grid gap-2">
-            <Label htmlFor="people">Liczba osób</Label>
-            <Input
-              id="people"
-              type="number"
-              min={1}
-              aria-invalid={peopleBad || peopleOver}
-              value={people}
-              onChange={(e) => setPeople(e.target.value)}
-            />
-          </div>
-          {!isNew && (
             <div className="grid gap-2">
               <Label htmlFor="price">Cena / noc (PLN)</Label>
               <Input
@@ -290,8 +290,8 @@ function EditForm({
                 }}
               />
             </div>
-          )}
-        </div>
+          </div>
+        )}
         <div className="grid grid-cols-2 gap-4">
           <div className="grid gap-2">
             <Label htmlFor="phone">Telefon</Label>
