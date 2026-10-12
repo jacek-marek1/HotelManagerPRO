@@ -130,37 +130,46 @@ export default function Home() {
         hasFilter={!!range}
         onReset={() => setRange(undefined)}
       />
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-lg font-semibold">
-          {search ? "Dostępne pokoje" : "Pokoje"}{" "}
-          <span className="font-normal text-muted-foreground">
-            · {results.length}
-          </span>
-        </h2>
-        <Button size="lg" onClick={() => startReservation()}>
-          <PlusIcon />
-          Nowa rezerwacja
-        </Button>
-      </div>
-      <RoomsTable
-        rooms={pageRooms}
-        reservations={reservations}
-        search={search}
-        onReserve={startReservation}
-        onDetails={(r) => setDetailsId(r.id)}
-        onEdit={(r) => {
-          setIsNew(false);
-          setEditing(r);
-        }}
-        onDelete={setDeleting}
-      />
-      <TablePagination
-        page={currentPage}
-        pageCount={pageCount}
-        total={results.length}
-        pageSize={PAGE_SIZE}
-        onPage={setPage}
-      />
+      <section
+        aria-label="Lista pokoi"
+        className="overflow-hidden rounded-lg border bg-card"
+      >
+        <div className="flex items-center justify-between gap-4 px-4 py-3">
+          <h2 className="text-lg font-semibold">
+            {search ? "Dostępne pokoje" : "Pokoje"}{" "}
+            <span className="font-normal text-muted-foreground">
+              · {results.length}
+            </span>
+          </h2>
+          <Button size="lg" onClick={() => startReservation()}>
+            <PlusIcon />
+            Nowa rezerwacja
+          </Button>
+        </div>
+        <RoomsTable
+          rooms={pageRooms}
+          reservations={reservations}
+          search={search}
+          onReserve={startReservation}
+          onDetails={(r) => setDetailsId(r.id)}
+          onEdit={(r) => {
+            setIsNew(false);
+            setEditing(r);
+          }}
+          onDelete={setDeleting}
+        />
+        {pageCount > 1 && (
+          <div className="border-t px-4 py-3">
+            <TablePagination
+              page={currentPage}
+              pageCount={pageCount}
+              total={results.length}
+              pageSize={PAGE_SIZE}
+              onPage={setPage}
+            />
+          </div>
+        )}
+      </section>
       <div className="border-t pt-4">
         <ExportActions />
       </div>

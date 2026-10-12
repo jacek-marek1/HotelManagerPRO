@@ -125,6 +125,9 @@ Ocena: status ma tekst w wypełnionej komórce, więc legenda dubluje informacj�
 - Rząd nad tabelą: po lewej tytuł z licznikiem („Pokoje · 8" / „Dostępne pokoje · N" przy wyszukiwaniu), po prawej „Nowa rezerwacja" w rozmiarze `lg` z ikoną plusa.
 - Menu z trzema kropkami: usunięta pozycja „Szczegóły" (zostają Edytuj i Usuń). Dostęp do szczegółów: klikalne nazwisko i strzałka obok.
 
+### 21. Tabela w boxie, wyróżniony nagłówek
+Tytuł z licznikiem, CTA, tabela i (gdy >1 strona) paginacja w jednym kontenerze (obramowanie, zaokrąglenia, `overflow-hidden`); wiersz nagłówka tabeli w lekkim kolorze (`slate-100`, pogrubione etykiety). Eksport zostaje pod boxem.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

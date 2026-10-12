@@ -23,15 +23,15 @@ const money = (n: number) => `${n} PLN`;
 export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, onEdit, onDelete }: Props) {
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Pokój</TableHead>
-          <TableHead>Pojemność</TableHead>
-          <TableHead>{search ? "Dostępność w terminie" : "Status dziś"}</TableHead>
-          <TableHead>Gość i pobyt</TableHead>
-          <TableHead className="text-right">Cena / noc</TableHead>
-          <TableHead>Uwagi</TableHead>
-          <TableHead className="text-right">Akcje</TableHead>
+      <TableHeader className="bg-slate-100">
+        <TableRow className="hover:bg-slate-100">
+          <TableHead className="font-semibold text-slate-900">Pokój</TableHead>
+          <TableHead className="font-semibold text-slate-900">Pojemność</TableHead>
+          <TableHead className="font-semibold text-slate-900">{search ? "Dostępność w terminie" : "Status dziś"}</TableHead>
+          <TableHead className="font-semibold text-slate-900">Gość i pobyt</TableHead>
+          <TableHead className="font-semibold text-slate-900 text-right">Cena / noc</TableHead>
+          <TableHead className="font-semibold text-slate-900">Uwagi</TableHead>
+          <TableHead className="font-semibold text-slate-900 text-right">Akcje</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
