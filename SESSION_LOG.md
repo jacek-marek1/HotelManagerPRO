@@ -86,6 +86,9 @@ Ocena wykazała: dwa konkurujące bloki filtrów, checkbox „tylko wolne" = bł
 ### 12. Repozytorium GitHub
 Decyzja Jacka: repozytorium https://github.com/jacek-marek1/HotelManagerPRO. Remote `origin`, commit całego projektu (z PRD i dziennikiem) wypchnięty na `main`. Vercel: nadal nie ruszany.
 
+### 13. Czyszczenie PRD i historii repo
+Na prośbę Jacka usunięto z PRD e-mail rekrutera, opis zadania/briefu i wszystkie wzmianki o firmie rekrutującej (w tym linki do zewnętrznego prototypu i boardu). Historia git przepisana (filter-branch), usunięty commit „PRD: usunięty e-mail…", wymuszony push (`--force-with-lease`). Aktualnie: 3 commity na `main`. Lokalna kopia sprzed przepisania w katalogu scratchpad (poza repo).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
