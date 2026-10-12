@@ -187,6 +187,9 @@ W oknie rezerwacji (nowa i edycja) „Liczba osób" stoi w jednym rzędzie z „
 Prośba Jacka: oszczędzić miejsce nad tabelą. Karty są domyślnie zwinięte: nagłówek (dzień + data + strzałka), liczby statusów w jednej linii oraz liczba przyjazdów i wyjazdów; po kliknięciu rozwijają się nazwiska/pokoje przyjazdów i wyjazdów (`aria-expanded`). Świadomy kompromis względem PRD (P0-2: podsumowanie bez dodatkowych kliknięć): liczby i liczba przyjazdów/wyjazdów widoczne od razu, same nazwiska za jednym kliknięciem; domyślnie rozwinięte można przywrócić jedną zmianą (`useState(false)` → `true`).
 Weryfikacja w Chrome: zwinięte karty (tabela wyżej), rozwinięcie „Dziś" pokazuje 102 (Jan Kowalski) / 103 (Anna Nowak).
 
+### 33. Większy nagłówek „Wyszukiwanie"
+Nagłówek bloku z `text-sm` na `text-lg font-semibold` (jak „Pokoje" nad tabelą); wiersz nagłówka `h-9`.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

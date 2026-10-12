@@ -78,8 +78,8 @@ export function AvailabilitySearch(p: Props) {
         aria-label="Wyszukiwanie"
         className="flex flex-col gap-3 rounded-lg border bg-card p-4 print:hidden"
       >
-        <div className="flex h-8 items-center justify-between">
-          <h2 className="text-sm font-semibold">Wyszukiwanie</h2>
+        <div className="flex h-9 items-center justify-between">
+          <h2 className="text-lg font-semibold">Wyszukiwanie</h2>
           {p.hasFilter && (
             <Button variant="outline" size="sm" onClick={p.onReset}>
               <XIcon />
