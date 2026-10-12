@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, XIcon } from "lucide-react";
 import { pl } from "date-fns/locale";
 import type { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
@@ -75,7 +75,15 @@ export function AvailabilitySearch(p: Props) {
         aria-label="Wyszukiwanie"
         className="flex flex-col gap-3 rounded-lg border bg-card p-4"
       >
-        <h2 className="text-sm font-semibold">Wyszukiwanie</h2>
+        <div className="flex h-8 items-center justify-between">
+          <h2 className="text-sm font-semibold">Wyszukiwanie</h2>
+          {p.hasFilter && (
+            <Button variant="outline" size="sm" onClick={p.onReset}>
+              <XIcon />
+              Wyczyść filtry
+            </Button>
+          )}
+        </div>
         <div className="flex flex-wrap items-start gap-4">
           <div className="flex flex-col gap-2">
             <Label>Termin (przyjazd – wyjazd)</Label>
@@ -140,11 +148,6 @@ export function AvailabilitySearch(p: Props) {
               </SelectContent>
             </Select>
           </div>
-          {p.hasFilter && (
-            <Button variant="ghost" className="mt-7 h-9" onClick={p.onReset}>
-              Wyczyść
-            </Button>
-          )}
         </div>
       </section>
       <Popover

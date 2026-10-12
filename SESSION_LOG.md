@@ -138,6 +138,11 @@ Gdy wiersz nie ma menu z trzema kropkami (pokój wolny, w naprawie, wyniki wyszu
 - Eksport: ikona pobierania przy „Eksportuj dane jako:", przyciski (Plik Excel, Plik PDF, Drukuj) w wariancie secondary (szare).
 - „Rezerwuj" w tabeli: wariant outline (obrys bez wypełnienia).
 
+### 25. Poprawiona akcja „Wyczyść"
+Wyglądała jak zwykły tekst, była przesunięta względem pól i czyściła tylko termin. Teraz: przycisk outline z ikoną X „Wyczyść filtry", wyrównany z polami , widoczny gdy aktywny jest dowolny filtr (termin, goście, piętro, status), resetuje wszystkie do wartości domyślnych i wraca na stronę 1.
+
+Korekta: przy węższym oknie (~1000 px) przycisk zawijał się pod pola, więc przeniesiony do nagłówka bloku „Wyszukiwanie" (po prawej, rozmiar sm) – zawsze się mieści.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

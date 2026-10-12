@@ -127,8 +127,16 @@ export default function Home() {
           setStatus(st);
           setPage(1);
         }}
-        hasFilter={!!range}
-        onReset={() => setRange(undefined)}
+        hasFilter={
+          !!range || guests !== null || floor !== "all" || status !== "all"
+        }
+        onReset={() => {
+          setRange(undefined);
+          setGuests(null);
+          setFloor("all");
+          setStatus("all");
+          setPage(1);
+        }}
       />
       <section
         aria-label="Lista pokoi"
