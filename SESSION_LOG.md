@@ -167,6 +167,14 @@ Pytanie Jacka o „Rezerwuj" przy każdym pokoju (rezerwacja na przyszłość). 
 - Okno nowej rezerwacji bez terminu z wyszukiwania używa tej daty i pokazuje podpowiedź „Pokój jest zajęty/w naprawie do … – najbliższy wolny termin"; zmiana pokoju w oknie przelicza daty, dopóki użytkownik ich nie ruszył. Z wyszukiwania daty nadal przenoszą się bez zmian.
 - Weryfikacja w Chrome: Rezerwuj przy 102 → 02.01–03.01 + podpowiedź, bez błędu. Zmiana pokoju w oknie nie była klikana.
 
+### 29. Domknięcie otwartych punktów (zaakceptowane przez Jacka)
+1. Liczba osób w rezerwacji: opcjonalne `guestsCount` (Schmidt = 4 z PRD, pozostałe puste), pole w oknie rezerwacji, wiersz w panelu szczegółów; walidacja: całkowita ≥ 1 i nie więcej niż pojemność pokoju; z wyszukiwania podstawia się liczba gości.
+2. Data końca naprawy w komórce statusu („Naprawa do 30.12"); usunięta automatyczna wzmianka w uwagach.
+3. „Jutro" w podsumowaniu z liczbami; reguła: po wyjeździe gościa pokój idzie do sprzątania także w prognozie (jutro: Zajęte 3, Wolne 3, Sprzątanie 1 (203), Naprawa 1). T3 bez zmian.
+4. Filtr „Status dziś" ukryty przy wybranym terminie i ignorowany w wynikach wyszukiwania (wraca po wyczyszczeniu).
+5. Okno rezerwacji: dodane Miasto/kraj i Cena/noc (walidacja > 0; zmiana pokoju w nowej rezerwacji podstawia cenę pokoju, dopóki cena nie była edytowana).
+Weryfikacja: skrypt (T1–T4 bez zmian, jutro 3/3/1/1) i Chrome (karta Jutro z liczbami, „Naprawa do 30.12", panel Schmidtów z „Liczba osób 4", okno edycji z nowymi polami, błąd „Pokój 203 mieści maksymalnie 4 osoby"). Nie klikane: ukrywanie filtra statusu przy terminie, zapis zmienionej ceny/liczby osób.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

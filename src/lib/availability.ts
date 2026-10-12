@@ -57,7 +57,12 @@ export function currentReservation(
 
 export function dayStatus(room: Room, reservations: Reservation[], date: string): DayStatus {
   if (repairBlocks(room, date)) return "repair";
-  if (date === TODAY && isCleaning(room, reservations)) return "cleaning";
+  if (date === TODAY) {
+    if (isCleaning(room, reservations)) return "cleaning";
+  } else if (reservations.some((r) => r.roomId === room.id && r.departure === date)) {
+    // Po wyjeździe gościa pokój idzie do sprzątania (prognoza na kolejne dni).
+    return "cleaning";
+  }
   return currentReservation(room, reservations, date) ? "occupied" : "free";
 }
 

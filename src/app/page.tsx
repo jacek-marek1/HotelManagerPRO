@@ -83,7 +83,9 @@ export default function Home() {
       return (
         fits &&
         (floor === "all" || r.floor === floor) &&
-        (status === "all" || dayStatus(r, reservations, TODAY) === status)
+        (search ||
+          status === "all" ||
+          dayStatus(r, reservations, TODAY) === status)
       );
     });
   }, [search?.from, search?.to, guests, rooms, reservations, status, floor]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -149,6 +151,7 @@ export default function Home() {
       departure: search?.to ?? addDays(start, 1),
       pricePerNight: target.pricePerNight,
       payment: "",
+      guestsCount: guests ?? undefined,
       notes: "",
     });
   };
@@ -188,6 +191,7 @@ export default function Home() {
           setPage(1);
         }}
         status={status}
+        searchActive={!!search}
         onStatus={(st) => {
           setStatus(st);
           setPage(1);

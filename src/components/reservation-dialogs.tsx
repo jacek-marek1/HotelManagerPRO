@@ -19,7 +19,12 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { nextFreeStart, overlapsOther, stayTotal } from "@/lib/availability";
+import {
+  isCleaning,
+  nextFreeStart,
+  overlapsOther,
+  stayTotal,
+} from "@/lib/availability";
 import {
   TODAY,
   addDays,
@@ -100,6 +105,12 @@ function EditForm({
         : `Pokój jest zajęty do ${formatDate(nextFree.date)} – najbliższy wolny termin.`
       : null;
   const [notes, setNotes] = useState(reservation.notes);
+  const [origin, setOrigin] = useState(reservation.guest.origin);
+  const [price, setPrice] = useState(String(reservation.pricePerNight));
+  const [priceTouched, setPriceTouched] = useState(false);
+  const [people, setPeople] = useState(
+    reservation.guestsCount ? String(reservation.guestsCount) : "",
+  );
   const [payment, setPayment] = useState(reservation.payment || "none");
   const [phone, setPhone] = useState(reservation.guest.phone);
   const [email, setEmail] = useState(reservation.guest.email);
@@ -111,12 +122,18 @@ function EditForm({
     room.condition.type === "repair" ? room.condition.until : null;
   const repairBlocked =
     !invalid && repairUntil !== null && arrival < repairUntil;
-  const cleaningNote =
-    !invalid && room.condition.type === "cleaning" && arrival === TODAY;
+  const cleaningNote = !invalid && arrival === TODAY && isCleaning(room, all);
   const phoneBad =
     phone.trim() !== "" && !/^\+?[0-9 ()-]{7,}$/.test(phone.trim());
   const emailBad =
     email.trim() !== "" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const priceNum = Number(price);
+  const priceBad = price.trim() === "" || !(priceNum > 0);
+  const peopleNum = people.trim() === "" ? null : Number(people);
+  const peopleBad =
+    peopleNum !== null && (!Number.isInteger(peopleNum) || peopleNum < 1);
+  const peopleOver =
+    peopleNum !== null && !peopleBad && peopleNum > room.capacity;
   const errors = [
     invalid && "Wyjazd musi być po przyjeździe.",
     conflict && "Ten termin koliduje z inną rezerwacją tego pokoju.",
@@ -124,13 +141,18 @@ function EditForm({
       `Pokój ${room.number} jest w naprawie do ${formatDate(repairUntil!)}. Wybierz późniejszy termin lub inny pokój.`,
     phoneBad && "Niepoprawny numer telefonu.",
     emailBad && "Niepoprawny adres e-mail.",
+    priceBad && "Podaj cenę za noc większą od zera.",
+    peopleBad && "Liczba osób musi być liczbą całkowitą od 1.",
+    peopleOver &&
+      `Pokój ${room.number} mieści maksymalnie ${room.capacity} ${room.capacity === 1 ? "osobę" : "osoby"}.`,
   ].filter(Boolean) as string[];
   const canSave = errors.length === 0 && name.trim() !== "";
   const draft = {
     ...reservation,
     roomId,
-    pricePerNight: isNew ? room.pricePerNight : reservation.pricePerNight,
-    guest: { ...reservation.guest, name, phone, email },
+    pricePerNight: priceBad ? reservation.pricePerNight : priceNum,
+    guestsCount: peopleNum !== null && !peopleBad ? peopleNum : undefined,
+    guest: { ...reservation.guest, name, phone, email, origin },
     payment: payment === "none" ? "" : payment,
     arrival,
     departure,
@@ -159,6 +181,10 @@ function EditForm({
               onValueChange={(v) => {
                 if (!v) return;
                 setRoomId(v);
+                if (!priceTouched)
+                  setPrice(
+                    String(rooms.find((r) => r.id === v)!.pricePerNight),
+                  );
                 if (autoDates && !datesTouched) {
                   const next = rooms.find((r) => r.id === v)!;
                   const start = nextFreeStart(next, all).date;
@@ -217,6 +243,41 @@ function EditForm({
               onChange={(e) => {
                 setDatesTouched(true);
                 setDeparture(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="origin">Miasto / kraj</Label>
+            <Input
+              id="origin"
+              value={origin}
+              onChange={(e) => setOrigin(e.target.value)}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="people">Liczba osób</Label>
+            <Input
+              id="people"
+              type="number"
+              min={1}
+              aria-invalid={peopleBad || peopleOver}
+              value={people}
+              onChange={(e) => setPeople(e.target.value)}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="price">Cena / noc (PLN)</Label>
+            <Input
+              id="price"
+              type="number"
+              min={1}
+              aria-invalid={priceBad}
+              value={price}
+              onChange={(e) => {
+                setPriceTouched(true);
+                setPrice(e.target.value);
               }}
             />
           </div>

@@ -106,7 +106,9 @@ export function RoomsTable({
                       ? isCleaningSoon(room, reservations, search.from)
                         ? "Sprzątanie – za chwilę gotowy"
                         : "Wolny"
-                      : STATUS_LABEL[status]}
+                      : status === "repair" && repairUntil
+                        ? `Naprawa do ${formatDate(repairUntil).slice(0, 5)}`
+                        : STATUS_LABEL[status]}
                   </span>
                   {!search && status === "cleaning" && (
                     <Button
@@ -161,12 +163,7 @@ export function RoomsTable({
                 {money(room.pricePerNight)}
               </TableCell>
               <TableCell className="max-w-44 whitespace-normal text-muted-foreground">
-                {[
-                  room.notes,
-                  repairUntil && `niedostępny do ${formatDate(repairUntil)}`,
-                ]
-                  .filter(Boolean)
-                  .join(" · ") || "–"}
+                {room.notes || "–"}
               </TableCell>
               <TableCell className="text-right whitespace-nowrap">
                 <Button

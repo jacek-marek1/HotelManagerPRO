@@ -20,6 +20,7 @@ export interface Reservation {
   guest: { name: string; origin: string; phone: string; email: string };
   arrival: string;
   departure: string;
+  guestsCount?: number;
   pricePerNight: number;
   payment: string;
   notes: string;

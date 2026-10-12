@@ -15,4 +15,9 @@ export const STATUS_FILL: Record<DayStatus, string> = {
   repair: "bg-red-100 text-red-900",
 };
 
-export const STATUS_ORDER: DayStatus[] = ["free", "occupied", "cleaning", "repair"];
+export const STATUS_ORDER: DayStatus[] = [
+  "free",
+  "occupied",
+  "cleaning",
+  "repair",
+];

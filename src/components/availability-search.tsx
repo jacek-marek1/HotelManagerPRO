@@ -53,6 +53,8 @@ interface Props {
   onFloor: (f: string) => void;
   status: StatusFilter;
   onStatus: (s: StatusFilter) => void;
+  /** Przy wybranym terminie wyniki są z definicji „dostępne w terminie" – filtr statusu dziś jest ukryty. */
+  searchActive: boolean;
   noResultsOpen: boolean;
   noResultsByFilters: boolean;
   onNoResultsDismiss: () => void;
@@ -130,25 +132,27 @@ export function AvailabilitySearch(p: Props) {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label>Status dziś</Label>
-            <Select
-              value={p.status}
-              onValueChange={(v) => p.onStatus((v ?? "all") as StatusFilter)}
-              items={STATUS_ITEMS}
-            >
-              <SelectTrigger className="h-9 w-48">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {STATUS_ITEMS.map((i) => (
-                  <SelectItem key={i.value} value={i.value}>
-                    {i.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {!p.searchActive && (
+            <div className="flex flex-col gap-2">
+              <Label>Status dziś</Label>
+              <Select
+                value={p.status}
+                onValueChange={(v) => p.onStatus((v ?? "all") as StatusFilter)}
+                items={STATUS_ITEMS}
+              >
+                <SelectTrigger className="h-9 w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {STATUS_ITEMS.map((i) => (
+                    <SelectItem key={i.value} value={i.value}>
+                      {i.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
       </section>
       <Popover

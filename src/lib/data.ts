@@ -18,5 +18,5 @@ export const reservations: Reservation[] = [
   { id: "b2", roomId: "r103", guest: { name: "Anna Nowak", origin: "", phone: "+48601234567", email: "a.nowak@gmail.com" }, arrival: "2024-12-26", departure: "2024-12-28", pricePerNight: 280, payment: "Gotówka", notes: "Wyjazd do 14:00" },
   { id: "b3", roomId: "r104", guest: { name: "Maria Wiśniewska", origin: "Kraków", phone: "+48791234567", email: "maria.w@company.pl" }, arrival: "2024-12-27", departure: "2024-12-30", pricePerNight: 180, payment: "Faktura", notes: "FV na firmę ABC Sp. z o.o." },
   { id: "b4", roomId: "r201", guest: { name: "Piotr Zieliński", origin: "Gdańsk", phone: "+447123456789", email: "piotr.z@email.co.uk" }, arrival: "2024-12-25", departure: "2025-01-03", pricePerNight: 250, payment: "Przelew", notes: "VIP, późny checkout" },
-  { id: "b5", roomId: "r203", guest: { name: "Rodzina Schmidt", origin: "Niemcy", phone: "+491234567890", email: "schmidt@deutsche.de" }, arrival: "2024-12-27", departure: "2024-12-29", pricePerNight: 320, payment: "Karta", notes: "4 os., 2 dzieci (5 i 8 lat), łóżeczko" },
+  { id: "b5", roomId: "r203", guestsCount: 4, guest: { name: "Rodzina Schmidt", origin: "Niemcy", phone: "+491234567890", email: "schmidt@deutsche.de" }, arrival: "2024-12-27", departure: "2024-12-29", pricePerNight: 320, payment: "Karta", notes: "4 os., 2 dzieci (5 i 8 lat), łóżeczko" },
 ];

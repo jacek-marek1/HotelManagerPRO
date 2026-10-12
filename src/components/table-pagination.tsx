@@ -8,7 +8,13 @@ interface Props {
   onPage: (p: number) => void;
 }
 
-export function TablePagination({ page, pageCount, total, pageSize, onPage }: Props) {
+export function TablePagination({
+  page,
+  pageCount,
+  total,
+  pageSize,
+  onPage,
+}: Props) {
   if (pageCount <= 1) return null;
   const from = (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, total);
@@ -18,7 +24,12 @@ export function TablePagination({ page, pageCount, total, pageSize, onPage }: Pr
         Pokoje {from}–{to} z {total}
       </p>
       <div className="flex items-center gap-1">
-        <Button variant="outline" size="sm" disabled={page === 1} onClick={() => onPage(page - 1)}>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={page === 1}
+          onClick={() => onPage(page - 1)}
+        >
           Poprzednia
         </Button>
         {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
@@ -32,7 +43,12 @@ export function TablePagination({ page, pageCount, total, pageSize, onPage }: Pr
             {n}
           </Button>
         ))}
-        <Button variant="outline" size="sm" disabled={page === pageCount} onClick={() => onPage(page + 1)}>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={page === pageCount}
+          onClick={() => onPage(page + 1)}
+        >
           Następna
         </Button>
       </div>
