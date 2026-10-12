@@ -153,6 +153,14 @@ Znalezione luki i naprawy:
 - Toasty po zapisie, dodaniu i usunięciu rezerwacji (`role="status"`).
 Otwarte: liczba osób w rezerwacji i data końca naprawy nadal tylko w uwagach; „Jutro" w podsumowaniu bez liczb; filtr „Status dziś" z wybranym terminem ukrywa np. 103 przy „Wolny".
 
+### 27. Zarządzanie stanem pokoju (sprzątanie / naprawa)
+Pytanie Jacka: jak recepcjonista zarządza statusami pokojów. Luka: stan techniczny był tylko w danych testowych. Zaakceptowane domyślne odpowiedzi: po dniu wyjazdu pokój automatycznie w „Sprzątanie" do oznaczenia; tylko recepcjonista (bez ról); sprzątanie zawsze dotyczy „dziś".
+- Stan pokoju w stanie aplikacji (`rooms`), pokój i rezerwacja rozdzielone. `Condition.none` ma `readyOn`.
+- Logika (`lib/availability.ts`): `isCleaning` (ręcznie albo wyjazd dziś bez oznaczenia „gotowy"), `repairConflicts`, `isCleaningSoon(room, reservations, from)`.
+- UI: menu z trzema kropkami przy każdym pokoju → „Zmień stan pokoju" (okno `room-state-dialog.tsx`: Gotowy / Sprzątanie / Naprawa do dnia + uwagi do pokoju); przycisk z haczykiem „Oznacz jako posprzątany" w komórce statusu pokoju w sprzątaniu; Edytuj/Usuń zmienione na „Edytuj rezerwację"/„Usuń rezerwację".
+- Walidacja: naprawa wymaga daty późniejszej niż dziś; blokada zapisu i lista kolidujących rezerwacji.
+- Weryfikacja: skrypt (T1–T4 bez zmian; 103 gotowy → 3 wolne; konflikt naprawy 102 z Janem Kowalskim) i Chrome (haczyk 103 → Wolny + toast; naprawa 102 → czerwony komunikat, Zapisz nieaktywny). Zapis zmiany stanu w oknie i zdjęcie naprawy nie były klikane.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

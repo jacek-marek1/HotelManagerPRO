@@ -27,7 +27,11 @@ import {
 import { buildCsv, downloadCsv, type ExportRow } from "@/lib/export";
 import { STATUS_LABEL } from "@/components/room-status-badge";
 import { TODAY, addDays, toISO } from "@/lib/dates";
-import { reservations as initialReservations, rooms } from "@/lib/data";
+import {
+  reservations as initialReservations,
+  rooms as initialRooms,
+} from "@/lib/data";
+import { RoomStateDialog } from "@/components/room-state-dialog";
 import type { Reservation, Room } from "@/lib/types";
 
 const PAGE_SIZE = 10;
@@ -35,7 +39,9 @@ const PAGE_SIZE = 10;
 export default function Home() {
   const [range, setRange] = useState<DateRange | undefined>();
   const [guests, setGuests] = useState<number | null>(null);
+  const [rooms, setRooms] = useState(initialRooms);
   const [reservations, setReservations] = useState(initialReservations);
+  const [stateRoom, setStateRoom] = useState<Room | null>(null);
   const [editing, setEditing] = useState<Reservation | null>(null);
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const [isNew, setIsNew] = useState(false);
@@ -54,11 +60,11 @@ export default function Home() {
 
   const today = useMemo(
     () => summarize(rooms, reservations, TODAY),
-    [reservations],
+    [rooms, reservations],
   );
   const tomorrow = useMemo(
     () => summarize(rooms, reservations, addDays(TODAY, 1)),
-    [reservations],
+    [rooms, reservations],
   );
 
   const search =
@@ -78,7 +84,7 @@ export default function Home() {
         (status === "all" || dayStatus(r, reservations, TODAY) === status)
       );
     });
-  }, [search?.from, search?.to, guests, reservations, status, floor]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [search?.from, search?.to, guests, rooms, reservations, status, floor]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
@@ -104,7 +110,7 @@ export default function Home() {
         floor: r.floor,
         capacity: r.capacity,
         status: search
-          ? isCleaningSoon(r, search.from)
+          ? isCleaningSoon(r, reservations, search.from)
             ? "Sprzątanie – za chwilę gotowy"
             : "Wolny w terminie"
           : STATUS_LABEL[st],
@@ -115,6 +121,17 @@ export default function Home() {
     });
     downloadCsv(buildCsv(rows), `pokoje-${TODAY}.csv`);
     notify(`Wyeksportowano ${rows.length} pokoi do pliku Excel`);
+  };
+
+  const markReady = (room: Room) => {
+    setRooms((all) =>
+      all.map((r) =>
+        r.id === room.id
+          ? { ...r, condition: { type: "none", readyOn: TODAY } }
+          : r,
+      ),
+    );
+    notify(`Pokój ${room.number} oznaczony jako posprzątany`);
   };
 
   const startReservation = (room?: Room) => {
@@ -207,6 +224,8 @@ export default function Home() {
           reservations={reservations}
           search={search}
           onReserve={startReservation}
+          onChangeState={setStateRoom}
+          onMarkReady={markReady}
           onDetails={(r) => setDetailsId(r.id)}
           onEdit={(r) => {
             setIsNew(false);
@@ -239,6 +258,18 @@ export default function Home() {
           setDetailsId(null);
           setIsNew(false);
           setEditing(r);
+        }}
+      />
+      <RoomStateDialog
+        room={stateRoom}
+        reservations={reservations}
+        onClose={() => setStateRoom(null)}
+        onSave={(room, condition, notes) => {
+          setRooms((all) =>
+            all.map((r) => (r.id === room.id ? { ...r, condition, notes } : r)),
+          );
+          setStateRoom(null);
+          notify(`Zapisano stan pokoju ${room.number}`);
         }}
       />
       <EditReservationDialog

@@ -25,9 +25,24 @@ export function isAvailable(
   );
 }
 
-/** Pokój w sprzątaniu, który po wyjeździe dziś będzie gotowy – oznaczenie przy terminie od dziś. */
-export function isCleaningSoon(room: Room, from: string): boolean {
-  return room.condition.type === "cleaning" && from === TODAY;
+/**
+ * Sprzątanie dotyczy „dziś": pokój oznaczony ręcznie albo po wyjeździe gościa dziś,
+ * dopóki recepcja nie oznaczy go jako gotowy.
+ */
+export function isCleaning(room: Room, reservations: Reservation[]): boolean {
+  if (room.condition.type === "cleaning") return true;
+  if (room.condition.type !== "none" || room.condition.readyOn === TODAY) return false;
+  return reservations.some((r) => r.roomId === room.id && r.departure === TODAY);
+}
+
+/** Pokój w sprzątaniu, który za chwilę będzie gotowy – oznaczenie przy terminie od dziś. */
+export function isCleaningSoon(room: Room, reservations: Reservation[], from: string): boolean {
+  return from === TODAY && isCleaning(room, reservations);
+}
+
+/** Rezerwacje pokoju kolidujące z naprawą trwającą od dziś do dnia `until` (noc przed `until` zajęta). */
+export function repairConflicts(room: Room, reservations: Reservation[], until: string): Reservation[] {
+  return reservations.filter((r) => r.roomId === room.id && r.arrival < until && r.departure > TODAY);
 }
 
 export function currentReservation(
@@ -42,7 +57,7 @@ export function currentReservation(
 
 export function dayStatus(room: Room, reservations: Reservation[], date: string): DayStatus {
   if (repairBlocks(room, date)) return "repair";
-  if (room.condition.type === "cleaning" && date === TODAY) return "cleaning";
+  if (date === TODAY && isCleaning(room, reservations)) return "cleaning";
   return currentReservation(room, reservations, date) ? "occupied" : "free";
 }
 

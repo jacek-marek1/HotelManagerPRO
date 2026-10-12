@@ -1,5 +1,5 @@
 export type Condition =
-  | { type: "none" }
+  | { type: "none"; readyOn?: string }
   | { type: "cleaning" }
   | { type: "repair"; until: string };
 
