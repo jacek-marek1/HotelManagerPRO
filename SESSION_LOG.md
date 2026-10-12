@@ -190,6 +190,9 @@ Weryfikacja w Chrome: zwinięte karty (tabela wyżej), rozwinięcie „Dziś" po
 ### 33. Większy nagłówek „Wyszukiwanie"
 Nagłówek bloku z `text-sm` na `text-lg font-semibold` (jak „Pokoje" nad tabelą); wiersz nagłówka `h-9`.
 
+### 34. Opis procesu pracy z AI
+Na prośbę Jacka: `docs/PROCES_PRACY_Z_AI.md` (pełna lista zmian względem oryginału, ewolucja, decyzje, pomyłki AI, efekt) i `docs/OPIS_FIGJAM.md` (krótki opis do wklejenia do FigJama).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
