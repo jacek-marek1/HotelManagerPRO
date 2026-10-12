@@ -97,9 +97,7 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, 
                 <Button variant="secondary" size="sm" onClick={() => onReserve(room)}>
                   Rezerwuj
                 </Button>
-                {search || !res ? (
-                  <span className="ml-1 inline-block size-7 align-middle" aria-hidden />
-                ) : (
+                {!search && res && (
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       aria-label={`Więcej akcji – pokój ${room.number}`}

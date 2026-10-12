@@ -131,6 +131,9 @@ Tytuł z licznikiem, CTA, tabela i (gdy >1 strona) paginacja w jednym kontenerze
 ### 22. Większy komunikat braku wyników
 Popover „Brak wolnych pokoi" powiększony: szerokość 28rem, padding 5, tytuł `text-lg font-semibold`, treść `text-base` (wcześniej 18rem / sm).
 
+### 23. Wyrównanie „Rezerwuj" do prawej
+Gdy wiersz nie ma menu z trzema kropkami (pokój wolny, w naprawie, wyniki wyszukiwania), „Rezerwuj" jest dosunięty do prawej krawędzi kolumny (usunięty pusty znacznik miejsca po menu).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
