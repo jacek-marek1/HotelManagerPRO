@@ -156,9 +156,10 @@ export function AvailabilitySearch(p: Props) {
           align="start"
           role="status"
           initialFocus={false}
+          className="w-[28rem] gap-2 p-5"
         >
-          <p className="font-medium">Brak wolnych pokoi</p>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-lg font-semibold">Brak wolnych pokoi</p>
+          <p className="text-base leading-relaxed text-muted-foreground">
             Żaden pokój nie jest dostępny w całym wybranym terminie dla tej
             liczby gości. Zmień termin lub liczbę osób.
           </p>

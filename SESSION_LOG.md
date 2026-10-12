@@ -128,6 +128,9 @@ Ocena: status ma tekst w wypełnionej komórce, więc legenda dubluje informacj�
 ### 21. Tabela w boxie, wyróżniony nagłówek
 Tytuł z licznikiem, CTA, tabela i (gdy >1 strona) paginacja w jednym kontenerze (obramowanie, zaokrąglenia, `overflow-hidden`); wiersz nagłówka tabeli w lekkim kolorze (`slate-100`, pogrubione etykiety). Eksport zostaje pod boxem.
 
+### 22. Większy komunikat braku wyników
+Popover „Brak wolnych pokoi" powiększony: szerokość 28rem, padding 5, tytuł `text-lg font-semibold`, treść `text-base` (wcześniej 18rem / sm).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
