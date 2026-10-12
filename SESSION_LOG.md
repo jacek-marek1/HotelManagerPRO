@@ -83,6 +83,9 @@ Ocena wykazała: dwa konkurujące bloki filtrów, checkbox „tylko wolne" = bł
 - Legenda nad tabelą (lewa strona), obok „+ Nowa rezerwacja"; na dole tylko eksport.
 - Paginacja: 10 pokoi/strona (przy 8 pokojach ukryta, zgodnie z P1-3).
 
+### 12. Repozytorium GitHub
+Decyzja Jacka: repozytorium https://github.com/jacek-marek1/HotelManagerPRO. Remote `origin`, commit całego projektu (z PRD i dziennikiem) wypchnięty na `main`. Vercel: nadal nie ruszany.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
