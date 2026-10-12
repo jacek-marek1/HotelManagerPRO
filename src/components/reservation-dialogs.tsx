@@ -19,8 +19,14 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { overlapsOther, stayTotal } from "@/lib/availability";
-import { TODAY, formatDate, formatNights, nightsBetween } from "@/lib/dates";
+import { nextFreeStart, overlapsOther, stayTotal } from "@/lib/availability";
+import {
+  TODAY,
+  addDays,
+  formatDate,
+  formatNights,
+  nightsBetween,
+} from "@/lib/dates";
 import type { Reservation, Room } from "@/lib/types";
 
 const PAYMENTS = [
@@ -34,6 +40,8 @@ const PAYMENTS = [
 interface EditProps {
   reservation: Reservation | null;
   isNew: boolean;
+  /** Nowa rezerwacja bez terminu z wyszukiwania: daty = najbliższy wolny termin pokoju. */
+  autoDates?: boolean;
   rooms: Room[];
   all: Reservation[];
   onSave: (r: Reservation) => void;
@@ -43,6 +51,7 @@ interface EditProps {
 export function EditReservationDialog({
   reservation,
   isNew,
+  autoDates,
   rooms,
   all,
   onSave,
@@ -55,6 +64,7 @@ export function EditReservationDialog({
           <EditForm
             key={reservation.id}
             isNew={isNew}
+            autoDates={autoDates}
             reservation={reservation}
             rooms={rooms}
             all={all}
@@ -70,6 +80,7 @@ export function EditReservationDialog({
 function EditForm({
   reservation,
   isNew,
+  autoDates,
   rooms,
   all,
   onSave,
@@ -80,6 +91,14 @@ function EditForm({
   const [name, setName] = useState(reservation.guest.name);
   const [arrival, setArrival] = useState(reservation.arrival);
   const [departure, setDeparture] = useState(reservation.departure);
+  const [datesTouched, setDatesTouched] = useState(false);
+  const nextFree = nextFreeStart(room, all);
+  const freeHint =
+    autoDates && !datesTouched && nextFree.reason
+      ? nextFree.reason === "repair"
+        ? `Pokój jest w naprawie do ${formatDate(nextFree.date)} – najbliższy wolny termin.`
+        : `Pokój jest zajęty do ${formatDate(nextFree.date)} – najbliższy wolny termin.`
+      : null;
   const [notes, setNotes] = useState(reservation.notes);
   const [payment, setPayment] = useState(reservation.payment || "none");
   const [phone, setPhone] = useState(reservation.guest.phone);
@@ -137,7 +156,16 @@ function EditForm({
             <Label htmlFor="room">Pokój</Label>
             <Select
               value={roomId}
-              onValueChange={(v) => v && setRoomId(v)}
+              onValueChange={(v) => {
+                if (!v) return;
+                setRoomId(v);
+                if (autoDates && !datesTouched) {
+                  const next = rooms.find((r) => r.id === v)!;
+                  const start = nextFreeStart(next, all).date;
+                  setArrival(start);
+                  setDeparture(addDays(start, 1));
+                }
+              }}
               items={rooms.map((r) => ({
                 value: r.id,
                 label: `${r.number} · ${r.capacity} os. · ${r.pricePerNight} PLN/noc`,
@@ -154,6 +182,9 @@ function EditForm({
                 ))}
               </SelectContent>
             </Select>
+            {freeHint && (
+              <p className="text-sm text-muted-foreground">{freeHint}</p>
+            )}
           </div>
         )}
         <div className="grid gap-2">
@@ -171,7 +202,10 @@ function EditForm({
               id="arrival"
               type="date"
               value={arrival}
-              onChange={(e) => setArrival(e.target.value)}
+              onChange={(e) => {
+                setDatesTouched(true);
+                setArrival(e.target.value);
+              }}
             />
           </div>
           <div className="grid gap-2">
@@ -180,7 +214,10 @@ function EditForm({
               id="departure"
               type="date"
               value={departure}
-              onChange={(e) => setDeparture(e.target.value)}
+              onChange={(e) => {
+                setDatesTouched(true);
+                setDeparture(e.target.value);
+              }}
             />
           </div>
         </div>

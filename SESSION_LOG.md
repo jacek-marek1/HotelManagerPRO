@@ -161,6 +161,12 @@ Pytanie Jacka: jak recepcjonista zarządza statusami pokojów. Luka: stan techni
 - Walidacja: naprawa wymaga daty późniejszej niż dziś; blokada zapisu i lista kolidujących rezerwacji.
 - Weryfikacja: skrypt (T1–T4 bez zmian; 103 gotowy → 3 wolne; konflikt naprawy 102 z Janem Kowalskim) i Chrome (haczyk 103 → Wolny + toast; naprawa 102 → czerwony komunikat, Zapisz nieaktywny). Zapis zmiany stanu w oknie i zdjęcie naprawy nie były klikane.
 
+### 28. Rezerwuj na przyszłość: domyślne daty = najbliższy wolny termin
+Pytanie Jacka o „Rezerwuj" przy każdym pokoju (rezerwacja na przyszłość). Problem: okno miało domyślnie dziś → jutro, więc przy zajętym pokoju od razu był błąd kolizji.
+- `nextFreeStart(room, reservations)` w `lib/availability.ts`: po końcu naprawy i po wyjeździe obecnych gości (np. 102 → 02.01, 105 → 30.12, 203 → 29.12, 201 → 03.01).
+- Okno nowej rezerwacji bez terminu z wyszukiwania używa tej daty i pokazuje podpowiedź „Pokój jest zajęty/w naprawie do … – najbliższy wolny termin"; zmiana pokoju w oknie przelicza daty, dopóki użytkownik ich nie ruszył. Z wyszukiwania daty nadal przenoszą się bez zmian.
+- Weryfikacja w Chrome: Rezerwuj przy 102 → 02.01–03.01 + podpowiedź, bez błędu. Zmiana pokoju w oknie nie była klikana.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

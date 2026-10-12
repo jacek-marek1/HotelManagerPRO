@@ -106,3 +106,27 @@ export function overlapsOther(
     (r) => r.id !== id && r.roomId === roomId && r.arrival < to && r.departure > from,
   );
 }
+
+/**
+ * Najbliższy dzień, od którego pokój jest wolny (od dziś): po końcu naprawy
+ * i po wyjeździe obecnych gości. `reason` mówi, dlaczego nie jest to dziś.
+ */
+export function nextFreeStart(
+  room: Room,
+  reservations: Reservation[],
+): { date: string; reason: "repair" | "occupied" | null } {
+  let date = TODAY;
+  let reason: "repair" | "occupied" | null = null;
+  if (room.condition.type === "repair" && room.condition.until > date) {
+    date = room.condition.until;
+    reason = "repair";
+  }
+  for (;;) {
+    const blocking = reservations.find(
+      (r) => r.roomId === room.id && r.arrival <= date && r.departure > date,
+    );
+    if (!blocking) return { date, reason };
+    date = blocking.departure;
+    reason = "occupied";
+  }
+}

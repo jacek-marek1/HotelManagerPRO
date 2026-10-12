@@ -20,6 +20,7 @@ import { ExportActions } from "@/components/export-actions";
 import {
   dayStatus,
   displayReservation,
+  nextFreeStart,
   isAvailable,
   isCleaningSoon,
   summarize,
@@ -45,6 +46,7 @@ export default function Home() {
   const [editing, setEditing] = useState<Reservation | null>(null);
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [autoDates, setAutoDates] = useState(false);
   const [deleting, setDeleting] = useState<Reservation | null>(null);
   const [dismissedKey, setDismissedKey] = useState("");
   const [toast, setToast] = useState<string | null>(null);
@@ -136,13 +138,15 @@ export default function Home() {
 
   const startReservation = (room?: Room) => {
     const target = room ?? results[0] ?? rooms[0];
+    const start = search?.from ?? nextFreeStart(target, reservations).date;
     setIsNew(true);
+    setAutoDates(!search);
     setEditing({
       id: `b${Date.now()}`,
       roomId: target.id,
       guest: { name: "", origin: "", phone: "", email: "" },
-      arrival: search?.from ?? TODAY,
-      departure: search?.to ?? addDays(TODAY, 1),
+      arrival: start,
+      departure: search?.to ?? addDays(start, 1),
       pricePerNight: target.pricePerNight,
       payment: "",
       notes: "",
@@ -275,6 +279,7 @@ export default function Home() {
       <EditReservationDialog
         reservation={editing}
         isNew={isNew}
+        autoDates={autoDates}
         rooms={rooms}
         all={reservations}
         onClose={() => setEditing(null)}
