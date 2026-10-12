@@ -94,7 +94,7 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, 
                 {[room.notes, repairUntil && `niedostępny do ${formatDate(repairUntil)}`].filter(Boolean).join(" · ") || "–"}
               </TableCell>
               <TableCell className="text-right whitespace-nowrap">
-                <Button variant="secondary" size="sm" onClick={() => onReserve(room)}>
+                <Button variant="outline" size="sm" onClick={() => onReserve(room)}>
                   Rezerwuj
                 </Button>
                 {!search && res && (

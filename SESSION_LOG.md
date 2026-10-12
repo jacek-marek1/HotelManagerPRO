@@ -134,6 +134,10 @@ Popover „Brak wolnych pokoi" powiększony: szerokość 28rem, padding 5, tytu�
 ### 23. Wyrównanie „Rezerwuj" do prawej
 Gdy wiersz nie ma menu z trzema kropkami (pokój wolny, w naprawie, wyniki wyszukiwania), „Rezerwuj" jest dosunięty do prawej krawędzi kolumny (usunięty pusty znacznik miejsca po menu).
 
+### 24. Eksport i „Rezerwuj" – styl przycisków
+- Eksport: ikona pobierania przy „Eksportuj dane jako:", przyciski (Plik Excel, Plik PDF, Drukuj) w wariancie secondary (szare).
+- „Rezerwuj" w tabeli: wariant outline (obrys bez wypełnienia).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
