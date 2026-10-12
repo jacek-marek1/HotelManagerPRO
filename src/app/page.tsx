@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import {
@@ -17,7 +17,15 @@ import { RoomsTable } from "@/components/rooms-table";
 import { TablePagination } from "@/components/table-pagination";
 import { Button } from "@/components/ui/button";
 import { ExportActions } from "@/components/export-actions";
-import { dayStatus, isAvailable, summarize } from "@/lib/availability";
+import {
+  dayStatus,
+  displayReservation,
+  isAvailable,
+  isCleaningSoon,
+  summarize,
+} from "@/lib/availability";
+import { buildCsv, downloadCsv, type ExportRow } from "@/lib/export";
+import { STATUS_LABEL } from "@/components/room-status-badge";
 import { TODAY, addDays, toISO } from "@/lib/dates";
 import { reservations as initialReservations, rooms } from "@/lib/data";
 import type { Reservation, Room } from "@/lib/types";
@@ -33,6 +41,13 @@ export default function Home() {
   const [isNew, setIsNew] = useState(false);
   const [deleting, setDeleting] = useState<Reservation | null>(null);
   const [dismissedKey, setDismissedKey] = useState("");
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const notify = (msg: string) => {
+    setToast(msg);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 3500);
+  };
   const [floor, setFloor] = useState("all");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [page, setPage] = useState(1);
@@ -74,6 +89,33 @@ export default function Home() {
 
   const key = search ? `${search.from}|${search.to}|${guests}` : "";
   const noResults = !!search && results.length === 0;
+  const noResultsByFilters =
+    noResults &&
+    rooms.some((r) =>
+      isAvailable(r, reservations, search!.from, search!.to, guests ?? 1),
+    );
+
+  const exportExcel = () => {
+    const rows: ExportRow[] = results.map((r) => {
+      const reservation = displayReservation(r, reservations, TODAY);
+      const st = dayStatus(r, reservations, TODAY);
+      return {
+        room: r.number,
+        floor: r.floor,
+        capacity: r.capacity,
+        status: search
+          ? isCleaningSoon(r, search.from)
+            ? "Sprzątanie – za chwilę gotowy"
+            : "Wolny w terminie"
+          : STATUS_LABEL[st],
+        pricePerNight: r.pricePerNight,
+        notes: r.notes,
+        reservation: search ? undefined : reservation,
+      };
+    });
+    downloadCsv(buildCsv(rows), `pokoje-${TODAY}.csv`);
+    notify(`Wyeksportowano ${rows.length} pokoi do pliku Excel`);
+  };
 
   const startReservation = (room?: Room) => {
     const target = room ?? results[0] ?? rooms[0];
@@ -108,7 +150,8 @@ export default function Home() {
           setRange(r);
           setPage(1);
           // Wyszukiwanie terminu bez wybranej liczby gości zakłada 2 osoby.
-          if (r?.from && r.to && guests === null) setGuests(2);
+          if (r?.from && r.to && toISO(r.to) > toISO(r.from) && guests === null)
+            setGuests(2);
         }}
         guests={guests}
         onGuestsChange={(n) => {
@@ -116,6 +159,7 @@ export default function Home() {
           setPage(1);
         }}
         noResultsOpen={noResults && dismissedKey !== key}
+        noResultsByFilters={noResultsByFilters}
         onNoResultsDismiss={() => setDismissedKey(key)}
         floor={floor}
         onFloor={(f) => {
@@ -149,7 +193,11 @@ export default function Home() {
               · {results.length}
             </span>
           </h2>
-          <Button size="lg" onClick={() => startReservation()}>
+          <Button
+            size="lg"
+            className="print:hidden"
+            onClick={() => startReservation()}
+          >
             <PlusIcon />
             Nowa rezerwacja
           </Button>
@@ -178,8 +226,8 @@ export default function Home() {
           </div>
         )}
       </section>
-      <div className="border-t pt-4">
-        <ExportActions />
+      <div className="border-t pt-4 print:hidden">
+        <ExportActions onExcel={exportExcel} />
       </div>
       <ReservationDetails
         reservation={reservations.find((x) => x.id === detailsId) ?? null}
@@ -204,6 +252,11 @@ export default function Home() {
             isNew ? [...all, r] : all.map((x) => (x.id === r.id ? r : x)),
           );
           setEditing(null);
+          notify(
+            isNew
+              ? `Dodano rezerwację – pokój ${rooms.find((x) => x.id === r.roomId)?.number}`
+              : "Zapisano zmiany w rezerwacji",
+          );
         }}
       />
       <DeleteReservationDialog
@@ -212,8 +265,18 @@ export default function Home() {
         onConfirm={(r) => {
           setReservations((all) => all.filter((x) => x.id !== r.id));
           setDeleting(null);
+          notify("Rezerwacja usunięta");
         }}
       />
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-slate-900 px-4 py-3 text-sm text-white shadow-lg print:hidden"
+        >
+          {toast}
+        </div>
+      )}
     </main>
   );
 }

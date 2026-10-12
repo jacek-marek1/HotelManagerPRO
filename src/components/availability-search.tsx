@@ -54,6 +54,7 @@ interface Props {
   status: StatusFilter;
   onStatus: (s: StatusFilter) => void;
   noResultsOpen: boolean;
+  noResultsByFilters: boolean;
   onNoResultsDismiss: () => void;
   onReset: () => void;
   hasFilter: boolean;
@@ -73,7 +74,7 @@ export function AvailabilitySearch(p: Props) {
       <section
         ref={barRef}
         aria-label="Wyszukiwanie"
-        className="flex flex-col gap-3 rounded-lg border bg-card p-4"
+        className="flex flex-col gap-3 rounded-lg border bg-card p-4 print:hidden"
       >
         <div className="flex h-8 items-center justify-between">
           <h2 className="text-sm font-semibold">Wyszukiwanie</h2>
@@ -163,8 +164,9 @@ export function AvailabilitySearch(p: Props) {
         >
           <p className="text-lg font-semibold">Brak wolnych pokoi</p>
           <p className="text-base leading-relaxed text-muted-foreground">
-            Żaden pokój nie jest dostępny w całym wybranym terminie dla tej
-            liczby gości. Zmień termin lub liczbę osób.
+            {p.noResultsByFilters
+              ? "W wybranym terminie są wolne pokoje, ale żaden nie spełnia filtrów piętra lub statusu. Zmień filtry."
+              : "Żaden pokój nie jest dostępny w całym wybranym terminie dla tej liczby gości. Zmień termin lub liczbę osób."}
           </p>
         </PopoverContent>
       </Popover>

@@ -123,7 +123,7 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, 
         {rooms.length === 0 && (
           <TableRow>
             <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
-              Brak pokoi spełniających kryteria.
+              Brak pokoi spełniających kryteria. Zmień filtry.
             </TableCell>
           </TableRow>
         )}

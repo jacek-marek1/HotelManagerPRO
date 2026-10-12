@@ -143,6 +143,16 @@ Wyglądała jak zwykły tekst, była przesunięta względem pól i czyściła ty
 
 Korekta: przy węższym oknie (~1000 px) przycisk zawijał się pod pola, więc przeniesiony do nagłówka bloku „Wyszukiwanie" (po prawej, rozmiar sm) – zawsze się mieści.
 
+### 26. Weryfikacja założeń i naprawa luk (3 kliknięcia, dostęp do informacji, błędy, edge cases)
+Decyzja Jacka: dashboard traktowany jako realny, bez komunikatów o „prototypie".
+Znalezione luki i naprawy:
+- Auto-ustawianie „2 osoby" tylko przy kompletnym terminie (od < do); dwukrotne kliknięcie tego samego dnia nie zawęża już listy (zweryfikowane w Chrome).
+- Komunikat braku wyników zależny od przyczyny: brak wolnych pokoi w terminie vs. za wąskie filtry piętra/statusu (zweryfikowane w Chrome); pusta tabela: „Zmień filtry".
+- Modal rezerwacji: błąd i blokada zapisu dla pokoju w naprawie przed datą końca naprawy (Chrome); informacja przy pokoju w sprzątaniu (przyjazd dziś); walidacja telefonu i e-maila (czerwone pole + komunikat, Chrome); podpowiedź przy pustym nazwisku.
+- Eksport działa: Plik Excel → CSV (średnik, BOM, polskie znaki; `lib/export.ts`), Plik PDF i Drukuj → okno drukowania (elementy sterujące ukryte w druku, `print:hidden`). Toast „Wyeksportowano N pokoi do pliku Excel" (Chrome; sam plik zweryfikowany skryptem, nie w przeglądarce).
+- Toasty po zapisie, dodaniu i usunięciu rezerwacji (`role="status"`).
+Otwarte: liczba osób w rezerwacji i data końca naprawy nadal tylko w uwagach; „Jutro" w podsumowaniu bez liczb; filtr „Status dziś" z wybranym terminem ukrywa np. 103 przy „Wolny".
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
