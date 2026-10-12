@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { dayStatus, displayReservation, isCleaningSoon, stayTotal } from "@/lib/availability";
 import { TODAY, formatDate, formatNights, nightsBetween } from "@/lib/dates";
@@ -49,18 +48,16 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, 
               <TableCell>
                 {room.capacity} {room.capacity === 1 ? "osoba" : "osoby"}
               </TableCell>
-              <TableCell>
-                <span
-                  className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                    search ? (isCleaningSoon(room, search.from) ? STATUS_FILL.cleaning : STATUS_FILL.free) : STATUS_FILL[status]
-                  }`}
-                >
-                  {search
-                    ? isCleaningSoon(room, search.from)
-                      ? "Sprzątanie – za chwilę gotowy"
-                      : "Wolny"
-                    : STATUS_LABEL[status]}
-                </span>
+              <TableCell
+                className={`font-medium ${
+                  search ? (isCleaningSoon(room, search.from) ? STATUS_FILL.cleaning : STATUS_FILL.free) : STATUS_FILL[status]
+                }`}
+              >
+                {search
+                  ? isCleaningSoon(room, search.from)
+                    ? "Sprzątanie – za chwilę gotowy"
+                    : "Wolny"
+                  : STATUS_LABEL[status]}
               </TableCell>
               <TableCell>
                 {!search && res ? (
@@ -73,8 +70,6 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, 
                       >
                         {res.guest.name}
                       </button>
-                      {res.departure === TODAY && <Tag>Wyjazd dziś</Tag>}
-                      {res.arrival === TODAY && <Tag>Przyjazd dziś</Tag>}
                       <div className="text-muted-foreground">
                         {formatDate(res.arrival)} – {formatDate(res.departure)} · {formatNights(nightsBetween(res.arrival, res.departure))} · {money(stayTotal(res))}
                       </div>
@@ -140,10 +135,3 @@ export function RoomsTable({ rooms, reservations, search, onReserve, onDetails, 
   );
 }
 
-function Tag({ children }: { children: React.ReactNode }) {
-  return (
-    <Badge variant="outline" className="ml-2 border-slate-700 bg-white text-slate-900">
-      {children}
-    </Badge>
-  );
-}

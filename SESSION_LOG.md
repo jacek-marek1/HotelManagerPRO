@@ -104,6 +104,12 @@ Uwaga Jacka: statusy mniej istotne, potrzebny widoczny element wskazujący na sz
 - Kolumna „Pojemność": tylko liczba osób (usunięty skrót typu pokoju, np. „2 os.+", zgodnie z P0-3 PRD).
 - Weryfikacja w Chrome: brak poziomego scrolla, kolumna Akcje w pełni widoczna.
 
+### 17. Korekta kroku 16
+Jacek doprecyzował: chodziło o znaczniki „Przyjazd dziś" / „Wyjazd dziś" (zajmują miejsce w tabeli), nie o kolor statusu.
+- Znaczniki usunięte z tabeli; w panelu szczegółów nowy wiersz „Dziś" (Przyjazd dziś / Wyjazd dziś / Gość w obiekcie). Przyjazdy i wyjazdy dziś nadal są w podsumowaniu na górze (T3).
+- Cofnięta moja błędna interpretacja z kroku 16: status znów jako wypełniona komórka (jak prosił Jacek wcześniej).
+- Weryfikacja w Chrome: tabela bez znaczników; panel Anny Nowak pokazuje „Wyjazd dziś".
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

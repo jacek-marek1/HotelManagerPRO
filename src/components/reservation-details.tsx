@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { stayTotal } from "@/lib/availability";
-import { formatDate, formatNights, nightsBetween } from "@/lib/dates";
+import { TODAY, formatDate, formatNights, nightsBetween } from "@/lib/dates";
 import type { Reservation, Room } from "@/lib/types";
 
 interface Props {
@@ -33,6 +33,15 @@ export function ReservationDetails({ reservation: r, room, onClose, onEdit }: Pr
               </SheetDescription>
             </SheetHeader>
             <dl className="px-4">
+              <Row label="Dziś">
+                {r.arrival === TODAY
+                  ? "Przyjazd dziś"
+                  : r.departure === TODAY
+                    ? "Wyjazd dziś"
+                    : r.arrival < TODAY && r.departure > TODAY
+                      ? "Gość w obiekcie"
+                      : ""}
+              </Row>
               <Row label="Płatność">{r.payment}</Row>
               <Row label="Telefon">
                 {r.guest.phone && (
