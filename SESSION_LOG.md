@@ -222,6 +222,10 @@ Prośba Jacka: osoba otwierająca prototyp ma być przeprowadzona przez flow; za
 - Po „Zakończ" / „Wychodzę" ekran wraca do stanu początkowego (filtry, karty).
 - Weryfikacja w Chrome: modal, kroki 1–6, „Zakończ" z resetem. Znaleziona i naprawiona w trakcie: dymek zasłaniał podświetlaną tabelę (zmiana przewijania i ustawiania dymku, krok 6 zawężony do kolumny statusu). Nie sprawdzone: „Nie" w modalu powitalnym, „Wychodzę", „Wstecz", przycisk „Przewodnik" w nagłówku.
 
+### 42. Przewodnik: krok 7 – dane klienta w panelu bocznym
+Dodany krok „Dane klienta poza tabelą": przewodnik otwiera panel szczegółów Jana Kowalskiego i tłumaczy, że dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym (problem: wiek, miasto, telefon, e-mail i płatność zabierały szerokość tabeli). Technicznie: panel jest niemodalny na czas przewodnika (`modal={!tourActive}`) i nie zamyka się po kliknięciu poza nim; `TourApi.openDetails`; reset zamyka panel. Modal powitalny: „7 krótkich kroków".
+Weryfikacja w Chrome: krok 7 z panelem (telefon, e-mail, suma 1250 PLN, uwagi), „Zakończ" zamyka panel i przywraca ekran.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

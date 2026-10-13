@@ -159,6 +159,7 @@ export default function Home() {
       setPage(1);
     },
     showSummary: setSummaryOpen,
+    openDetails: setDetailsId,
     reset: () => {
       setRange(undefined);
       setGuests(null);
@@ -166,6 +167,7 @@ export default function Home() {
       setStatus("all");
       setPage(1);
       setSummaryOpen(false);
+      setDetailsId(null);
     },
   };
 
@@ -306,7 +308,8 @@ export default function Home() {
         room={rooms.find(
           (r) => r.id === reservations.find((x) => x.id === detailsId)?.roomId,
         )}
-        onClose={() => setDetailsId(null)}
+        modal={!tourActive}
+        onClose={() => !tourActive && setDetailsId(null)}
         onEdit={(r) => {
           setDetailsId(null);
           setIsNew(false);

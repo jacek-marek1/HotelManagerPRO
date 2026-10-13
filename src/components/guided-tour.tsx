@@ -23,6 +23,8 @@ export interface TourApi {
   applySearch: (s: TourSearch) => void;
   clearFilters: () => void;
   showSummary: (open: boolean) => void;
+  /** Otwiera panel szczegółów rezerwacji o danym id (null = zamyka). */
+  openDetails: (reservationId: string | null) => void;
   reset: () => void;
 }
 
@@ -32,6 +34,8 @@ interface Step {
   title: string;
   problem: string;
   solution: string;
+  /** Id rezerwacji, której panel szczegółów ma być otwarty w tym kroku. */
+  details?: string;
   enter?: (api: TourApi) => void;
 }
 
@@ -104,6 +108,15 @@ const STEPS: Step[] = [
     solution:
       "Status wylicza się z dat i stanu pokoju. Kolor i tekst mówią to samo, a naprawa pokazuje datę końca. Przewodnik wyczyścił filtry.",
     enter: (api) => api.clearFilters(),
+  },
+  {
+    targets: ['[data-slot="sheet-content"]'],
+    details: "b1",
+    title: "Dane klienta poza tabelą",
+    problem:
+      "Wiek, miasto, telefon, e-mail i płatność zabierały szerokość tabeli i utrudniały szybką decyzję o pokoju.",
+    solution:
+      "Tabela zostaje czytelna: pokój, status, gość i termin. Dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym klienta, który otwiera kliknięcie w nazwisko. Stamtąd przejdziesz też do edycji.",
   },
 ];
 
@@ -187,6 +200,7 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
   // Wejście w krok: wykonanie akcji, przewinięcie, śledzenie położenia elementów.
   useEffect(() => {
     if (!active) return;
+    api.openDetails(step.details ?? null);
     step.enter?.(api);
     const scrollTimer = setTimeout(() => {
       const r = unionRect(step.targets);

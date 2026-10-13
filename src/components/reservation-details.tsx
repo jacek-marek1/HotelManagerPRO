@@ -16,6 +16,8 @@ interface Props {
   room: Room | undefined;
   onClose: () => void;
   onEdit: (r: Reservation) => void;
+  /** Niemodalny panel (np. podczas przewodnika) nie blokuje reszty ekranu. */
+  modal?: boolean;
 }
 
 function Row({
@@ -38,9 +40,10 @@ export function ReservationDetails({
   room,
   onClose,
   onEdit,
+  modal = true,
 }: Props) {
   return (
-    <Sheet open={!!r} onOpenChange={(o) => !o && onClose()}>
+    <Sheet open={!!r} modal={modal} onOpenChange={(o) => !o && onClose()}>
       <SheetContent>
         {r && room && (
           <>
