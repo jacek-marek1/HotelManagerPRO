@@ -244,6 +244,9 @@ Uwaga Jacka: akcja ma nazywać się „status pokoju"; przykład: gość wymeldo
 - Weryfikacja w Chrome na pokoju 106 (Tomasz Nowicki, 27–31.12): okno, komunikat, zapis → status „Wolny", pobyt 27–28.12 (1 noc). Nie sprawdzano: przypadku usunięcia rezerwacji (przyjazd dziś) ani ponownego rezerwowania zwolnionego pokoju.
 Dodatkowo (uwaga Jacka): „Liczba osób" uzupełniona dla oryginalnych rezerwacji (Maria Wiśniewska 1 – panel pokazuje 1 zamiast „–").
 
+### 47. Przycisk przewodnika jako wystający dymek z boku
+Przycisk „Przewodnik" z nagłówka zastąpiony stałą zakładką przy prawej krawędzi okna (u góry, `fixed right-0 top-6`), z zaokrąglonymi lewymi rogami, ikoną kompasu i tekstem „Skorzystaj z przewodnika"; po najechaniu lub fokusie wysuwa się o kilka pikseli; wygląd jasny z obrysem (jak wcześniejszy przycisk „Przewodnik"), bez wypełnienia primary; ukryta w trakcie przewodnika i przy druku.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

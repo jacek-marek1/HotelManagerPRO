@@ -203,15 +203,6 @@ export default function Home() {
             09:15
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="print:hidden"
-          onClick={() => setTourRun((n) => n + 1)}
-        >
-          <CompassIcon />
-          Przewodnik
-        </Button>
       </header>
       <OccupancySummary
         today={today}
@@ -374,6 +365,16 @@ export default function Home() {
           notify("Rezerwacja usunięta");
         }}
       />
+      {!tourActive && (
+        <button
+          type="button"
+          onClick={() => setTourRun((n) => n + 1)}
+          className="fixed right-0 top-6 z-40 flex translate-x-1 cursor-pointer items-center gap-2 rounded-l-2xl border border-r-0 bg-card py-3 pl-4 pr-5 text-sm font-medium text-foreground shadow-md hover:bg-muted transition-transform hover:translate-x-0 focus-visible:translate-x-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring print:hidden"
+        >
+          <CompassIcon className="size-4" aria-hidden />
+          Skorzystaj z przewodnika
+        </button>
+      )}
       {tourActive && <div aria-hidden className="h-[75vh]" />}
       <GuidedTour
         api={tourApi}
