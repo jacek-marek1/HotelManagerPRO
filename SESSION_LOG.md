@@ -259,6 +259,9 @@ Decyzja Jacka: w wynikach wyszukiwania (termin od dziś) pokój w sprzątaniu ma
 ### 51. Rodzaj problemu w przewodniku
 Każdy krok przewodnika ma oznaczenie rodzaju problemu (pigułka obok numeru kroku): „Nielogiczność" (kroki 1–7: obłożenie, termin i liczba osób, wynik z dat, „Rezerwuj", komunikat braku wyników, filtr statusów, status pokoi) lub „Estetyka i odciążenie poznawcze" (krok 8: dane klienta w panelu bocznym). Zgodne z kategoriami analizy z PRD („Nielogiczne" vs „Mało estetyczne").
 
+### 52. Kolory statusów w podsumowaniu obłożenia
+Liczby w kartach „Dziś" i „Jutro" jako pigułki z wypełnieniem i obrysem w kolorze statusu (Zajęty czerwony, Wolny zielony, Sprzątanie żółty, Naprawa szary; `STATUS_FILL` + nowe `STATUS_STROKE`), żeby właściciel od razu rozpoznał obłożenie po kolorach.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

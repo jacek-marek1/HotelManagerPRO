@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChevronDownIcon } from "lucide-react";
 import type { DaySummary } from "@/lib/availability";
 import { formatDate } from "@/lib/dates";
-import { STATUS_LABEL } from "./room-status-badge";
+import { STATUS_FILL, STATUS_LABEL, STATUS_STROKE } from "./room-status-badge";
 import type { DayStatus } from "@/lib/types";
 
 const ORDER: DayStatus[] = ["occupied", "free", "cleaning", "repair"];
@@ -61,15 +61,16 @@ function Day({
             aria-hidden
           />
         </span>
-        <span className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+        <span className="flex flex-wrap items-center gap-2">
           {ORDER.map((k) => (
-            <span key={k} className="flex items-baseline gap-1.5">
+            <span
+              key={k}
+              className={`inline-flex items-baseline gap-1.5 rounded-full border px-3 py-1 ${STATUS_FILL[k]} ${STATUS_STROKE[k]}`}
+            >
               <span className="text-xl font-semibold leading-none">
                 {s.counts[k]}
               </span>
-              <span className="text-sm text-muted-foreground">
-                {STATUS_LABEL[k]}
-              </span>
+              <span className="text-sm font-medium">{STATUS_LABEL[k]}</span>
             </span>
           ))}
         </span>
