@@ -214,6 +214,14 @@ Spójność danych sprawdzona skryptem (brak nakładania rezerwacji, pojemność
 ### 40. Suma przeniesiona do panelu bocznego
 Z komórki „Gość i pobyt" usunięta kwota za pobyt (zostają: nazwisko, termin, liczba nocy). W bocznym panelu szczegółów osobny wiersz „Suma" (noce × cena/noc); wiersz „Pobyt" ma tylko noce i cenę za noc.
 
+### 41. Przewodnik po prototypie (samouczek)
+Prośba Jacka: osoba otwierająca prototyp ma być przeprowadzona przez flow; zakres zawężony do głównego zadania (szybkie znalezienie wolnego pokoju dla gościa walk-in i sprawdzenie obłożenia, problemy użyteczności → rozwiązania); przewodnik sam wykonuje akcje na ekranie, ale do kolejnego kroku przechodzi osoba oglądająca („Idę dalej" / „Wychodzę").
+- Komponent `components/guided-tour.tsx`: modal powitalny (Tak / Nie; „Nie" zapamiętane w `sessionStorage`), ciemna nakładka z podświetleniem elementu (box-shadow), dymek z numerem kroku, sekcjami „Problem" i „Rozwiązanie", przyciskami „Wychodzę", „Wstecz", „Idę dalej" (na ostatnim kroku „Zakończ"); klawisze: strzałki i Enter (dalej/wstecz), Esc (wyjście). Przycisk „Przewodnik" w nagłówku uruchamia go ponownie.
+- 6 kroków: (1) obłożenie (karty Dziś/Jutro, Dziś rozwinięte), (2) termin i liczba osób (przewodnik ustawia 28–30.12, 2 osoby), (3) wynik liczony z dat (sprzątanie „za chwilę gotowy"), (4) „Rezerwuj" w wyniku, (5) komunikat braku wyników (4 osoby, Piętro 2), (6) kolumna statusu (filtry wyczyszczone).
+- Na czas przewodnika: blokada klikania w ekran pod spodem, pusta przestrzeń na dole strony (żeby cel dało się przewinąć na górę), popover braku wyników nie zamyka się sam.
+- Po „Zakończ" / „Wychodzę" ekran wraca do stanu początkowego (filtry, karty).
+- Weryfikacja w Chrome: modal, kroki 1–6, „Zakończ" z resetem. Znaleziona i naprawiona w trakcie: dymek zasłaniał podświetlaną tabelę (zmiana przewijania i ustawiania dymku, krok 6 zawężony do kolumny statusu). Nie sprawdzone: „Nie" w modalu powitalnym, „Wychodzę", „Wstecz", przycisk „Przewodnik" w nagłówku.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

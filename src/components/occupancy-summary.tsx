@@ -28,8 +28,17 @@ function People({
   );
 }
 
-function Day({ title, s }: { title: string; s: DaySummary }) {
-  const [open, setOpen] = useState(false);
+function Day({
+  title,
+  s,
+  forceOpen,
+}: {
+  title: string;
+  s: DaySummary;
+  forceOpen?: boolean;
+}) {
+  const [openState, setOpen] = useState(false);
+  const open = openState || !!forceOpen;
   const panelId = `summary-${title.toLowerCase()}`;
   return (
     <div className="flex-1 rounded-lg border bg-card">
@@ -37,7 +46,7 @@ function Day({ title, s }: { title: string; s: DaySummary }) {
         type="button"
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => setOpen(!openState)}
         className="flex w-full flex-col gap-2 rounded-lg px-4 py-3 text-left hover:bg-muted/50 focus-visible:outline-2 focus-visible:outline-ring"
       >
         <span className="flex items-center justify-between">
@@ -82,13 +91,19 @@ function Day({ title, s }: { title: string; s: DaySummary }) {
 export function OccupancySummary({
   today,
   tomorrow,
+  forceOpenToday,
 }: {
   today: DaySummary;
   tomorrow: DaySummary;
+  forceOpenToday?: boolean;
 }) {
   return (
-    <section aria-label="Obłożenie" className="flex items-start gap-4">
-      <Day title="Dziś" s={today} />
+    <section
+      aria-label="Obłożenie"
+      data-tour="summary"
+      className="flex items-start gap-4"
+    >
+      <Day title="Dziś" s={today} forceOpen={forceOpenToday} />
       <Day title="Jutro" s={tomorrow} />
     </section>
   );

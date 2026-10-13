@@ -1,12 +1,13 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { PlusIcon } from "lucide-react";
+import { CompassIcon, PlusIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import {
   AvailabilitySearch,
   type StatusFilter,
 } from "@/components/availability-search";
+import { GuidedTour, type TourApi } from "@/components/guided-tour";
 import { OccupancySummary } from "@/components/occupancy-summary";
 import {
   DeleteReservationDialog,
@@ -27,7 +28,7 @@ import {
 } from "@/lib/availability";
 import { buildCsv, downloadCsv, type ExportRow } from "@/lib/export";
 import { STATUS_LABEL } from "@/components/room-status-badge";
-import { TODAY, addDays, toISO } from "@/lib/dates";
+import { TODAY, addDays, fromISO, toISO } from "@/lib/dates";
 import {
   reservations as initialReservations,
   rooms as initialRooms,
@@ -49,6 +50,9 @@ export default function Home() {
   const [autoDates, setAutoDates] = useState(false);
   const [deleting, setDeleting] = useState<Reservation | null>(null);
   const [dismissedKey, setDismissedKey] = useState("");
+  const [tourRun, setTourRun] = useState(0);
+  const [tourActive, setTourActive] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const notify = (msg: string) => {
@@ -138,6 +142,33 @@ export default function Home() {
     notify(`Pokój ${room.number} oznaczony jako posprzątany`);
   };
 
+  const tourApi: TourApi = {
+    applySearch: (t) => {
+      setRange({ from: fromISO(t.from), to: fromISO(t.to) });
+      setGuests(t.guests);
+      setFloor(t.floor);
+      setStatus("all");
+      setDismissedKey("");
+      setPage(1);
+    },
+    clearFilters: () => {
+      setRange(undefined);
+      setGuests(null);
+      setFloor("all");
+      setStatus("all");
+      setPage(1);
+    },
+    showSummary: setSummaryOpen,
+    reset: () => {
+      setRange(undefined);
+      setGuests(null);
+      setFloor("all");
+      setStatus("all");
+      setPage(1);
+      setSummaryOpen(false);
+    },
+  };
+
   const startReservation = (room?: Room) => {
     const target = room ?? results[0] ?? rooms[0];
     const start = search?.from ?? nextFreeStart(target, reservations).date;
@@ -166,8 +197,21 @@ export default function Home() {
             09:15
           </p>
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="print:hidden"
+          onClick={() => setTourRun((n) => n + 1)}
+        >
+          <CompassIcon />
+          Przewodnik
+        </Button>
       </header>
-      <OccupancySummary today={today} tomorrow={tomorrow} />
+      <OccupancySummary
+        today={today}
+        tomorrow={tomorrow}
+        forceOpenToday={summaryOpen}
+      />
       <AvailabilitySearch
         range={range}
         onRangeChange={(r) => {
@@ -182,9 +226,9 @@ export default function Home() {
           setGuests(n);
           setPage(1);
         }}
-        noResultsOpen={noResults && dismissedKey !== key}
+        noResultsOpen={noResults && (tourActive || dismissedKey !== key)}
         noResultsByFilters={noResultsByFilters}
-        onNoResultsDismiss={() => setDismissedKey(key)}
+        onNoResultsDismiss={() => !tourActive && setDismissedKey(key)}
         floor={floor}
         onFloor={(f) => {
           setFloor(f);
@@ -209,6 +253,7 @@ export default function Home() {
       />
       <section
         aria-label="Lista pokoi"
+        data-tour="table"
         className="overflow-hidden rounded-lg border bg-card"
       >
         <div className="flex items-center justify-between gap-4 px-4 py-3">
@@ -307,6 +352,12 @@ export default function Home() {
           setDeleting(null);
           notify("Rezerwacja usunięta");
         }}
+      />
+      {tourActive && <div aria-hidden className="h-[75vh]" />}
+      <GuidedTour
+        api={tourApi}
+        runId={tourRun}
+        onActiveChange={setTourActive}
       />
       {toast && (
         <div

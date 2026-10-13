@@ -76,6 +76,7 @@ export function AvailabilitySearch(p: Props) {
       <section
         ref={barRef}
         aria-label="Wyszukiwanie"
+        data-tour="search"
         className="flex flex-col gap-3 rounded-lg border bg-card p-4 print:hidden"
       >
         <div className="flex h-9 items-center justify-between">

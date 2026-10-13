@@ -1,0 +1,350 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+export interface TourSearch {
+  from: string;
+  to: string;
+  guests: number | null;
+  floor: string;
+}
+
+/** Akcje, które przewodnik wykonuje na ekranie za osobę oglądającą. */
+export interface TourApi {
+  applySearch: (s: TourSearch) => void;
+  clearFilters: () => void;
+  showSummary: (open: boolean) => void;
+  reset: () => void;
+}
+
+interface Step {
+  /** Selektory elementów do podświetlenia (podświetlany jest ich wspólny obszar). */
+  targets: string[];
+  title: string;
+  problem: string;
+  solution: string;
+  enter?: (api: TourApi) => void;
+}
+
+const STEPS: Step[] = [
+  {
+    targets: ['[data-tour="summary"]'],
+    title: "Obłożenie na pierwszy rzut oka",
+    problem:
+      "Żeby sprawdzić obłożenie, trzeba było liczyć wiersze ręcznie. Przyjazdów i wyjazdów dziś nic nie wyróżniało.",
+    solution:
+      "Karty „Dziś” i „Jutro” liczą statusy z tych samych danych co wyszukiwarka. Po rozwinięciu widać, kto przyjeżdża i wyjeżdża.",
+    enter: (api) => api.showSummary(true),
+  },
+  {
+    targets: ['[data-tour="search"]'],
+    title: "Pytanie gościa: termin i liczba osób",
+    problem:
+      "Pola Od/Do nie filtrowały listy i nie dało się podać liczby gości. Na pytanie „czy macie pokój dla 2 osób na 2 noce od dziś?” ekran nie odpowiadał.",
+    solution:
+      "Kalendarz zakresu i liczba gości filtrują pokoje od razu, w 3 kliknięciach. Przewodnik wpisał za Ciebie 28–30.12 i 2 osoby.",
+    enter: (api) => {
+      api.showSummary(false);
+      api.applySearch({
+        from: "2024-12-28",
+        to: "2024-12-30",
+        guests: 2,
+        floor: "all",
+      });
+    },
+  },
+  {
+    targets: ['[data-tour="table"]'],
+    title: "Wynik liczony z dat, nie z ręcznego statusu",
+    problem:
+      "„Wolne” znaczyło tylko „wolny dziś”. Pokój w sprzątaniu znikał z wyników, a naprawa była ukryta w uwagach.",
+    solution:
+      "Lista pokazuje pokoje dostępne w całym terminie. Pokój w sprzątaniu zostaje na liście z oznaczeniem „za chwilę gotowy”.",
+  },
+  {
+    targets: ['[data-tour="reserve-first"]'],
+    title: "Wskazanie pokoju w jednym kliknięciu",
+    problem:
+      "Z wyniku nie dało się od razu przejść do rezerwacji, a pojemność trzeba było odgadywać ze skrótów („2os.+”).",
+    solution:
+      "„Rezerwuj” otwiera rezerwację z datami z wyszukiwania. Pojemność jest podana w osobach.",
+  },
+  {
+    targets: ['[data-tour="search"]', '[data-slot="popover-content"]'],
+    title: "Komunikat zamiast pustego ekranu",
+    problem:
+      "Gdy nic nie pasowało, recepcjonista widział pustą listę i nie wiedział, co zmienić.",
+    solution:
+      "Komunikat mówi, że brak pokoi, i podpowiada, co zmienić: termin, liczbę osób albo filtry. Przewodnik ustawił 4 osoby na piętrze 2.",
+    enter: (api) =>
+      api.applySearch({
+        from: "2024-12-28",
+        to: "2024-12-30",
+        guests: 4,
+        floor: "P2",
+      }),
+  },
+  {
+    targets: [
+      '[data-tour="table"] thead th:nth-child(3)',
+      '[data-tour="table"] tbody td:nth-child(3)',
+    ],
+    title: "Status pokoi dziś w jednym miejscu",
+    problem:
+      "Stan techniczny (sprzątanie, naprawa) był ukryty w uwagach, a status ustawiany ręcznie, niezależnie od dat.",
+    solution:
+      "Status wylicza się z dat i stanu pokoju. Kolor i tekst mówią to samo, a naprawa pokazuje datę końca. Przewodnik wyczyścił filtry.",
+    enter: (api) => api.clearFilters(),
+  },
+];
+
+const DECLINED_KEY = "hm-tour-declined";
+const PAD = 8;
+
+interface Rect {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+function unionRect(selectors: string[]): Rect | null {
+  const rects = selectors
+    .flatMap((s) => Array.from(document.querySelectorAll(s)))
+    .map((el) => el.getBoundingClientRect())
+    .filter((r) => r.width > 0 && r.height > 0);
+  if (rects.length === 0) return null;
+  const top = Math.min(...rects.map((r) => r.top));
+  const left = Math.min(...rects.map((r) => r.left));
+  const bottom = Math.max(...rects.map((r) => r.bottom));
+  const right = Math.max(...rects.map((r) => r.right));
+  return {
+    top: top - PAD,
+    left: left - PAD,
+    width: right - left + PAD * 2,
+    height: bottom - top + PAD * 2,
+  };
+}
+
+interface Props {
+  api: TourApi;
+  /** Zwiększenie wartości uruchamia przewodnik (przycisk w nagłówku). */
+  runId: number;
+  onActiveChange: (active: boolean) => void;
+}
+
+export function GuidedTour({ api, runId, onActiveChange }: Props) {
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
+  const [active, setActive] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [rect, setRect] = useState<Rect | null>(null);
+  const [viewport, setViewport] = useState({ w: 0, h: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [cardH, setCardH] = useState(280);
+
+  // Modal powitalny przy świeżym wejściu (chyba że odrzucony w tej sesji).
+  useEffect(() => {
+    let declined = false;
+    try {
+      declined = sessionStorage.getItem(DECLINED_KEY) === "1";
+    } catch {}
+    if (declined) return;
+    const t = setTimeout(() => setWelcomeOpen(true), 0);
+    return () => clearTimeout(t);
+  }, []);
+
+  const start = useCallback(() => {
+    setWelcomeOpen(false);
+    setIndex(0);
+    setActive(true);
+    onActiveChange(true);
+  }, [onActiveChange]);
+
+  const exit = useCallback(() => {
+    setActive(false);
+    setRect(null);
+    onActiveChange(false);
+    api.reset();
+  }, [api, onActiveChange]);
+
+  useEffect(() => {
+    if (runId === 0) return;
+    const t = setTimeout(start, 0);
+    return () => clearTimeout(t);
+  }, [runId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const step = STEPS[index];
+
+  // Wejście w krok: wykonanie akcji, przewinięcie, śledzenie położenia elementów.
+  useEffect(() => {
+    if (!active) return;
+    step.enter?.(api);
+    const scrollTimer = setTimeout(() => {
+      const r = unionRect(step.targets);
+      if (r)
+        window.scrollTo({
+          top: window.scrollY + r.top - 16,
+          behavior: "smooth",
+        });
+    }, 350);
+    const poll = setInterval(() => {
+      setRect(unionRect(step.targets));
+      setViewport({ w: window.innerWidth, h: window.innerHeight });
+      if (cardRef.current) setCardH(cardRef.current.offsetHeight);
+    }, 120);
+    return () => {
+      clearTimeout(scrollTimer);
+      clearInterval(poll);
+    };
+  }, [active, index]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const last = index === STEPS.length - 1;
+  const next = () => (last ? exit() : setIndex(index + 1));
+
+  useEffect(() => {
+    if (!active) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") exit();
+      if (e.key === "ArrowRight" || e.key === "Enter") next();
+      if (e.key === "ArrowLeft" && index > 0) setIndex(index - 1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  const decline = () => {
+    try {
+      sessionStorage.setItem(DECLINED_KEY, "1");
+    } catch {}
+    setWelcomeOpen(false);
+  };
+
+  // Położenie dymku: pod podświetleniem, nad nim, z prawej, z lewej albo przy dolnej krawędzi okna.
+  const W = 380;
+  const GAP = 16;
+  let cardTop = Math.max(8, viewport.h - cardH - GAP);
+  let cardLeft = Math.max(GAP, (viewport.w - W) / 2);
+  if (rect) {
+    const clampLeft = (x: number) =>
+      Math.min(Math.max(GAP, x), Math.max(GAP, viewport.w - W - GAP));
+    const clampTop = (y: number) =>
+      Math.min(Math.max(8, y), Math.max(8, viewport.h - cardH - 8));
+    const below = rect.top + rect.height + GAP;
+    const above = rect.top - cardH - GAP;
+    const rightSpace = viewport.w - (rect.left + rect.width) - GAP * 2;
+    const leftSpace = rect.left - GAP * 2;
+    if (below + cardH <= viewport.h - 8) {
+      cardTop = below;
+      cardLeft = clampLeft(rect.left);
+    } else if (above >= 8) {
+      cardTop = above;
+      cardLeft = clampLeft(rect.left);
+    } else if (rightSpace >= W) {
+      cardTop = clampTop(rect.top);
+      cardLeft = rect.left + rect.width + GAP;
+    } else if (leftSpace >= W) {
+      cardTop = clampTop(rect.top);
+      cardLeft = rect.left - W - GAP;
+    }
+  }
+
+  return (
+    <>
+      <Dialog open={welcomeOpen} onOpenChange={(o) => !o && decline()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Przewodnik po prototypie</DialogTitle>
+            <DialogDescription>
+              HotelManager PRO – redesign ekranu rezerwacji. Pokażę, jakie
+              problemy użyteczności utrudniały recepcjoniście szybkie
+              znalezienie wolnego pokoju dla gościa walk-in i sprawdzenie
+              obłożenia oraz jak rozwiązuje je ten prototyp.
+            </DialogDescription>
+          </DialogHeader>
+          <p className="text-sm">
+            To {STEPS.length} krótkich kroków. Ekran będzie się zmieniał sam, a
+            dalej idziesz Ty. Czy chcesz przejść przez prezentację funkcji?
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={decline}>
+              Nie
+            </Button>
+            <Button onClick={start}>Tak</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {active && (
+        <div
+          className="fixed inset-0 z-[100] print:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Przewodnik"
+        >
+          {/* Blokuje klikanie w ekran pod spodem – dalej idzie tylko osoba oglądająca. */}
+          <div className="absolute inset-0" />
+          {rect ? (
+            <div
+              className="pointer-events-none absolute rounded-lg ring-2 ring-white/90 transition-all duration-300"
+              style={{
+                top: rect.top,
+                left: rect.left,
+                width: rect.width,
+                height: rect.height,
+                boxShadow: "0 0 0 9999px rgba(15, 23, 42, 0.65)",
+              }}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-slate-900/65" />
+          )}
+          <div
+            ref={cardRef}
+            className="absolute rounded-xl border bg-card p-5 text-card-foreground shadow-xl transition-all duration-300"
+            style={{ top: cardTop, left: cardLeft, width: W }}
+          >
+            <p className="text-xs font-medium text-muted-foreground">
+              Krok {index + 1} z {STEPS.length}
+            </p>
+            <h2 className="mt-1 text-lg font-semibold">{step.title}</h2>
+            <div className="mt-3 space-y-3 text-sm">
+              <p>
+                <span className="mb-0.5 block text-xs font-semibold uppercase tracking-wide text-red-800">
+                  Problem
+                </span>
+                {step.problem}
+              </p>
+              <p>
+                <span className="mb-0.5 block text-xs font-semibold uppercase tracking-wide text-emerald-800">
+                  Rozwiązanie
+                </span>
+                {step.solution}
+              </p>
+            </div>
+            <div className="mt-4 flex items-center justify-between gap-2">
+              <Button variant="ghost" onClick={exit}>
+                Wychodzę
+              </Button>
+              <div className="flex gap-2">
+                {index > 0 && (
+                  <Button variant="outline" onClick={() => setIndex(index - 1)}>
+                    Wstecz
+                  </Button>
+                )}
+                <Button onClick={next}>{last ? "Zakończ" : "Idę dalej"}</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

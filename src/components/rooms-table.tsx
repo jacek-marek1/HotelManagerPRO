@@ -73,7 +73,7 @@ export function RoomsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {rooms.map((room) => {
+        {rooms.map((room, rowIndex) => {
           const res = displayReservation(room, reservations, TODAY);
           const status = dayStatus(room, reservations, TODAY);
           const repairUntil =
@@ -145,6 +145,7 @@ export function RoomsTable({
                 <Button
                   variant="outline"
                   size="sm"
+                  data-tour={rowIndex === 0 ? "reserve-first" : undefined}
                   onClick={() => onReserve(room)}
                 >
                   Rezerwuj
