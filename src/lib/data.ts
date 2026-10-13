@@ -213,6 +213,7 @@ export const rooms: Room[] = [...roomList].sort((a, b) =>
 export const reservations: Reservation[] = [
   {
     id: "b1",
+    guestsCount: 2,
     roomId: "r102",
     guest: {
       name: "Jan Kowalski",
@@ -228,6 +229,7 @@ export const reservations: Reservation[] = [
   },
   {
     id: "b2",
+    guestsCount: 2,
     roomId: "r103",
     guest: {
       name: "Anna Nowak",
@@ -243,6 +245,7 @@ export const reservations: Reservation[] = [
   },
   {
     id: "b3",
+    guestsCount: 1,
     roomId: "r104",
     guest: {
       name: "Maria Wiśniewska",
@@ -258,6 +261,7 @@ export const reservations: Reservation[] = [
   },
   {
     id: "b4",
+    guestsCount: 2,
     roomId: "r201",
     guest: {
       name: "Piotr Zieliński",

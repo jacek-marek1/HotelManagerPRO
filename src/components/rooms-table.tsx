@@ -171,7 +171,7 @@ export function RoomsTable({
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem onClick={() => onChangeState(room)}>
-                        Zmień stan pokoju
+                        Zmień status pokoju
                       </DropdownMenuItem>
                       {res && (
                         <>

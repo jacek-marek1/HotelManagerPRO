@@ -233,6 +233,17 @@ Opis zastąpiony tekstem Jacka („Cześć, przygotowałem krótki przewodnik po
 Dodany krok „Filtr po każdym statusie": problem (w oryginale tylko pokoje zajęte i wolne, sprzątanie i naprawa jako „Inne") → rozwiązanie (osobna pozycja filtra dla Wolny / Zajęty / Sprzątanie / Naprawa). Przewodnik sam wybiera status „Sprzątanie" (lista: 103, 109, 209). Opis uwzględnia, że termin wybiera się osobno w kalendarzu (przy wybranym terminie filtr statusu dziś jest ukryty, więc statusy i daty nie działają razem). `TourApi.setStatus`, `data-tour="status-filter"`; dymek przewodnika poszerzony do 440 px, żeby mniej zasłaniał tabelę.
 Weryfikacja w Chrome: modal „8 krótkich kroków", krok 6 z filtrem statusu i przefiltrowaną listą. Po poszerzeniu dymka nie sprawdzano ponownie wyglądu.
 
+### 45. Liczba osób dla oryginalnych rezerwacji
+Uwaga Jacka: w panelu „Liczba osób" pokazywała „–" dla części gości (np. Maria Wiśniewska). Uzupełnione fikcyjne wartości w pozostałych oryginalnych rezerwacjach (zgodne z pojemnością pokoju): Kowalski 2, Nowak 2, Wiśniewska 1 (pokój 1-osobowy), Zieliński 2. Rodzina Schmidt miała 4 z PRD.
+
+### 46. „Zmień status pokoju" i wymeldowanie przed terminem
+Uwaga Jacka: akcja ma nazywać się „status pokoju"; przykład: gość wymeldował się wcześniej i dostał zwrot, pokój wraca jako Wolny i recepcjonista może go przypisać samodzielnie.
+- Nazwy: menu „Zmień status pokoju", okno „Status pokoju N" z „Obecny status: …" i sekcją „Nowy status", opcje Wolny / Sprzątanie / Naprawa (dawne „Gotowy" → „Wolny"); toast „Zapisano status pokoju N".
+- Dla pokoju z gościem nic nie jest domyślnie zaznaczone, a „Zapisz" jest nieaktywny do wyboru statusu.
+- Wymeldowanie: wybór „Wolny" przy trwającym pobycie pokazuje komunikat (gość wymeldowany dziś, pobyt skrócony do N nocy, suma przeliczona, pokój od razu do przypisania); po zapisie rezerwacja kończy się dziś (gdy gość przyjechał dziś: rezerwacja usunięta), pokój jest „Wolny" (nie przechodzi w automatyczne sprzątanie dzięki `readyOn`), toast „Pokój N wolny – gość wymeldowany". Zwrotu pieniędzy aplikacja nie obsługuje – tylko przelicza sumę.
+- Weryfikacja w Chrome na pokoju 106 (Tomasz Nowicki, 27–31.12): okno, komunikat, zapis → status „Wolny", pobyt 27–28.12 (1 noc). Nie sprawdzano: przypadku usunięcia rezerwacji (przyjazd dziś) ani ponownego rezerwowania zwolnionego pokoju.
+Dodatkowo (uwaga Jacka): „Liczba osób" uzupełniona dla oryginalnych rezerwacji (Maria Wiśniewska 1 – panel pokazuje 1 zamiast „–").
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

@@ -324,12 +324,26 @@ export default function Home() {
         room={stateRoom}
         reservations={reservations}
         onClose={() => setStateRoom(null)}
-        onSave={(room, condition, notes) => {
+        onSave={(room, condition, notes, endStay) => {
           setRooms((all) =>
             all.map((r) => (r.id === room.id ? { ...r, condition, notes } : r)),
           );
+          if (endStay) {
+            // Wymeldowanie przed terminem: pobyt kończy się dziś (bez nocy – usunięty).
+            setReservations((all) =>
+              endStay.arrival >= TODAY
+                ? all.filter((x) => x.id !== endStay.id)
+                : all.map((x) =>
+                    x.id === endStay.id ? { ...x, departure: TODAY } : x,
+                  ),
+            );
+          }
           setStateRoom(null);
-          notify(`Zapisano stan pokoju ${room.number}`);
+          notify(
+            endStay
+              ? `Pokój ${room.number} wolny – gość wymeldowany`
+              : `Zapisano status pokoju ${room.number}`,
+          );
         }}
       />
       <EditReservationDialog
