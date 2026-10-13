@@ -96,13 +96,13 @@ const STEPS: Step[] = [
   },
   {
     targets: ['[data-tour="reserve-first"]'],
-    title: "Wskazanie pokoju w jednym kliknięciu",
-    kind: "logic",
-    focus: "main",
+    title: "Rezerwacja z wyniku: czytelna akcja",
+    kind: "cognitive",
+    focus: "extra",
     problem:
-      "Z wyniku nie dało się od razu przejść do rezerwacji, a pojemność trzeba było odgadywać ze skrótów („2os.+”).",
+      "Z wyniku dało się od razu przejść do rezerwacji, ale ta akcja niczym się nie wyróżniała. Były tylko pojedyncze litery R, E, U, trudne do rozpoznania w krótkim czasie, a pojemność trzeba było odgadywać ze skrótów („2os.+”).",
     solution:
-      "„Rezerwuj” otwiera rezerwację z datami z wyszukiwania. Pojemność jest podana w osobach.",
+      "„Rezerwuj” ma pełną nazwę i stoi przy każdym pokoju, a pojemność jest podana w osobach. Edycja i usuwanie są w osobnym menu, więc nie pomylisz ich z rezerwacją. Daty z wyszukiwania przenoszą się do rezerwacji.",
   },
   {
     targets: ['[data-tour="search"]', '[data-slot="popover-content"]'],
@@ -110,7 +110,7 @@ const STEPS: Step[] = [
     kind: "logic",
     focus: "main",
     problem:
-      "Gdy nic nie pasowało, recepcjonista widział pustą listę i nie wiedział, co zmienić.",
+      "Ekran nie odpowiadał na pytanie o termin i liczbę osób, więc nie mógł też powiedzieć „brak wolnych pokoi” ani podpowiedzieć, co zmienić.",
     solution:
       "Komunikat mówi, że brak pokoi, i podpowiada, co zmienić: termin, liczbę osób albo filtry. Przewodnik ustawił 4 osoby na piętrze 2.",
     enter: (api) =>
@@ -144,7 +144,7 @@ const STEPS: Step[] = [
     kind: "logic",
     focus: "extra",
     problem:
-      "Stan techniczny (sprzątanie, naprawa) był ukryty w uwagach, a status ustawiany ręcznie, niezależnie od dat.",
+      "Naprawa była tylko w uwagach, „Wolne” ukrywało sprzątanie, a status ustawiano ręcznie w edycji, niezależnie od dat.",
     solution:
       "Status wylicza się z dat i stanu pokoju. Kolor i tekst mówią to samo, a naprawa pokazuje datę końca. Przewodnik wyczyścił filtry.",
     enter: (api) => api.clearFilters(),
@@ -156,7 +156,7 @@ const STEPS: Step[] = [
     kind: "cognitive",
     focus: "extra",
     problem:
-      "Wiek, miasto, telefon, e-mail i płatność zabierały szerokość tabeli i utrudniały szybką decyzję o pokoju.",
+      "Wiek, miasto, telefon i e-mail zabierały szerokość tabeli i utrudniały szybką decyzję o pokoju.",
     solution:
       "Tabela zostaje czytelna: pokój, status, gość i termin. Dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym klienta, który otwiera kliknięcie w nazwisko. Stamtąd przejdziesz też do edycji.",
   },
