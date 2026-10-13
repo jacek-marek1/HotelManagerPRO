@@ -278,21 +278,21 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
           <DialogHeader>
             <DialogTitle>Przewodnik po prototypie</DialogTitle>
             <DialogDescription>
-              HotelManager PRO – redesign ekranu rezerwacji. Pokażę, jakie
-              problemy użyteczności utrudniały recepcjoniście szybkie
-              znalezienie wolnego pokoju dla gościa walk-in i sprawdzenie
-              obłożenia oraz jak rozwiązuje je ten prototyp.
+              Cześć, przygotowałem krótki przewodnik po moim redesignie, w
+              którym pokazuję po kolei jakie problemy użyteczności utrudniały
+              szybkie znalezienie wolnego pokoju i sprawdzenie obłożenia oraz
+              jak ten prototyp je rozwiązuje.
             </DialogDescription>
           </DialogHeader>
           <p className="text-sm">
             To {STEPS.length} krótkich kroków. Ekran będzie się zmieniał sam, a
-            dalej idziesz Ty. Czy chcesz przejść przez prezentację funkcji?
+            dalej idziesz Ty.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={decline}>
-              Nie
+              Rezygnuję
             </Button>
-            <Button onClick={start}>Tak</Button>
+            <Button onClick={start}>Zaczynamy</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

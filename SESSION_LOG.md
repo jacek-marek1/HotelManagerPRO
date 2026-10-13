@@ -226,6 +226,9 @@ Prośba Jacka: osoba otwierająca prototyp ma być przeprowadzona przez flow; za
 Dodany krok „Dane klienta poza tabelą": przewodnik otwiera panel szczegółów Jana Kowalskiego i tłumaczy, że dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym (problem: wiek, miasto, telefon, e-mail i płatność zabierały szerokość tabeli). Technicznie: panel jest niemodalny na czas przewodnika (`modal={!tourActive}`) i nie zamyka się po kliknięciu poza nim; `TourApi.openDetails`; reset zamyka panel. Modal powitalny: „7 krótkich kroków".
 Weryfikacja w Chrome: krok 7 z panelem (telefon, e-mail, suma 1250 PLN, uwagi), „Zakończ" zamyka panel i przywraca ekran.
 
+### 43. Treść ekranu powitalnego przewodnika
+Opis zastąpiony tekstem Jacka („Cześć, przygotowałem krótki przewodnik po moim redesignie…"); przyciski „Tak" → „Zaczynamy", „Nie" → „Rezygnuję" (zinterpretowane z niepełnego polecenia); z drugiego akapitu usunięte pytanie „Czy chcesz przejść…", bo nie pasuje do nowych przycisków.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
