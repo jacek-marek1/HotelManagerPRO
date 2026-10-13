@@ -193,6 +193,9 @@ Nagłówek bloku z `text-sm` na `text-lg font-semibold` (jak „Pokoje" nad tabe
 ### 34. Opis procesu pracy z AI
 Na prośbę Jacka: `docs/PROCES_PRACY_Z_AI.md` (pełna lista zmian względem oryginału, ewolucja, decyzje, pomyłki AI, efekt) i `docs/OPIS_FIGJAM.md` (krótki opis do wklejenia do FigJama).
 
+### 35. Zamiana kolorów statusów
+Zajęty = czerwony (`red-100`), Naprawa = szary (`slate-200`); Wolny (zielony) i Sprzątanie (żółty) bez zmian.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
