@@ -34,7 +34,7 @@ interface Step {
   targets: string[];
   title: string;
   /** Rodzaj problemu: nielogiczność działania vs estetyka i odciążenie poznawcze. */
-  kind: "logic" | "cognitive";
+  kind?: "logic" | "cognitive";
   /** Czy krok odpowiada na główny problem z analizy, czy na dodatkową kwestię. */
   focus: "main" | "extra";
   problem: string;
@@ -45,6 +45,15 @@ interface Step {
 }
 
 const STEPS: Step[] = [
+  {
+    targets: [],
+    title: "Na co odpowiada ten ekran",
+    focus: "main",
+    problem:
+      "Ekran nie pozwalał zapytać o dostępność na konkretny termin i liczbę osób, tylko pokazywał stan „na teraz”. Recepcjonista nie odpowiadał gościowi walk-in w jednym kroku, a właściciel liczył obłożenie ręcznie.",
+    solution:
+      "Prototyp pozwala podać termin i liczbę osób i od razu widzieć pasujące pokoje, a obłożenie widać na górze ekranu. Kolejne kroki pokazują to po kolei. Przy każdym zaznaczam, czy dotyczy głównego problemu, czy dodatkowej kwestii.",
+  },
   {
     targets: ['[data-tour="summary"]'],
     title: "Obłożenie na pierwszy rzut oka",
@@ -153,7 +162,10 @@ const STEPS: Step[] = [
   },
 ];
 
-const KIND_LABEL: Record<Step["kind"], { text: string; className: string }> = {
+const KIND_LABEL: Record<
+  NonNullable<Step["kind"]>,
+  { text: string; className: string }
+> = {
   logic: {
     text: "Nielogiczność",
     className: "bg-amber-100 text-amber-950",
@@ -291,6 +303,8 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
   const GAP = 16;
   let cardTop = Math.max(8, viewport.h - cardH - GAP);
   let cardLeft = Math.max(GAP, (viewport.w - W) / 2);
+  if (step.targets.length === 0)
+    cardTop = Math.max(8, (viewport.h - cardH) / 2);
   if (rect) {
     const clampLeft = (x: number) =>
       Math.min(Math.max(GAP, x), Math.max(GAP, viewport.w - W - GAP));
@@ -324,24 +338,9 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
               Przewodnik po prototypie
             </DialogTitle>
             <DialogDescription className="text-foreground">
-              Cześć, przygotowałem krótki przewodnik po moim redesignie, w
-              którym pokazuję po kolei jakie problemy użyteczności utrudniały
-              szybkie znalezienie wolnego pokoju i sprawdzenie obłożenia oraz
-              jak ten prototyp je rozwiązuje.
+              Cześć, przygotowałem krótki przewodnik po moim redesignie.
             </DialogDescription>
           </DialogHeader>
-          <div className="rounded-lg border-2 border-slate-900 p-3 text-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide">
-              Główny problem z analizy (board FigJam)
-            </p>
-            <p className="mt-1">
-              Ekran nie pozwala zapytać o dostępność na konkretny termin i
-              liczbę osób, tylko pokazuje stan „na teraz”. Recepcjonista nie
-              odpowie gościowi walk-in w jednym kroku, a właściciel liczy
-              obłożenie ręcznie. Przy każdym kroku zaznaczam, czy to był główny
-              problem, czy dodatkowa kwestia.
-            </p>
-          </div>
           <p className="text-sm">
             To {STEPS.length} krótkich kroków. Ekran będzie się zmieniał sam, a
             dalej idziesz Ty. Przewodnik jest opcjonalny: możesz go pominąć i
@@ -389,11 +388,13 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
               <p className="text-xs font-medium text-muted-foreground">
                 Krok {index + 1} z {STEPS.length}
               </p>
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${KIND_LABEL[step.kind].className}`}
-              >
-                {KIND_LABEL[step.kind].text}
-              </span>
+              {step.kind && (
+                <span
+                  className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${KIND_LABEL[step.kind].className}`}
+                >
+                  {KIND_LABEL[step.kind].text}
+                </span>
+              )}
             </div>
             <h2 className="mt-1 text-lg font-semibold">{step.title}</h2>
             <div className="mt-2">
