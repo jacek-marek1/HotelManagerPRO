@@ -199,6 +199,9 @@ Zajęty = czerwony (`red-100`), Naprawa = szary (`slate-200`); Wolny (zielony) i
 ### 36. Nazwisko bez podkreślenia, chevron obok
 Usunięte podkreślenie nazwiska gościa; mały chevron (`size-3.5`) bezpośrednio za nazwiskiem w tym samym przycisku (jedno miejsce kliknięcia, `title`/`aria-label` „Szczegóły i edycja"); hover zmienia kolor nazwiska i ikony. Osobny przycisk ze strzałką po prawej usunięty.
 
+### 37. Bez ikony w statusie „Sprzątanie"
+Usunięty przycisk z haczykiem z komórki statusu. Funkcja „Oznacz jako posprzątany" przeniesiona do menu z trzema kropkami (pierwsza pozycja, tylko dla pokoju w sprzątaniu). Weryfikacja w Chrome: komórka bez ikony, menu pokoju 103 z nową pozycją na górze; samo kliknięcie pozycji nie było powtarzane po przeniesieniu.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

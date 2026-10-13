@@ -21,7 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CheckIcon, ChevronRightIcon, MoreVerticalIcon } from "lucide-react";
+import { ChevronRightIcon, MoreVerticalIcon } from "lucide-react";
 import { STATUS_FILL, STATUS_LABEL } from "./room-status-badge";
 
 interface Props {
@@ -100,29 +100,13 @@ export function RoomsTable({
                     : STATUS_FILL[status]
                 }`}
               >
-                <div className="flex items-center justify-between gap-1">
-                  <span>
-                    {search
-                      ? isCleaningSoon(room, reservations, search.from)
-                        ? "Sprzątanie – za chwilę gotowy"
-                        : "Wolny"
-                      : status === "repair" && repairUntil
-                        ? `Naprawa do ${formatDate(repairUntil).slice(0, 5)}`
-                        : STATUS_LABEL[status]}
-                  </span>
-                  {!search && status === "cleaning" && (
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      className="-my-1 shrink-0"
-                      title="Oznacz jako posprzątany"
-                      aria-label={`Oznacz pokój ${room.number} jako posprzątany`}
-                      onClick={() => onMarkReady(room)}
-                    >
-                      <CheckIcon />
-                    </Button>
-                  )}
-                </div>
+                {search
+                  ? isCleaningSoon(room, reservations, search.from)
+                    ? "Sprzątanie – za chwilę gotowy"
+                    : "Wolny"
+                  : status === "repair" && repairUntil
+                    ? `Naprawa do ${formatDate(repairUntil).slice(0, 5)}`
+                    : STATUS_LABEL[status]}
               </TableCell>
               <TableCell>
                 {!search && res ? (
@@ -179,6 +163,11 @@ export function RoomsTable({
                       <MoreVerticalIcon />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="min-w-52">
+                      {status === "cleaning" && (
+                        <DropdownMenuItem onClick={() => onMarkReady(room)}>
+                          Oznacz jako posprzątany
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuItem onClick={() => onChangeState(room)}>
                         Zmień stan pokoju
                       </DropdownMenuItem>
