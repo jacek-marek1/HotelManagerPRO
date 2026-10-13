@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -114,7 +115,7 @@ const STEPS: Step[] = [
     problem:
       "Z wyniku dało się od razu przejść do rezerwacji, ale ta akcja niczym się nie wyróżniała. Były tylko pojedyncze litery R, E, U, trudne do rozpoznania w krótkim czasie, a pojemność trzeba było odgadywać ze skrótów („2os.+”).",
     solution:
-      "„Rezerwuj” ma pełną nazwę i stoi przy każdym pokoju, a pojemność jest podana w osobach. Edycja i usuwanie są w osobnym menu, więc nie pomylisz ich z rezerwacją. Daty z wyszukiwania przenoszą się do rezerwacji.",
+      "„Rezerwuj” ma pełną nazwę i stoi przy każdym pokoju, a pojemność jest podana w osobach. Edycja i usuwanie są w osobnym menu, więc nie pomylisz ich z rezerwacją. Daty z wyszukiwania przenoszą się do rezerwacji. Dla pokoi obecnie zajętych rezerwacja jest domyślnie możliwa dopiero od dnia, w którym klient potencjalnie opuści pokój.",
   },
   {
     targets: ['[data-tour="search"]', '[data-slot="popover-content"]'],
@@ -156,7 +157,7 @@ const STEPS: Step[] = [
     problem:
       "Wiek, miasto, telefon i e-mail zabierały szerokość tabeli i utrudniały szybką decyzję o pokoju.",
     solution:
-      "Tabela zostaje czytelna: pokój, status, gość i termin. Dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym klienta, który otwiera kliknięcie w nazwisko. Stamtąd przejdziesz też do edycji.",
+      "Tabela zostaje czytelna: pokój, status, gość i termin. Dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym klienta, który otwiera kliknięcie w nazwisko. Stamtąd przejdziesz do edycji danych klienta. Rezerwację edytujesz też z menu z trzema kropkami przy pokoju. Z tego menu zmienisz również status pokoju, a ekran pokaże odpowiednią informację zależnie od tego, czy pokój jest obecnie zajęty.",
   },
 ];
 
@@ -349,9 +350,10 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
           </DialogHeader>
           <p className="text-sm">
             To {STEPS.length} krótkich kroków. Ekran będzie się zmieniał sam, a
-            dalej idziesz Ty. Przewodnik jest opcjonalny: możesz go pominąć i
+            kroki przechodzisz we własnym tempie. Przewodnik jest opcjonalny: możesz go pominąć i
             korzystać z prototypu samodzielnie, a wrócić do niego w każdej
-            chwili przez zakładkę „Skorzystaj z przewodnika”.
+            chwili przez zakładkę „Skorzystaj z przewodnika”, która jest
+            przyklejona do prawej górnej części ekranu.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={decline}>
@@ -390,6 +392,15 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
             className="absolute rounded-xl border bg-card p-5 text-card-foreground shadow-xl transition-all duration-300"
             style={{ top: cardTop, left: cardLeft, width: W }}
           >
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={exit}
+              aria-label="Wyjdź z przewodnika"
+              className="absolute right-2 top-2"
+            >
+              <XIcon />
+            </Button>
             <p className="text-xs font-medium text-muted-foreground">
               Krok {index + 1} z {STEPS.length}
             </p>
@@ -426,10 +437,7 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
                 {step.solution}
               </p>
             </div>
-            <div className="mt-4 flex items-center justify-between gap-2">
-              <Button variant="ghost" onClick={exit}>
-                Wychodzę
-              </Button>
+            <div className="mt-4 flex items-center justify-end gap-2">
               <div className="flex gap-2">
                 {index > 0 && (
                   <Button variant="outline" onClick={() => setIndex(index - 1)}>

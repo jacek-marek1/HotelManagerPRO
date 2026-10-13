@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { CalendarIcon } from "lucide-react";
+import { pl } from "date-fns/locale";
+import type { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,6 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -30,7 +39,9 @@ import {
   addDays,
   formatDate,
   formatNights,
+  fromISO,
   nightsBetween,
+  toISO,
 } from "@/lib/dates";
 import type { Reservation, Room } from "@/lib/types";
 
@@ -240,31 +251,43 @@ function EditForm({
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="arrival">Przyjazd</Label>
-            <Input
-              id="arrival"
-              type="date"
-              value={arrival}
-              onChange={(e) => {
-                setDatesTouched(true);
-                setArrival(e.target.value);
-              }}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="departure">Wyjazd</Label>
-            <Input
-              id="departure"
-              type="date"
-              value={departure}
-              onChange={(e) => {
-                setDatesTouched(true);
-                setDeparture(e.target.value);
-              }}
-            />
-          </div>
+        <div className="grid gap-2">
+          <Label>Termin (przyjazd – wyjazd)</Label>
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button
+                  variant="outline"
+                  className="h-9 w-full justify-start font-normal"
+                />
+              }
+            >
+              <CalendarIcon className="size-4" />
+              {arrival && departure
+                ? `${formatDate(arrival)} – ${formatDate(departure)}`
+                : arrival
+                  ? `${formatDate(arrival)} – wybierz wyjazd`
+                  : "Wybierz termin"}
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="range"
+                locale={pl}
+                weekStartsOn={1}
+                numberOfMonths={2}
+                defaultMonth={arrival ? fromISO(arrival) : fromISO(TODAY)}
+                selected={{
+                  from: arrival ? fromISO(arrival) : undefined,
+                  to: departure ? fromISO(departure) : undefined,
+                }}
+                onSelect={(r: DateRange | undefined) => {
+                  setDatesTouched(true);
+                  setArrival(r?.from ? toISO(r.from) : "");
+                  setDeparture(r?.to ? toISO(r.to) : "");
+                }}
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         {!isNew && (
           <div className="grid grid-cols-2 gap-4">
