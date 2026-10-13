@@ -157,7 +157,7 @@ const STEPS: Step[] = [
     problem:
       "Wiek, miasto, telefon i e-mail zabierały szerokość tabeli i utrudniały szybką decyzję o pokoju.",
     solution:
-      "Zdecydowałem się wynieść dane klienta z tabeli ze względu na użyteczność i rozdzielenie akcji. Tabela służy do szybkiej decyzji o pokoju (pokój, status, gość, termin), a dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym, który otwiera kliknięcie w imię i nazwisko. Edycja jest rozdzielona tak samo: z panelu klienta edytujesz dane klienta, a menu z trzema kropkami przy pokoju służy do edycji rezerwacji i zmiany statusu pokoju, z informacją zależną od tego, czy pokój jest obecnie zajęty.",
+      "Zdecydowałem się wynieść dane klienta z tabeli ze względu na użyteczność i rozdzielenie akcji. Ważniejsze od tego, czy klient zapłacił kartą czy gotówką, są dostępność pokoju i terminy, więc tabela pokazuje tylko je (pokój, status, gość, termin), a odczyt jest mniej przepełniony poznawczo. Dane kontaktowe, forma płatności, suma za pobyt i uwagi są w osobnym panelu bocznym, który „odchudza” tabelę i otwiera się kliknięciem w imię i nazwisko. Edycja jest rozdzielona tak samo: z panelu klienta edytujesz dane klienta, a menu z trzema kropkami przy pokoju służy do edycji rezerwacji i zmiany statusu pokoju, z informacją zależną od tego, czy pokój jest obecnie zajęty.",
   },
 ];
 
