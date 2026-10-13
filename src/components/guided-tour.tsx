@@ -35,10 +35,8 @@ interface Step {
   title: string;
   /** Rodzaj problemu: nielogiczność działania vs estetyka i odciążenie poznawcze. */
   kind: "logic" | "cognitive";
-  /** Powiązanie z analizą: główny problem z boardu, jego „bonus" albo brak. */
-  focus?: "main" | "bonus";
-  /** Punkty z boardu FigJam, których dotyczy krok (numeracja z mapy problemów). */
-  board: string;
+  /** Czy krok odpowiada na główny problem z analizy, czy na dodatkową kwestię. */
+  focus: "main" | "extra";
   problem: string;
   solution: string;
   /** Id rezerwacji, której panel szczegółów ma być otwarty w tym kroku. */
@@ -51,8 +49,7 @@ const STEPS: Step[] = [
     targets: ['[data-tour="summary"]'],
     title: "Obłożenie na pierwszy rzut oka",
     kind: "logic",
-    focus: "bonus",
-    board: "Nielogiczne #4 – brak podsumowania obłożenia",
+    focus: "extra",
     problem:
       "Żeby sprawdzić obłożenie, trzeba było liczyć wiersze ręcznie. Przyjazdów i wyjazdów dziś nic nie wyróżniało.",
     solution:
@@ -64,8 +61,6 @@ const STEPS: Step[] = [
     title: "Pytanie gościa: termin i liczba osób",
     kind: "logic",
     focus: "main",
-    board:
-      "Nielogiczne #1 – pola Od/Do nie filtrują listy; #2 – liczba gości i pojemność",
     problem:
       "Pola Od/Do nie filtrowały listy i nie dało się podać liczby gości. Na pytanie „czy macie pokój dla 2 osób na 2 noce od dziś?” ekran nie odpowiadał.",
     solution:
@@ -85,8 +80,6 @@ const STEPS: Step[] = [
     title: "Wynik liczony z dat, nie z ręcznego statusu",
     kind: "logic",
     focus: "main",
-    board:
-      "Nielogiczne #1 – „Wolne” to status na dziś; #5 – status ustawiany ręcznie",
     problem:
       "„Wolne” znaczyło tylko „wolny dziś”. Pokój w sprzątaniu znikał z wyników, a naprawa była ukryta w uwagach.",
     solution:
@@ -97,8 +90,6 @@ const STEPS: Step[] = [
     title: "Wskazanie pokoju w jednym kliknięciu",
     kind: "logic",
     focus: "main",
-    board:
-      "Nielogiczne #2 – pojemność ukryta w skrótach; cel: maks. 3 interakcje",
     problem:
       "Z wyniku nie dało się od razu przejść do rezerwacji, a pojemność trzeba było odgadywać ze skrótów („2os.+”).",
     solution:
@@ -109,7 +100,6 @@ const STEPS: Step[] = [
     title: "Komunikat zamiast pustego ekranu",
     kind: "logic",
     focus: "main",
-    board: "Główny problem – odpowiedź także wtedy, gdy nic nie pasuje",
     problem:
       "Gdy nic nie pasowało, recepcjonista widział pustą listę i nie wiedział, co zmienić.",
     solution:
@@ -126,8 +116,7 @@ const STEPS: Step[] = [
     targets: ['[data-tour="status-filter"]', '[data-tour="table"]'],
     title: "Filtr po każdym statusie",
     kind: "logic",
-    board:
-      "Nielogiczne #3 – sprzątanie i naprawa ukryte; Recenzja D – niejasna opcja „Inne”",
+    focus: "extra",
     problem:
       "W oryginale do wyboru były tylko pokoje zajęte i wolne, a sprzątanie i naprawa trafiały do nieczytelnej opcji „Inne”.",
     solution:
@@ -144,8 +133,7 @@ const STEPS: Step[] = [
     ],
     title: "Status pokoi dziś w jednym miejscu",
     kind: "logic",
-    board:
-      "Nielogiczne #3 – stan techniczny tylko w uwagach; #5 – status ręczny",
+    focus: "extra",
     problem:
       "Stan techniczny (sprzątanie, naprawa) był ukryty w uwagach, a status ustawiany ręcznie, niezależnie od dat.",
     solution:
@@ -157,7 +145,7 @@ const STEPS: Step[] = [
     details: "b1",
     title: "Dane klienta poza tabelą",
     kind: "cognitive",
-    board: "Recenzja – szum w tabeli (wiek, miasto, telefon, e-mail)",
+    focus: "extra",
     problem:
       "Wiek, miasto, telefon, e-mail i płatność zabierały szerokość tabeli i utrudniały szybką decyzję o pokoju.",
     solution:
@@ -350,8 +338,8 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
               Ekran nie pozwala zapytać o dostępność na konkretny termin i
               liczbę osób, tylko pokazuje stan „na teraz”. Recepcjonista nie
               odpowie gościowi walk-in w jednym kroku, a właściciel liczy
-              obłożenie ręcznie. Przy każdym kroku zaznaczam, którego punktu z
-              boardu dotyczy.
+              obłożenie ręcznie. Przy każdym kroku zaznaczam, czy to był główny
+              problem, czy dodatkowa kwestia.
             </p>
           </div>
           <p className="text-sm">
@@ -408,16 +396,15 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
               </span>
             </div>
             <h2 className="mt-1 text-lg font-semibold">{step.title}</h2>
-            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-md bg-muted px-2.5 py-1.5 text-xs">
-              {step.focus && (
-                <span className="rounded-full bg-slate-900 px-2 py-0.5 font-semibold text-white">
-                  {step.focus === "main"
-                    ? "Główny problem"
-                    : "Bonus z głównego problemu"}
-                </span>
-              )}
-              <span className="text-muted-foreground">
-                Board FigJam: {step.board}
+            <div className="mt-2">
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                  step.focus === "main"
+                    ? "bg-slate-900 text-white"
+                    : "border border-slate-400 text-slate-800"
+                }`}
+              >
+                {step.focus === "main" ? "Główny problem" : "Dodatkowa kwestia"}
               </span>
             </div>
             <div className="mt-3 space-y-3 text-sm">
