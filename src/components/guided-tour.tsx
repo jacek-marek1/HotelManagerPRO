@@ -341,18 +341,6 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
               Cześć, przygotowałem krótki przewodnik po moim redesignie.
             </DialogDescription>
           </DialogHeader>
-          <div className="rounded-lg border-2 border-slate-900 p-3 text-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide">
-              Główny problem z analizy (board FigJam)
-            </p>
-            <p className="mt-1">
-              Ekran nie pozwala zapytać o dostępność na konkretny termin i
-              liczbę osób, tylko pokazuje stan „na teraz”. Recepcjonista nie
-              odpowie gościowi walk-in w jednym kroku, a właściciel liczy
-              obłożenie ręcznie. Przy każdym kroku zaznaczam, czy to był główny
-              problem, czy dodatkowa kwestia.
-            </p>
-          </div>
           <p className="text-sm">
             To {STEPS.length} krótkich kroków. Ekran będzie się zmieniał sam, a
             dalej idziesz Ty. Przewodnik jest opcjonalny: możesz go pominąć i
