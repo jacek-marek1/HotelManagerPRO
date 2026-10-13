@@ -350,10 +350,10 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
           </DialogHeader>
           <p className="text-sm">
             To {STEPS.length} krótkich kroków. Ekran będzie się zmieniał sam, a
-            kroki przechodzisz we własnym tempie. Przewodnik jest opcjonalny: możesz go pominąć i
-            korzystać z prototypu samodzielnie, a wrócić do niego w każdej
-            chwili przez zakładkę „Skorzystaj z przewodnika”, która jest
-            przyklejona do prawej górnej części ekranu.
+            kroki przechodzisz we własnym tempie. Przewodnik jest opcjonalny:
+            możesz go pominąć i korzystać z prototypu samodzielnie, a wrócić do
+            niego w każdej chwili przez zakładkę „Skorzystaj z przewodnika”,
+            która jest przyklejona do prawej górnej części ekranu.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={decline}>
@@ -366,30 +366,29 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
 
       {active && (
         <div
-          className="fixed inset-0 z-[100] print:hidden"
+          className="fixed inset-0 z-[100] animate-in fade-in-0 duration-500 motion-reduce:animate-none print:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Przewodnik"
         >
           {/* Blokuje klikanie w ekran pod spodem – dalej idzie tylko osoba oglądająca. */}
           <div className="absolute inset-0" />
-          {rect ? (
-            <div
-              className="pointer-events-none absolute rounded-lg ring-2 ring-white/90 transition-all duration-300"
-              style={{
-                top: rect.top,
-                left: rect.left,
-                width: rect.width,
-                height: rect.height,
-                boxShadow: "0 0 0 9999px rgba(15, 23, 42, 0.65)",
-              }}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-slate-900/65" />
-          )}
+          {/* Jedno podświetlenie dla wszystkich kroków: płynnie przesuwa się i zmienia rozmiar, a bez celu zwija się do środka i zostaje samo przyciemnienie. */}
+          <div
+            className={`pointer-events-none absolute rounded-lg transition-[top,left,width,height,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+              rect ? "ring-2 ring-white/90" : ""
+            }`}
+            style={{
+              top: rect ? rect.top : viewport.h / 2,
+              left: rect ? rect.left : viewport.w / 2,
+              width: rect ? rect.width : 0,
+              height: rect ? rect.height : 0,
+              boxShadow: "0 0 0 9999px rgba(15, 23, 42, 0.65)",
+            }}
+          />
           <div
             ref={cardRef}
-            className="absolute rounded-xl border bg-card p-5 text-card-foreground shadow-xl transition-all duration-300"
+            className="absolute rounded-xl border bg-card p-5 text-card-foreground shadow-xl animate-in fade-in-0 slide-in-from-bottom-3 duration-500 transition-[top,left] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none motion-reduce:transition-none"
             style={{ top: cardTop, left: cardLeft, width: W }}
           >
             <Button
@@ -401,50 +400,62 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
             >
               <XIcon />
             </Button>
-            <p className="text-xs font-medium text-muted-foreground">
-              Krok {index + 1} z {STEPS.length}
-            </p>
-            <h2 className="mt-1 text-lg font-semibold">{step.title}</h2>
-            <div className="mt-2 flex flex-wrap items-center gap-1.5">
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                  step.focus === "main"
-                    ? "bg-slate-900 text-white"
-                    : "border border-slate-400 text-slate-800"
-                }`}
-              >
-                {step.focus === "main" ? "Główny problem" : "Dodatkowa kwestia"}
-              </span>
-              {step.kind && (
+            <div
+              key={index}
+              className="animate-in fade-in-0 slide-in-from-bottom-2 duration-500 motion-reduce:animate-none"
+            >
+              <p className="text-xs font-medium text-muted-foreground">
+                Krok {index + 1} z {STEPS.length}
+              </p>
+              <h2 className="mt-1 text-lg font-semibold">{step.title}</h2>
+              <div className="mt-2 flex flex-wrap items-center gap-1.5">
                 <span
-                  className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${KIND_LABEL[step.kind].className}`}
+                  className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                    step.focus === "main"
+                      ? "bg-slate-900 text-white"
+                      : "border border-slate-400 text-slate-800"
+                  }`}
                 >
-                  {KIND_LABEL[step.kind].text}
+                  {step.focus === "main"
+                    ? "Główny problem"
+                    : "Dodatkowa kwestia"}
                 </span>
-              )}
-            </div>
-            <div className="mt-3 space-y-3 text-sm">
-              <p>
-                <span className="mb-0.5 block text-xs font-semibold uppercase tracking-wide text-red-800">
-                  Problem
-                </span>
-                {step.problem}
-              </p>
-              <p>
-                <span className="mb-0.5 block text-xs font-semibold uppercase tracking-wide text-emerald-800">
-                  Rozwiązanie
-                </span>
-                {step.solution}
-              </p>
-            </div>
-            <div className="mt-4 flex items-center justify-end gap-2">
-              <div className="flex gap-2">
-                {index > 0 && (
-                  <Button variant="outline" onClick={() => setIndex(index - 1)}>
-                    Wstecz
-                  </Button>
+                {step.kind && (
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${KIND_LABEL[step.kind].className}`}
+                  >
+                    {KIND_LABEL[step.kind].text}
+                  </span>
                 )}
-                <Button onClick={next}>{last ? "Zakończ" : "Idę dalej"}</Button>
+              </div>
+              <div className="mt-3 space-y-3 text-sm">
+                <p>
+                  <span className="mb-0.5 block text-xs font-semibold uppercase tracking-wide text-red-800">
+                    Problem
+                  </span>
+                  {step.problem}
+                </p>
+                <p>
+                  <span className="mb-0.5 block text-xs font-semibold uppercase tracking-wide text-emerald-800">
+                    Rozwiązanie
+                  </span>
+                  {step.solution}
+                </p>
+              </div>
+              <div className="mt-4 flex items-center justify-end gap-2">
+                <div className="flex gap-2">
+                  {index > 0 && (
+                    <Button
+                      variant="outline"
+                      onClick={() => setIndex(index - 1)}
+                    >
+                      Wstecz
+                    </Button>
+                  )}
+                  <Button onClick={next}>
+                    {last ? "Zakończ" : "Idę dalej"}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
