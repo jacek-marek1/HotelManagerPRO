@@ -23,6 +23,12 @@ export interface TourApi {
   applySearch: (s: TourSearch) => void;
   clearFilters: () => void;
   setStatus: (status: string) => void;
+  /** Ustawia filtry bez terminu (piętro, liczba gości, status). */
+  setFilters: (f: {
+    guests: number | null;
+    floor: string;
+    status: string;
+  }) => void;
   showSummary: (open: boolean) => void;
   /** Otwiera panel szczegółów rezerwacji o danym id (null = zamyka). */
   openDetails: (reservationId: string | null) => void;
@@ -39,6 +45,10 @@ interface Step {
   focus: "main" | "extra";
   problem: string;
   solution: string;
+  /** Gdzie na ekranie ma stanąć podświetlenie po przewinięciu: u góry (domyślnie) albo niżej. */
+  align?: "top" | "lower";
+  /** Po której stronie podświetlenia ma stanąć dymek (domyślnie pod nim). */
+  cardSide?: "below" | "above";
   /** Id rezerwacji, której panel szczegółów ma być otwarty w tym kroku. */
   details?: string;
   enter?: (api: TourApi) => void;
@@ -62,7 +72,7 @@ const STEPS: Step[] = [
     problem:
       "Żeby sprawdzić obłożenie, trzeba było liczyć wiersze ręcznie. Przyjazdów i wyjazdów dziś nic nie wyróżniało.",
     solution:
-      "Karty „Dziś” i „Jutro” liczą statusy z tych samych danych co wyszukiwarka. Po rozwinięciu widać, kto przyjeżdża i wyjeżdża.",
+      "Karty „Dziś” i „Jutro” liczą statusy z tych samych danych co wyszukiwarka. Kolory odpowiadają statusom pokoi w tabeli (czerwony zajęty, zielony wolny, żółty sprzątanie, szary naprawa), więc obłożenie rozpoznasz w kilka sekund. Po rozwinięciu widać, kto przyjeżdża i wyjeżdża.",
     enter: (api) => api.showSummary(true),
   },
   {
@@ -97,6 +107,8 @@ const STEPS: Step[] = [
   {
     targets: ['[data-tour="reserve-first"]'],
     title: "Rezerwacja z wyniku: czytelna akcja",
+    align: "lower",
+    cardSide: "above",
     kind: "cognitive",
     focus: "extra",
     problem:
@@ -122,17 +134,17 @@ const STEPS: Step[] = [
       }),
   },
   {
-    targets: ['[data-tour="status-filter"]', '[data-tour="table"]'],
+    targets: ['[data-tour="search"]', '[data-tour="table"]'],
     title: "Filtr po każdym statusie",
     kind: "logic",
     focus: "extra",
     problem:
       "W oryginale do wyboru były tylko pokoje zajęte i wolne, a sprzątanie i naprawa trafiały do nieczytelnej opcji „Inne”.",
     solution:
-      "Każdy status ma własną pozycję filtra: Wolny, Zajęty, Sprzątanie i Naprawa. Filtr łączy się z terminem, liczbą gości i piętrem. Po wybraniu terminu status dotyczy właśnie tych dni, np. pokoje zajęte w wybranym terminie. Przewodnik wybrał dla Ciebie status „Sprzątanie”.",
+      "Każdy status ma własną pozycję filtra: Wolny, Zajęty, Sprzątanie i Naprawa. Filtry łączą się ze sobą w jednej tabeli. Przewodnik ustawił piętro 1, co najmniej 2 osoby i status „Zajęty”, a po wybraniu terminu status dotyczy właśnie tych dni.",
     enter: (api) => {
       api.clearFilters();
-      api.setStatus("cleaning");
+      api.setFilters({ guests: 2, floor: "P1", status: "occupied" });
     },
   },
   {
@@ -262,7 +274,10 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
       const r = unionRect(step.targets);
       if (r)
         window.scrollTo({
-          top: window.scrollY + r.top - 16,
+          top:
+            window.scrollY +
+            r.top -
+            (step.align === "lower" ? window.innerHeight * 0.62 : 16),
           behavior: "smooth",
         });
     }, 350);
@@ -302,9 +317,11 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
   const W = 440;
   const GAP = 16;
   let cardTop = Math.max(8, viewport.h - cardH - GAP);
-  let cardLeft = Math.max(GAP, (viewport.w - W) / 2);
-  if (step.targets.length === 0)
+  let cardLeft = Math.max(GAP, viewport.w - W - GAP);
+  if (step.targets.length === 0) {
     cardTop = Math.max(8, (viewport.h - cardH) / 2);
+    cardLeft = Math.max(GAP, (viewport.w - W) / 2);
+  }
   if (rect) {
     const clampLeft = (x: number) =>
       Math.min(Math.max(GAP, x), Math.max(GAP, viewport.w - W - GAP));
@@ -314,7 +331,10 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
     const above = rect.top - cardH - GAP;
     const rightSpace = viewport.w - (rect.left + rect.width) - GAP * 2;
     const leftSpace = rect.left - GAP * 2;
-    if (below + cardH <= viewport.h - 8) {
+    if (step.cardSide === "above" && above >= 8) {
+      cardTop = above;
+      cardLeft = clampLeft(rect.left);
+    } else if (below + cardH <= viewport.h - 8) {
       cardTop = below;
       cardLeft = clampLeft(rect.left);
     } else if (above >= 8) {

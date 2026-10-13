@@ -168,6 +168,12 @@ export default function Home() {
       setStatus(st as StatusFilter);
       setPage(1);
     },
+    setFilters: (f) => {
+      setGuests(f.guests);
+      setFloor(f.floor);
+      setStatus(f.status as StatusFilter);
+      setPage(1);
+    },
     showSummary: setSummaryOpen,
     openDetails: setDetailsId,
     reset: () => {
