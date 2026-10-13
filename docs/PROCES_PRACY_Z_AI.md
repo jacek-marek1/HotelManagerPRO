@@ -18,7 +18,7 @@
 | „Wolne" = status na dziś | Dostępność z nakładania dat rezerwacji, pojemności i stanu technicznego |
 | Pojemność ukryta w skrótach („2os.+") | Pojemność w osobach |
 | Brak podsumowania obłożenia | Karty „Dziś" i „Jutro": liczby statusów, przyjazdy, wyjazdy |
-| Sprzątanie i naprawa tylko w uwagach | Stan techniczny wpływa na dostępność (sprzątanie „za chwilę gotowy", naprawa do daty) |
+| Sprzątanie i naprawa tylko w uwagach | Stan techniczny wpływa na dostępność (oznaczenie „Sprzątanie", naprawa do daty) |
 | Status wpisywany ręcznie w modalu | Status wyliczany z dat i stanu pokoju |
 | Pokój i rezerwacja jako jeden rekord | Rozdzielone w modelu (pokój ma wiele rezerwacji) |
 | Akcje R/E/U | „Rezerwuj" + menu z trzema kropkami |

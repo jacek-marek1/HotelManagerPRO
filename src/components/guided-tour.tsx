@@ -73,7 +73,7 @@ const STEPS: Step[] = [
     problem:
       "„Wolne” znaczyło tylko „wolny dziś”. Pokój w sprzątaniu znikał z wyników, a naprawa była ukryta w uwagach.",
     solution:
-      "Lista pokazuje pokoje dostępne w całym terminie. Pokój w sprzątaniu zostaje na liście z oznaczeniem „za chwilę gotowy”.",
+      "Lista pokazuje pokoje dostępne w całym terminie. Pokój w sprzątaniu zostaje na liście z oznaczeniem „Sprzątanie”.",
   },
   {
     targets: ['[data-tour="reserve-first"]'],

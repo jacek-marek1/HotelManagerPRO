@@ -253,6 +253,9 @@ Zgłoszenie Jacka: po wybraniu terminu dropdown „Status dziś" znikał z opcji
 ### 49. Zakładka otwiera ekran powitalny; informacja, że przewodnik jest opcjonalny
 Kliknięcie „Skorzystaj z przewodnika" pokazuje teraz modal powitalny (Rezygnuję / Zaczynamy) zamiast od razu startować przewodnik. W modalu dodane zdanie: przewodnik jest opcjonalny, można go pominąć i wrócić do niego przez zakładkę.
 
+### 50. Etykieta „Sprzątanie" zamiast „Sprzątanie – za chwilę gotowy"
+Decyzja Jacka: w wynikach wyszukiwania (termin od dziś) pokój w sprzątaniu ma etykietę po prostu „Sprzątanie" (PRD wymagał tylko „czytelnego oznaczenia"). Zmienione: tabela, eksport do Excela, opis w przewodniku i dokumentacja procesu. Zasada bez zmian: pokój w sprzątaniu nie znika z wyników, a oznaczenie pojawia się tylko, gdy termin zaczyna się dziś.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

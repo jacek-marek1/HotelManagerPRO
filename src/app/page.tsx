@@ -117,7 +117,7 @@ export default function Home() {
         capacity: r.capacity,
         status: search
           ? isCleaningSoon(r, reservations, search.from)
-            ? "Sprzątanie – za chwilę gotowy"
+            ? "Sprzątanie"
             : "Wolny w terminie"
           : STATUS_LABEL[st],
         pricePerNight: r.pricePerNight,

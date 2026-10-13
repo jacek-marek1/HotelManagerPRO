@@ -101,7 +101,7 @@ export function RoomsTable({
               >
                 {search
                   ? isCleaningSoon(room, reservations, search.from)
-                    ? "Sprzątanie – za chwilę gotowy"
+                    ? "Sprzątanie"
                     : "Wolny"
                   : status === "repair" && repairUntil
                     ? `Naprawa do ${formatDate(repairUntil).slice(0, 5)}`
