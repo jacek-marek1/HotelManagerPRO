@@ -396,20 +396,11 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
             className="absolute rounded-xl border bg-card p-5 text-card-foreground shadow-xl transition-all duration-300"
             style={{ top: cardTop, left: cardLeft, width: W }}
           >
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-xs font-medium text-muted-foreground">
-                Krok {index + 1} z {STEPS.length}
-              </p>
-              {step.kind && (
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${KIND_LABEL[step.kind].className}`}
-                >
-                  {KIND_LABEL[step.kind].text}
-                </span>
-              )}
-            </div>
+            <p className="text-xs font-medium text-muted-foreground">
+              Krok {index + 1} z {STEPS.length}
+            </p>
             <h2 className="mt-1 text-lg font-semibold">{step.title}</h2>
-            <div className="mt-2">
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
               <span
                 className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                   step.focus === "main"
@@ -419,6 +410,13 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
               >
                 {step.focus === "main" ? "Główny problem" : "Dodatkowa kwestia"}
               </span>
+              {step.kind && (
+                <span
+                  className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${KIND_LABEL[step.kind].className}`}
+                >
+                  {KIND_LABEL[step.kind].text}
+                </span>
+              )}
             </div>
             <div className="mt-3 space-y-3 text-sm">
               <p>
