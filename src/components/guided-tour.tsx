@@ -157,7 +157,7 @@ const STEPS: Step[] = [
     problem:
       "Wiek, miasto, telefon i e-mail zabierały szerokość tabeli i utrudniały szybką decyzję o pokoju.",
     solution:
-      "Tabela zostaje czytelna: pokój, status, gość i termin. Dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym klienta, który otwiera kliknięcie w nazwisko. Stamtąd przejdziesz do edycji danych klienta. Rezerwację edytujesz też z menu z trzema kropkami przy pokoju. Z tego menu zmienisz również status pokoju, a ekran pokaże odpowiednią informację zależnie od tego, czy pokój jest obecnie zajęty.",
+      "Zdecydowałem się wynieść dane klienta z tabeli ze względu na użyteczność i rozdzielenie akcji. Tabela służy do szybkiej decyzji o pokoju (pokój, status, gość, termin), a dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym, który otwiera kliknięcie w imię i nazwisko. Edycja jest rozdzielona tak samo: z panelu klienta edytujesz dane klienta, a menu z trzema kropkami przy pokoju służy do edycji rezerwacji i zmiany statusu pokoju, z informacją zależną od tego, czy pokój jest obecnie zajęty.",
   },
 ];
 
