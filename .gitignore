@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# lokalny dziennik sesji (nie w repozytorium)
+SESSION_LOG.md

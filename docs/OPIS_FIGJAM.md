@@ -14,7 +14,7 @@ Dałem AI jeden dokument wymagań (PRD) i prompt z regułami: nic spoza PRD, prz
 Błędnie zrozumiało „statusy nie są istotne" (osłabiło kolory zamiast przenieść znaczniki przyjazdu/wyjazdu), jedną „naprawą" wydłużyło główny scenariusz do 4 kliknięć, a tekstowy przycisk przywrócił poziomy scroll. Każdą z tych rzeczy wychwyciłem w przeglądzie i wymusiłem poprawkę.
 
 **Efekt**
-Działający klikalny ekran: wyszukiwanie wolnych pokoi po terminie, liczbie osób i piętrze, podsumowanie obłożenia, zarządzanie stanem pokoi, walidacje. Testy T1–T4 z PRD przechodzą. Dziennik kroków i kod są w repozytorium.
+Działający klikalny ekran: wyszukiwanie wolnych pokoi po terminie, liczbie osób i piętrze, podsumowanie obłożenia, zarządzanie stanem pokoi, walidacje. Testy T1–T4 z PRD przechodzą. Kod jest w repozytorium.
 
 **Ograniczenia**
 Dane lokalne (bez backendu), eksport do Excela jako CSV, wdrożenie jeszcze nie wykonane.

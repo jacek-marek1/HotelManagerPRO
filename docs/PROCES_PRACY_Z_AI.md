@@ -1,6 +1,6 @@
 # Proces pracy z AI – HotelManager PRO (prototyp ekranu rezerwacji)
 
-Źródło szczegółów: [SESSION_LOG.md](../SESSION_LOG.md) (33 wpisy) i historia git. Historia git została przepisana, więc pierwsze kroki (P0 i P1) są w jednym commicie; dziennik jest dokładniejszy niż `git log`.
+Źródło szczegółów: historia git i zapis rozmowy z AI. Historia git została przepisana, więc pierwsze kroki (P0 i P1) są w jednym commicie.
 
 ## 1. Punkt wyjścia i sposób pracy
 
