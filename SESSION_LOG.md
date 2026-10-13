@@ -247,6 +247,12 @@ Dodatkowo (uwaga Jacka): „Liczba osób" uzupełniona dla oryginalnych rezerwac
 ### 47. Przycisk przewodnika jako wystający dymek z boku
 Przycisk „Przewodnik" z nagłówka zastąpiony stałą zakładką przy prawej krawędzi okna (u góry, `fixed right-0 top-6`), z zaokrąglonymi lewymi rogami, ikoną kompasu i tekstem „Skorzystaj z przewodnika"; po najechaniu lub fokusie wysuwa się o kilka pikseli; wygląd jasny z obrysem (jak wcześniejszy przycisk „Przewodnik"), bez wypełnienia primary; ukryta w trakcie przewodnika i przy druku.
 
+### 48. Filtr statusu razem z terminem i piętrem
+Zgłoszenie Jacka: po wybraniu terminu dropdown „Status dziś" znikał z opcji. Cofnięta decyzja z kroku 29 (ukrywanie statusu przy terminie): filtr jest zawsze widoczny i łączy się (AND) z terminem, liczbą gości i piętrem — lista pokazuje pokoje dostępne w terminie, które dziś mają wybrany status (np. 28–30.12 + „Sprzątanie" → 103, 109, 209). Usunięty prop `searchActive`. Opis w przewodniku („Filtr po każdym statusie") dostosowany.
+
+### 49. Zakładka otwiera ekran powitalny; informacja, że przewodnik jest opcjonalny
+Kliknięcie „Skorzystaj z przewodnika" pokazuje teraz modal powitalny (Rezygnuję / Zaczynamy) zamiast od razu startować przewodnik. W modalu dodane zdanie: przewodnik jest opcjonalny, można go pominąć i wrócić do niego przez zakładkę.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

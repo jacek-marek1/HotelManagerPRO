@@ -104,7 +104,7 @@ const STEPS: Step[] = [
     problem:
       "W oryginale do wyboru były tylko pokoje zajęte i wolne, a sprzątanie i naprawa trafiały do nieczytelnej opcji „Inne”.",
     solution:
-      "Każdy status ma własną pozycję filtra: Wolny, Zajęty, Sprzątanie i Naprawa. Termin wybiera się osobno w kalendarzu, wtedy lista pokazuje pokoje dostępne w całym terminie. Przewodnik wybrał dla Ciebie status „Sprzątanie”.",
+      "Każdy status ma własną pozycję filtra: Wolny, Zajęty, Sprzątanie i Naprawa. Filtr łączy się z terminem, liczbą gości i piętrem: lista pokazuje pokoje dostępne w wybranym terminie, które dziś mają wybrany status. Przewodnik wybrał dla Ciebie status „Sprzątanie”.",
     enter: (api) => {
       api.clearFilters();
       api.setStatus("cleaning");
@@ -204,9 +204,9 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
 
   useEffect(() => {
     if (runId === 0) return;
-    const t = setTimeout(start, 0);
+    const t = setTimeout(() => setWelcomeOpen(true), 0);
     return () => clearTimeout(t);
-  }, [runId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [runId]);
 
   const step = STEPS[index];
 
@@ -299,7 +299,9 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
           </DialogHeader>
           <p className="text-sm">
             To {STEPS.length} krótkich kroków. Ekran będzie się zmieniał sam, a
-            dalej idziesz Ty.
+            dalej idziesz Ty. Przewodnik jest opcjonalny: możesz go pominąć i
+            korzystać z prototypu samodzielnie, a wrócić do niego w każdej
+            chwili przez zakładkę „Skorzystaj z przewodnika”.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={decline}>

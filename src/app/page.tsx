@@ -87,9 +87,7 @@ export default function Home() {
       return (
         fits &&
         (floor === "all" || r.floor === floor) &&
-        (search ||
-          status === "all" ||
-          dayStatus(r, reservations, TODAY) === status)
+        (status === "all" || dayStatus(r, reservations, TODAY) === status)
       );
     });
   }, [search?.from, search?.to, guests, rooms, reservations, status, floor]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -232,7 +230,6 @@ export default function Home() {
           setPage(1);
         }}
         status={status}
-        searchActive={!!search}
         onStatus={(st) => {
           setStatus(st);
           setPage(1);

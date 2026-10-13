@@ -53,8 +53,6 @@ interface Props {
   onFloor: (f: string) => void;
   status: StatusFilter;
   onStatus: (s: StatusFilter) => void;
-  /** Przy wybranym terminie wyniki są z definicji „dostępne w terminie" – filtr statusu dziś jest ukryty. */
-  searchActive: boolean;
   noResultsOpen: boolean;
   noResultsByFilters: boolean;
   onNoResultsDismiss: () => void;
@@ -133,7 +131,7 @@ export function AvailabilitySearch(p: Props) {
               </SelectContent>
             </Select>
           </div>
-          {!p.searchActive && (
+          {
             <div className="flex flex-col gap-2" data-tour="status-filter">
               <Label>Status dziś</Label>
               <Select
@@ -153,7 +151,7 @@ export function AvailabilitySearch(p: Props) {
                 </SelectContent>
               </Select>
             </div>
-          )}
+          }
         </div>
       </section>
       <Popover
