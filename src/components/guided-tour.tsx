@@ -47,18 +47,18 @@ interface Step {
 const STEPS: Step[] = [
   {
     targets: [],
-    title: "Na co odpowiada ten ekran",
+    title: "Główny problem – na co odpowiada ten ekran",
     focus: "main",
     problem:
-      "Ekran nie pozwalał zapytać o dostępność na konkretny termin i liczbę osób, tylko pokazywał stan „na teraz”. Recepcjonista nie odpowiadał gościowi walk-in w jednym kroku, a właściciel liczył obłożenie ręcznie.",
+      "Recepcjonista nie mógł szybko sprawdzić, czy jest wolny pokój na konkretny termin dla konkretnej liczby osób. Ekran pokazywał tylko to, co dzieje się „na teraz”, więc gość przy ladzie czekał, a właściciel liczył obłożenie w głowie, wiersz po wierszu.",
     solution:
-      "Prototyp pozwala podać termin i liczbę osób i od razu widzieć pasujące pokoje, a obłożenie widać na górze ekranu. Kolejne kroki pokazują to po kolei. Przy każdym zaznaczam, czy dotyczy głównego problemu, czy dodatkowej kwestii.",
+      "Wystarczy podać termin i liczbę osób, a lista od razu pokaże pasujące pokoje. Obłożenie widać na górze ekranu, bez liczenia. Pokażę to krok po kroku i przy każdym kroku zaznaczę, czy dotyczy głównego problemu, czy dodatkowej kwestii.",
   },
   {
     targets: ['[data-tour="summary"]'],
     title: "Obłożenie na pierwszy rzut oka",
     kind: "logic",
-    focus: "extra",
+    focus: "main",
     problem:
       "Żeby sprawdzić obłożenie, trzeba było liczyć wiersze ręcznie. Przyjazdów i wyjazdów dziś nic nie wyróżniało.",
     solution:
