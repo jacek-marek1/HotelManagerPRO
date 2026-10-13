@@ -19,7 +19,8 @@ export function isAvailable(
   guests: number,
 ): boolean {
   if (room.capacity < guests) return false;
-  if (room.condition.type === "repair" && from < room.condition.until) return false;
+  if (room.condition.type === "repair" && from < room.condition.until)
+    return false;
   return !reservations.some(
     (r) => r.roomId === room.id && r.arrival < to && r.departure > from,
   );
@@ -31,18 +32,31 @@ export function isAvailable(
  */
 export function isCleaning(room: Room, reservations: Reservation[]): boolean {
   if (room.condition.type === "cleaning") return true;
-  if (room.condition.type !== "none" || room.condition.readyOn === TODAY) return false;
-  return reservations.some((r) => r.roomId === room.id && r.departure === TODAY);
+  if (room.condition.type !== "none" || room.condition.readyOn === TODAY)
+    return false;
+  return reservations.some(
+    (r) => r.roomId === room.id && r.departure === TODAY,
+  );
 }
 
 /** Pokój w sprzątaniu, który za chwilę będzie gotowy – oznaczenie przy terminie od dziś. */
-export function isCleaningSoon(room: Room, reservations: Reservation[], from: string): boolean {
+export function isCleaningSoon(
+  room: Room,
+  reservations: Reservation[],
+  from: string,
+): boolean {
   return from === TODAY && isCleaning(room, reservations);
 }
 
 /** Rezerwacje pokoju kolidujące z naprawą trwającą od dziś do dnia `until` (noc przed `until` zajęta). */
-export function repairConflicts(room: Room, reservations: Reservation[], until: string): Reservation[] {
-  return reservations.filter((r) => r.roomId === room.id && r.arrival < until && r.departure > TODAY);
+export function repairConflicts(
+  room: Room,
+  reservations: Reservation[],
+  until: string,
+): Reservation[] {
+  return reservations.filter(
+    (r) => r.roomId === room.id && r.arrival < until && r.departure > TODAY,
+  );
 }
 
 export function currentReservation(
@@ -55,11 +69,17 @@ export function currentReservation(
   );
 }
 
-export function dayStatus(room: Room, reservations: Reservation[], date: string): DayStatus {
+export function dayStatus(
+  room: Room,
+  reservations: Reservation[],
+  date: string,
+): DayStatus {
   if (repairBlocks(room, date)) return "repair";
   if (date === TODAY) {
     if (isCleaning(room, reservations)) return "cleaning";
-  } else if (reservations.some((r) => r.roomId === room.id && r.departure === date)) {
+  } else if (
+    reservations.some((r) => r.roomId === room.id && r.departure === date)
+  ) {
     // Po wyjeździe gościa pokój idzie do sprzątania (prognoza na kolejne dni).
     return "cleaning";
   }
@@ -73,10 +93,22 @@ export interface DaySummary {
   departures: { room: Room; reservation: Reservation }[];
 }
 
-export function summarize(rooms: Room[], reservations: Reservation[], date: string): DaySummary {
-  const counts: Record<DayStatus, number> = { free: 0, occupied: 0, cleaning: 0, repair: 0 };
+export function summarize(
+  rooms: Room[],
+  reservations: Reservation[],
+  date: string,
+): DaySummary {
+  const counts: Record<DayStatus, number> = {
+    free: 0,
+    occupied: 0,
+    cleaning: 0,
+    repair: 0,
+  };
   for (const room of rooms) counts[dayStatus(room, reservations, date)]++;
-  const pair = (r: Reservation) => ({ room: rooms.find((x) => x.id === r.roomId)!, reservation: r });
+  const pair = (r: Reservation) => ({
+    room: rooms.find((x) => x.id === r.roomId)!,
+    reservation: r,
+  });
   return {
     date,
     counts,
@@ -108,7 +140,11 @@ export function overlapsOther(
   to: string,
 ): boolean {
   return reservations.some(
-    (r) => r.id !== id && r.roomId === roomId && r.arrival < to && r.departure > from,
+    (r) =>
+      r.id !== id &&
+      r.roomId === roomId &&
+      r.arrival < to &&
+      r.departure > from,
   );
 }
 
@@ -134,4 +170,39 @@ export function nextFreeStart(
     date = blocking.departure;
     reason = "occupied";
   }
+}
+
+/**
+ * Status pokoju w wybranym terminie [from, to): naprawa → zajęty → sprzątanie
+ * (tylko gdy termin zaczyna się dziś) → wolny. Pokój „wolny" i „sprzątanie" są dostępne.
+ */
+export function termStatus(
+  room: Room,
+  reservations: Reservation[],
+  from: string,
+  to: string,
+): DayStatus {
+  if (room.condition.type === "repair" && from < room.condition.until)
+    return "repair";
+  if (
+    reservations.some(
+      (r) => r.roomId === room.id && r.arrival < to && r.departure > from,
+    )
+  ) {
+    return "occupied";
+  }
+  if (from === TODAY && isCleaning(room, reservations)) return "cleaning";
+  return "free";
+}
+
+/** Rezerwacja pokoju nakładająca się na termin [from, to). */
+export function overlappingReservation(
+  room: Room,
+  reservations: Reservation[],
+  from: string,
+  to: string,
+): Reservation | undefined {
+  return reservations.find(
+    (r) => r.roomId === room.id && r.arrival < to && r.departure > from,
+  );
 }

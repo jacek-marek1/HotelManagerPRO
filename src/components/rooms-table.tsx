@@ -6,7 +6,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { dayStatus, displayReservation } from "@/lib/availability";
+import {
+  dayStatus,
+  displayReservation,
+  overlappingReservation,
+  termStatus,
+} from "@/lib/availability";
 import { TODAY, formatDate, formatNights, nightsBetween } from "@/lib/dates";
 import type { Reservation, Room } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -54,10 +59,10 @@ export function RoomsTable({
             Pojemność
           </TableHead>
           <TableHead className="font-semibold text-slate-900">
-            Status dziś
+            {search ? "Status w terminie" : "Status dziś"}
           </TableHead>
           <TableHead className="font-semibold text-slate-900">
-            {search ? "Dostępność w terminie" : "Gość i pobyt"}
+            Gość i pobyt
           </TableHead>
           <TableHead className="font-semibold text-slate-900 text-right">
             Cena / noc
@@ -70,8 +75,12 @@ export function RoomsTable({
       </TableHeader>
       <TableBody>
         {rooms.map((room, rowIndex) => {
-          const res = displayReservation(room, reservations, TODAY);
-          const status = dayStatus(room, reservations, TODAY);
+          const res = search
+            ? overlappingReservation(room, reservations, search.from, search.to)
+            : displayReservation(room, reservations, TODAY);
+          const status = search
+            ? termStatus(room, reservations, search.from, search.to)
+            : dayStatus(room, reservations, TODAY);
           const repairUntil =
             room.condition.type === "repair" ? room.condition.until : null;
           return (
@@ -91,41 +100,34 @@ export function RoomsTable({
                   ? `Naprawa do ${formatDate(repairUntil).slice(0, 5)}`
                   : STATUS_LABEL[status]}
               </TableCell>
-              {search ? (
-                <TableCell className={`font-medium ${STATUS_FILL.free}`}>
-                  Dostępny
-                </TableCell>
-              ) : (
-                <TableCell>
-                  {!search && res ? (
-                    <div>
-                      <button
-                        type="button"
-                        className="group inline-flex cursor-pointer items-center gap-1.5 rounded-sm font-medium focus-visible:outline-2 focus-visible:outline-ring"
-                        title="Szczegóły i edycja"
-                        aria-label={`Szczegóły i edycja – ${res.guest.name}`}
-                        onClick={() => onDetails(res)}
-                      >
-                        <span className="underline-offset-2 group-hover:underline">
-                          {res.guest.name}
-                        </span>
-                        <span className="inline-flex size-5 items-center justify-center rounded border border-border bg-card text-muted-foreground transition-colors group-hover:border-foreground/40 group-hover:bg-muted group-hover:text-foreground">
-                          <ChevronRightIcon className="size-3.5" aria-hidden />
-                        </span>
-                      </button>
-                      <div className="text-muted-foreground">
-                        {formatDate(res.arrival)} – {formatDate(res.departure)}{" "}
-                        ·{" "}
-                        {formatNights(
-                          nightsBetween(res.arrival, res.departure),
-                        )}{" "}
-                      </div>
+              <TableCell>
+                {res ? (
+                  <div>
+                    <button
+                      type="button"
+                      className="group inline-flex cursor-pointer items-center gap-1.5 rounded-sm font-medium focus-visible:outline-2 focus-visible:outline-ring"
+                      title="Szczegóły i edycja"
+                      aria-label={`Szczegóły i edycja – ${res.guest.name}`}
+                      onClick={() => onDetails(res)}
+                    >
+                      <span className="underline-offset-2 group-hover:underline">
+                        {res.guest.name}
+                      </span>
+                      <span className="inline-flex size-5 items-center justify-center rounded border border-border bg-card text-muted-foreground transition-colors group-hover:border-foreground/40 group-hover:bg-muted group-hover:text-foreground">
+                        <ChevronRightIcon className="size-3.5" aria-hidden />
+                      </span>
+                    </button>
+                    <div className="text-muted-foreground">
+                      {formatDate(res.arrival)} – {formatDate(res.departure)} ·{" "}
+                      {formatNights(
+                        nightsBetween(res.arrival, res.departure),
+                      )}{" "}
                     </div>
-                  ) : (
-                    "–"
-                  )}
-                </TableCell>
-              )}
+                  </div>
+                ) : (
+                  "–"
+                )}
+              </TableCell>
               <TableCell className="text-right">
                 {money(room.pricePerNight)}
               </TableCell>
@@ -133,14 +135,19 @@ export function RoomsTable({
                 {room.notes || "–"}
               </TableCell>
               <TableCell className="text-right whitespace-nowrap">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  data-tour={rowIndex === 0 ? "reserve-first" : undefined}
-                  onClick={() => onReserve(room)}
-                >
-                  Rezerwuj
-                </Button>
+                {!(
+                  search &&
+                  (status === "occupied" || status === "repair")
+                ) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    data-tour={rowIndex === 0 ? "reserve-first" : undefined}
+                    onClick={() => onReserve(room)}
+                  >
+                    Rezerwuj
+                  </Button>
+                )}
                 {!search && (
                   <DropdownMenu>
                     <DropdownMenuTrigger

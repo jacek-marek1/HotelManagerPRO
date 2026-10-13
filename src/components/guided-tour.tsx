@@ -60,7 +60,7 @@ const STEPS: Step[] = [
     problem:
       "Pola Od/Do nie filtrowały listy i nie dało się podać liczby gości. Na pytanie „czy macie pokój dla 2 osób na 2 noce od dziś?” ekran nie odpowiadał.",
     solution:
-      "Kalendarz zakresu i liczba gości filtrują pokoje od razu, w 3 kliknięciach. Przewodnik wpisał za Ciebie 28–30.12 i 2 osoby.",
+      "Kalendarz zakresu i liczba gości filtrują pokoje od razu, bez przeładowania strony. Przewodnik wpisał za Ciebie 28–30.12 i 2 osoby.",
     enter: (api) => {
       api.showSummary(false);
       api.applySearch({
@@ -112,7 +112,7 @@ const STEPS: Step[] = [
     problem:
       "W oryginale do wyboru były tylko pokoje zajęte i wolne, a sprzątanie i naprawa trafiały do nieczytelnej opcji „Inne”.",
     solution:
-      "Każdy status ma własną pozycję filtra: Wolny, Zajęty, Sprzątanie i Naprawa. Filtr łączy się z terminem, liczbą gości i piętrem: lista pokazuje pokoje dostępne w wybranym terminie, które dziś mają wybrany status. Przewodnik wybrał dla Ciebie status „Sprzątanie”.",
+      "Każdy status ma własną pozycję filtra: Wolny, Zajęty, Sprzątanie i Naprawa. Filtr łączy się z terminem, liczbą gości i piętrem. Po wybraniu terminu status dotyczy właśnie tych dni, np. pokoje zajęte w wybranym terminie. Przewodnik wybrał dla Ciebie status „Sprzątanie”.",
     enter: (api) => {
       api.clearFilters();
       api.setStatus("cleaning");
@@ -310,8 +310,10 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
       <Dialog open={welcomeOpen} onOpenChange={(o) => !o && decline()}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Przewodnik po prototypie</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-[22px] leading-tight">
+              Przewodnik po prototypie
+            </DialogTitle>
+            <DialogDescription className="text-foreground">
               Cześć, przygotowałem krótki przewodnik po moim redesignie, w
               którym pokazuję po kolei jakie problemy użyteczności utrudniały
               szybkie znalezienie wolnego pokoju i sprawdzenie obłożenia oraz

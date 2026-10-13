@@ -54,7 +54,8 @@ interface Props {
   status: StatusFilter;
   onStatus: (s: StatusFilter) => void;
   noResultsOpen: boolean;
-  noResultsByFilters: boolean;
+  noResultsTitle: string;
+  noResultsText: string;
   onNoResultsDismiss: () => void;
   onReset: () => void;
   hasFilter: boolean;
@@ -133,7 +134,11 @@ export function AvailabilitySearch(p: Props) {
           </div>
           {
             <div className="flex flex-col gap-2" data-tour="status-filter">
-              <Label>Status dziś</Label>
+              <Label>
+                {p.range?.from && p.range.to
+                  ? "Status w terminie"
+                  : "Status dziś"}
+              </Label>
               <Select
                 value={p.status}
                 onValueChange={(v) => p.onStatus((v ?? "all") as StatusFilter)}
@@ -165,11 +170,9 @@ export function AvailabilitySearch(p: Props) {
           initialFocus={false}
           className="w-[28rem] gap-2 p-5"
         >
-          <p className="text-lg font-semibold">Brak wolnych pokoi</p>
+          <p className="text-lg font-semibold">{p.noResultsTitle}</p>
           <p className="text-base leading-relaxed text-muted-foreground">
-            {p.noResultsByFilters
-              ? "W wybranym terminie są wolne pokoje, ale żaden nie spełnia filtrów piętra lub statusu. Zmień filtry."
-              : "Żaden pokój nie jest dostępny w całym wybranym terminie dla tej liczby gości. Zmień termin lub liczbę osób."}
+            {p.noResultsText}
           </p>
         </PopoverContent>
       </Popover>

@@ -269,6 +269,15 @@ Na prośbę Jacka pigułki z liczbami w kartach Dziś/Jutro tylko z obrysem (cie
 Zgłoszenie: termin 31.12–05.01 + status „Zajęty" pokazał pokój 104 z napisem „Wolny". Przyczyna: filtr „Status dziś" i kolumna „Dostępność w terminie" mówiły o różnych rzeczach tym samym słowem (dziś zajęty do 30.12, w terminie dostępny).
 Naprawa: w wynikach wyszukiwania zawsze są dwie osobne kolumny — „Status dziś" (wypełnienie wg statusu na dziś, np. Zajęty, Sprzątanie, Naprawa do 30.12) i „Dostępność w terminie" (zielone „Dostępny"; słowo „Wolny" zarezerwowane dla statusu dziś); kolumna „Gość i pobyt" w trybie wyszukiwania zastąpiona dostępnością. Eksport: status dziś z dopiskiem „(dostępny w terminie)". Weryfikacja w Chrome: 28–30.12 → 103, 109, 209: „Sprzątanie" + „Dostępny". Nie sprawdzano ponownie dokładnie scenariusza zgłoszonego (31.12–05.01, 1 os., Piętro 1, Zajęty).
 
+### 55. Status w wybranym terminie, bez automatycznych „2 osób"; modal powitalny
+Uwagi Jacka: nie ma sensu rozdzielać „zajęty dziś, wolny w terminie" — po wyborze terminu ma być po prostu pokazane, że pokój w tym terminie jest wolny; usunąć automatyczne ustawianie „2 osoby"; w modalu powitalnym pierwszy akapit w kolorze drugiego i większy nagłówek (+4 px).
+- `termStatus` (`lib/availability.ts`): status pokoju w terminie [od, do): naprawa → zajęty → sprzątanie (tylko termin od dziś) → wolny. Z terminem kolumna i filtr to „Status w terminie"; „Wszystkie statusy" = tylko pokoje dostępne (wolny i sprzątanie), a wybrany status pokazuje pokoje o tym statusie w terminie (np. zajęte w tych dniach, z gościem w kolumnie „Gość i pobyt"); „Rezerwuj" ukryty przy pokoju zajętym lub w naprawie w terminie. Komunikat braku wyników zależy od statusu („Brak pokoi o tym statusie").
+- Usunięte automatyczne ustawianie „2 osoby" po wybraniu terminu (liczba gości zostaje „Dowolna liczba"); w przewodniku przykład nadal 2 osoby; opis kroków przewodnika dostosowany.
+- Modal powitalny: pierwszy akapit w kolorze tekstu (jak drugi), nagłówek 22 px (było 18 px).
+- Skrypt: termin 31.12–05.01, Piętro 1, status „Zajęty" → 102, 106, 107, 108; T1 i T2 bez zmian (103, 105, 109, 203, 204, 206, 209 / 103, 109, 209).
+Nagłówek tabeli: „Dostępne pokoje" bez wybranego statusu, „Pokoje w terminie" przy wybranym statusie. Weryfikacja w Chrome: 28–30.12 → 7 dostępnych (Wolny/Sprzątanie), liczba gości „Dowolna liczba", status „Naprawa" → 105 (do 30.12) i 110 (do 02.01) bez „Rezerwuj"; modal powitalny z nowym kolorem akapitu i nagłówkiem. Nie klikano: status „Zajęty" z terminem w UI (tylko skrypt).
+Zastępuje podział z kroku 54 (osobne kolumny Status dziś / Dostępność w terminie).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

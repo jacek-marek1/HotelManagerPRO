@@ -23,6 +23,7 @@ import {
   displayReservation,
   nextFreeStart,
   isAvailable,
+  termStatus,
   summarize,
 } from "@/lib/availability";
 import { buildCsv, downloadCsv, type ExportRow } from "@/lib/export";
@@ -80,14 +81,16 @@ export default function Home() {
   const results = useMemo(() => {
     const seats = guests ?? 1;
     return rooms.filter((r) => {
-      const fits = search
-        ? isAvailable(r, reservations, search.from, search.to, seats)
-        : r.capacity >= seats;
-      return (
-        fits &&
-        (floor === "all" || r.floor === floor) &&
-        (status === "all" || dayStatus(r, reservations, TODAY) === status)
-      );
+      if (r.capacity < seats) return false;
+      if (floor !== "all" && r.floor !== floor) return false;
+      if (search) {
+        // Z terminem status liczy się dla tego terminu; bez wybranego statusu – tylko pokoje dostępne.
+        const ts = termStatus(r, reservations, search.from, search.to);
+        return status === "all"
+          ? ts === "free" || ts === "cleaning"
+          : ts === status;
+      }
+      return status === "all" || dayStatus(r, reservations, TODAY) === status;
     });
   }, [search?.from, search?.to, guests, rooms, reservations, status, floor]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -100,23 +103,31 @@ export default function Home() {
 
   const key = search ? `${search.from}|${search.to}|${guests}` : "";
   const noResults = !!search && results.length === 0;
-  const noResultsByFilters =
+  const anyAvailable =
     noResults &&
     rooms.some((r) =>
       isAvailable(r, reservations, search!.from, search!.to, guests ?? 1),
     );
+  const noResultsTitle =
+    status === "all" ? "Brak wolnych pokoi" : "Brak pokoi o tym statusie";
+  const noResultsText =
+    status !== "all"
+      ? "W wybranym terminie żaden pokój nie spełnia wybranych filtrów (status, piętro, liczba gości). Zmień filtry."
+      : anyAvailable
+        ? "W wybranym terminie są wolne pokoje, ale żaden nie spełnia filtrów piętra lub liczby gości. Zmień filtry."
+        : "Żaden pokój nie jest dostępny w całym wybranym terminie dla tej liczby gości. Zmień termin lub liczbę osób.";
 
   const exportExcel = () => {
     const rows: ExportRow[] = results.map((r) => {
       const reservation = displayReservation(r, reservations, TODAY);
-      const st = dayStatus(r, reservations, TODAY);
+      const st = search
+        ? termStatus(r, reservations, search.from, search.to)
+        : dayStatus(r, reservations, TODAY);
       return {
         room: r.number,
         floor: r.floor,
         capacity: r.capacity,
-        status: search
-          ? `${STATUS_LABEL[st]} (dostępny w terminie)`
-          : STATUS_LABEL[st],
+        status: search ? `${STATUS_LABEL[st]} w terminie` : STATUS_LABEL[st],
         pricePerNight: r.pricePerNight,
         notes: r.notes,
         reservation: search ? undefined : reservation,
@@ -209,9 +220,6 @@ export default function Home() {
         onRangeChange={(r) => {
           setRange(r);
           setPage(1);
-          // Wyszukiwanie terminu bez wybranej liczby gości zakłada 2 osoby.
-          if (r?.from && r.to && toISO(r.to) > toISO(r.from) && guests === null)
-            setGuests(2);
         }}
         guests={guests}
         onGuestsChange={(n) => {
@@ -219,7 +227,8 @@ export default function Home() {
           setPage(1);
         }}
         noResultsOpen={noResults && (tourActive || dismissedKey !== key)}
-        noResultsByFilters={noResultsByFilters}
+        noResultsTitle={noResultsTitle}
+        noResultsText={noResultsText}
         onNoResultsDismiss={() => !tourActive && setDismissedKey(key)}
         floor={floor}
         onFloor={(f) => {
@@ -249,7 +258,11 @@ export default function Home() {
       >
         <div className="flex items-center justify-between gap-4 px-4 py-3">
           <h2 className="text-lg font-semibold">
-            {search ? "Dostępne pokoje" : "Pokoje"}{" "}
+            {search
+              ? status === "all"
+                ? "Dostępne pokoje"
+                : "Pokoje w terminie"
+              : "Pokoje"}{" "}
             <span className="font-normal text-muted-foreground">
               · {results.length}
             </span>
