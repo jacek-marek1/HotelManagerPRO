@@ -202,6 +202,9 @@ Usunięte podkreślenie nazwiska gościa; mały chevron (`size-3.5`) bezpośredn
 ### 37. Bez ikony w statusie „Sprzątanie"
 Usunięty przycisk z haczykiem z komórki statusu. Funkcja „Oznacz jako posprzątany" przeniesiona do menu z trzema kropkami (pierwsza pozycja, tylko dla pokoju w sprzątaniu). Weryfikacja w Chrome: komórka bez ikony, menu pokoju 103 z nową pozycją na górze; samo kliknięcie pozycji nie było powtarzane po przeniesieniu.
 
+### 38. Chevron w obramowaniu, hover na nazwisku
+Chevron obok nazwiska w małym polu z cienkim obrysem (`size-5`, `border-border`); po najechaniu na przycisk: nazwisko się podkreśla (bez stałego podkreślenia), a pole z chevronem dostaje ciemniejszy obrys i szare tło; kursor `pointer`.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

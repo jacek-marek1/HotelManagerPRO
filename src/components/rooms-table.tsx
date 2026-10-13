@@ -113,16 +113,17 @@ export function RoomsTable({
                   <div>
                     <button
                       type="button"
-                      className="group inline-flex items-center gap-0.5 rounded-sm font-medium hover:text-primary focus-visible:outline-2 focus-visible:outline-ring"
+                      className="group inline-flex cursor-pointer items-center gap-1.5 rounded-sm font-medium focus-visible:outline-2 focus-visible:outline-ring"
                       title="Szczegóły i edycja"
                       aria-label={`Szczegóły i edycja – ${res.guest.name}`}
                       onClick={() => onDetails(res)}
                     >
-                      {res.guest.name}
-                      <ChevronRightIcon
-                        className="size-3.5 text-muted-foreground group-hover:text-primary"
-                        aria-hidden
-                      />
+                      <span className="underline-offset-2 group-hover:underline">
+                        {res.guest.name}
+                      </span>
+                      <span className="inline-flex size-5 items-center justify-center rounded border border-border bg-card text-muted-foreground transition-colors group-hover:border-foreground/40 group-hover:bg-muted group-hover:text-foreground">
+                        <ChevronRightIcon className="size-3.5" aria-hidden />
+                      </span>
                     </button>
                     <div className="text-muted-foreground">
                       {formatDate(res.arrival)} – {formatDate(res.departure)} ·{" "}
