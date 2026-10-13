@@ -196,6 +196,9 @@ Na prośbę Jacka: `docs/PROCES_PRACY_Z_AI.md` (pełna lista zmian względem ory
 ### 35. Zamiana kolorów statusów
 Zajęty = czerwony (`red-100`), Naprawa = szary (`slate-200`); Wolny (zielony) i Sprzątanie (żółty) bez zmian.
 
+### 36. Nazwisko bez podkreślenia, chevron obok
+Usunięte podkreślenie nazwiska gościa; mały chevron (`size-3.5`) bezpośrednio za nazwiskiem w tym samym przycisku (jedno miejsce kliknięcia, `title`/`aria-label` „Szczegóły i edycja"); hover zmienia kolor nazwiska i ikony. Osobny przycisk ze strzałką po prawej usunięty.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

@@ -126,34 +126,25 @@ export function RoomsTable({
               </TableCell>
               <TableCell>
                 {!search && res ? (
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <button
-                        type="button"
-                        className="rounded-sm font-medium underline underline-offset-2 hover:text-primary focus-visible:outline-2 focus-visible:outline-ring"
-                        onClick={() => onDetails(res)}
-                      >
-                        {res.guest.name}
-                      </button>
-                      <div className="text-muted-foreground">
-                        {formatDate(res.arrival)} – {formatDate(res.departure)}{" "}
-                        ·{" "}
-                        {formatNights(
-                          nightsBetween(res.arrival, res.departure),
-                        )}{" "}
-                        · {money(stayTotal(res))}
-                      </div>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      className="shrink-0"
+                  <div>
+                    <button
+                      type="button"
+                      className="group inline-flex items-center gap-0.5 rounded-sm font-medium hover:text-primary focus-visible:outline-2 focus-visible:outline-ring"
                       title="Szczegóły i edycja"
                       aria-label={`Szczegóły i edycja – ${res.guest.name}`}
                       onClick={() => onDetails(res)}
                     >
-                      <ChevronRightIcon />
-                    </Button>
+                      {res.guest.name}
+                      <ChevronRightIcon
+                        className="size-3.5 text-muted-foreground group-hover:text-primary"
+                        aria-hidden
+                      />
+                    </button>
+                    <div className="text-muted-foreground">
+                      {formatDate(res.arrival)} – {formatDate(res.departure)} ·{" "}
+                      {formatNights(nightsBetween(res.arrival, res.departure))}{" "}
+                      · {money(stayTotal(res))}
+                    </div>
                   </div>
                 ) : (
                   "–"
