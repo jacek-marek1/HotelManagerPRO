@@ -205,6 +205,15 @@ Usunięty przycisk z haczykiem z komórki statusu. Funkcja „Oznacz jako posprz
 ### 38. Chevron w obramowaniu, hover na nazwisku
 Chevron obok nazwiska w małym polu z cienkim obrysem (`size-5`, `border-border`); po najechaniu na przycisk: nazwisko się podkreśla (bez stałego podkreślenia), a pole z chevronem dostaje ciemniejszy obrys i szare tło; kursor `pointer`.
 
+### 39. Więcej pokoi i klientów (dane demonstracyjne)
+Prośba Jacka: pokazać zarządzanie pokojami na większej liczbie danych, ten sam wzór, nadal dwa piętra. Oryginalne 8 pokoi i 5 rezerwacji bez zmian; dodane 12 pokoi (106–110 na P1, 204–210 na P2; razem 20: po 10 na piętro) i 11 fikcyjnych rezerwacji z pełnymi danymi (gość, miasto/kraj, telefon, e-mail, płatność, liczba osób), pokoje posortowane po numerze.
+Zaprojektowane sytuacje (dziś = 28.12.2024): przyjazdy dziś (102, 108, 210), wyjazdy dziś (103, 109 – 109 przechodzi w sprzątanie automatycznie), wyjazd jutro (203, 206), przyjazd jutro (208), sprzątanie ręczne (209), naprawa do 02.01 (110), rezerwacje na przyszłość (106, 107, 204), długi pobyt (207).
+Skutek dla scenariuszy PRD (które zakładały 8 pokoi): T1 (30–31.12, 2 os.) → 103, 105, 203, 109, 204, 206, 209 (nadal zawiera 103 i 203, bez 1-osobowych i zajętych); T2 → 103, 109, 209 (wszystkie „za chwilę gotowy"); T3 dziś → Zajęte 10, Wolne 5, Sprzątanie 3, Naprawa 2; przyjazdy 102, 108, 210; wyjazdy 103, 109; jutro wyjazdy 203, 206, przyjazd 208. Wartości z PRD dla T3 (4/2/1/1) dotyczą wyłącznie oryginalnych 8 pokoi. Brak wyników (T4) np. 28–30.12, 4 os., Piętro 2.
+Spójność danych sprawdzona skryptem (brak nakładania rezerwacji, pojemność, istniejące pokoje).
+
+### 40. Suma przeniesiona do panelu bocznego
+Z komórki „Gość i pobyt" usunięta kwota za pobyt (zostają: nazwisko, termin, liczba nocy). W bocznym panelu szczegółów osobny wiersz „Suma" (noce × cena/noc); wiersz „Pobyt" ma tylko noce i cenę za noc.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

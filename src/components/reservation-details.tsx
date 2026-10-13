@@ -90,8 +90,9 @@ export function ReservationDetails({
               </Row>
               <Row label="Pobyt">
                 {formatNights(nightsBetween(r.arrival, r.departure))} ·{" "}
-                {r.pricePerNight} PLN/noc · razem {stayTotal(r)} PLN
+                {r.pricePerNight} PLN/noc
               </Row>
+              <Row label="Suma">{stayTotal(r)} PLN</Row>
               <Row label="Uwagi">{r.notes}</Row>
             </dl>
             <SheetFooter>

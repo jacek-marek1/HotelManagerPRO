@@ -10,7 +10,6 @@ import {
   dayStatus,
   displayReservation,
   isCleaningSoon,
-  stayTotal,
 } from "@/lib/availability";
 import { TODAY, formatDate, formatNights, nightsBetween } from "@/lib/dates";
 import type { Reservation, Room } from "@/lib/types";
@@ -127,8 +126,9 @@ export function RoomsTable({
                     </button>
                     <div className="text-muted-foreground">
                       {formatDate(res.arrival)} – {formatDate(res.departure)} ·{" "}
-                      {formatNights(nightsBetween(res.arrival, res.departure))}{" "}
-                      · {money(stayTotal(res))}
+                      {formatNights(
+                        nightsBetween(res.arrival, res.departure),
+                      )}{" "}
                     </div>
                   </div>
                 ) : (
