@@ -23,7 +23,6 @@ import {
   displayReservation,
   nextFreeStart,
   isAvailable,
-  isCleaningSoon,
   summarize,
 } from "@/lib/availability";
 import { buildCsv, downloadCsv, type ExportRow } from "@/lib/export";
@@ -116,9 +115,7 @@ export default function Home() {
         floor: r.floor,
         capacity: r.capacity,
         status: search
-          ? isCleaningSoon(r, reservations, search.from)
-            ? "Sprzątanie"
-            : "Wolny w terminie"
+          ? `${STATUS_LABEL[st]} (dostępny w terminie)`
           : STATUS_LABEL[st],
         pricePerNight: r.pricePerNight,
         notes: r.notes,

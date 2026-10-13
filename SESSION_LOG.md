@@ -265,6 +265,10 @@ Liczby w kartach „Dziś" i „Jutro" jako pigułki z wypełnieniem i obrysem w
 ### 53. Pigułki obłożenia bez wypełnienia
 Na prośbę Jacka pigułki z liczbami w kartach Dziś/Jutro tylko z obrysem (cienki `border` 1 px w kolorze statusu, biało-kartowe tło, tekst w ciemnym odcieniu statusu); nowe `STATUS_TEXT`.
 
+### 54. Dwa znaczenia „Wolny" w wynikach wyszukiwania (błąd użyteczności zgłoszony przez Jacka)
+Zgłoszenie: termin 31.12–05.01 + status „Zajęty" pokazał pokój 104 z napisem „Wolny". Przyczyna: filtr „Status dziś" i kolumna „Dostępność w terminie" mówiły o różnych rzeczach tym samym słowem (dziś zajęty do 30.12, w terminie dostępny).
+Naprawa: w wynikach wyszukiwania zawsze są dwie osobne kolumny — „Status dziś" (wypełnienie wg statusu na dziś, np. Zajęty, Sprzątanie, Naprawa do 30.12) i „Dostępność w terminie" (zielone „Dostępny"; słowo „Wolny" zarezerwowane dla statusu dziś); kolumna „Gość i pobyt" w trybie wyszukiwania zastąpiona dostępnością. Eksport: status dziś z dopiskiem „(dostępny w terminie)". Weryfikacja w Chrome: 28–30.12 → 103, 109, 209: „Sprzątanie" + „Dostępny". Nie sprawdzano ponownie dokładnie scenariusza zgłoszonego (31.12–05.01, 1 os., Piętro 1, Zajęty).
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.
