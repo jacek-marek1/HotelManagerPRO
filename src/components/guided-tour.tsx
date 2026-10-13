@@ -33,6 +33,8 @@ interface Step {
   /** Selektory elementów do podświetlenia (podświetlany jest ich wspólny obszar). */
   targets: string[];
   title: string;
+  /** Rodzaj problemu: nielogiczność działania vs estetyka i odciążenie poznawcze. */
+  kind: "logic" | "cognitive";
   problem: string;
   solution: string;
   /** Id rezerwacji, której panel szczegółów ma być otwarty w tym kroku. */
@@ -44,6 +46,7 @@ const STEPS: Step[] = [
   {
     targets: ['[data-tour="summary"]'],
     title: "Obłożenie na pierwszy rzut oka",
+    kind: "logic",
     problem:
       "Żeby sprawdzić obłożenie, trzeba było liczyć wiersze ręcznie. Przyjazdów i wyjazdów dziś nic nie wyróżniało.",
     solution:
@@ -53,6 +56,7 @@ const STEPS: Step[] = [
   {
     targets: ['[data-tour="search"]'],
     title: "Pytanie gościa: termin i liczba osób",
+    kind: "logic",
     problem:
       "Pola Od/Do nie filtrowały listy i nie dało się podać liczby gości. Na pytanie „czy macie pokój dla 2 osób na 2 noce od dziś?” ekran nie odpowiadał.",
     solution:
@@ -70,6 +74,7 @@ const STEPS: Step[] = [
   {
     targets: ['[data-tour="table"]'],
     title: "Wynik liczony z dat, nie z ręcznego statusu",
+    kind: "logic",
     problem:
       "„Wolne” znaczyło tylko „wolny dziś”. Pokój w sprzątaniu znikał z wyników, a naprawa była ukryta w uwagach.",
     solution:
@@ -78,6 +83,7 @@ const STEPS: Step[] = [
   {
     targets: ['[data-tour="reserve-first"]'],
     title: "Wskazanie pokoju w jednym kliknięciu",
+    kind: "logic",
     problem:
       "Z wyniku nie dało się od razu przejść do rezerwacji, a pojemność trzeba było odgadywać ze skrótów („2os.+”).",
     solution:
@@ -86,6 +92,7 @@ const STEPS: Step[] = [
   {
     targets: ['[data-tour="search"]', '[data-slot="popover-content"]'],
     title: "Komunikat zamiast pustego ekranu",
+    kind: "logic",
     problem:
       "Gdy nic nie pasowało, recepcjonista widział pustą listę i nie wiedział, co zmienić.",
     solution:
@@ -101,6 +108,7 @@ const STEPS: Step[] = [
   {
     targets: ['[data-tour="status-filter"]', '[data-tour="table"]'],
     title: "Filtr po każdym statusie",
+    kind: "logic",
     problem:
       "W oryginale do wyboru były tylko pokoje zajęte i wolne, a sprzątanie i naprawa trafiały do nieczytelnej opcji „Inne”.",
     solution:
@@ -116,6 +124,7 @@ const STEPS: Step[] = [
       '[data-tour="table"] tbody td:nth-child(3)',
     ],
     title: "Status pokoi dziś w jednym miejscu",
+    kind: "logic",
     problem:
       "Stan techniczny (sprzątanie, naprawa) był ukryty w uwagach, a status ustawiany ręcznie, niezależnie od dat.",
     solution:
@@ -126,12 +135,24 @@ const STEPS: Step[] = [
     targets: ['[data-slot="sheet-content"]'],
     details: "b1",
     title: "Dane klienta poza tabelą",
+    kind: "cognitive",
     problem:
       "Wiek, miasto, telefon, e-mail i płatność zabierały szerokość tabeli i utrudniały szybką decyzję o pokoju.",
     solution:
       "Tabela zostaje czytelna: pokój, status, gość i termin. Dane kontaktowe, forma płatności, suma za pobyt i uwagi są w panelu bocznym klienta, który otwiera kliknięcie w nazwisko. Stamtąd przejdziesz też do edycji.",
   },
 ];
+
+const KIND_LABEL: Record<Step["kind"], { text: string; className: string }> = {
+  logic: {
+    text: "Nielogiczność",
+    className: "bg-amber-100 text-amber-950",
+  },
+  cognitive: {
+    text: "Estetyka i odciążenie poznawcze",
+    className: "bg-sky-100 text-sky-950",
+  },
+};
 
 const DECLINED_KEY = "hm-tour-declined";
 const PAD = 8;
@@ -340,9 +361,16 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
             className="absolute rounded-xl border bg-card p-5 text-card-foreground shadow-xl transition-all duration-300"
             style={{ top: cardTop, left: cardLeft, width: W }}
           >
-            <p className="text-xs font-medium text-muted-foreground">
-              Krok {index + 1} z {STEPS.length}
-            </p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs font-medium text-muted-foreground">
+                Krok {index + 1} z {STEPS.length}
+              </p>
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${KIND_LABEL[step.kind].className}`}
+              >
+                {KIND_LABEL[step.kind].text}
+              </span>
+            </div>
             <h2 className="mt-1 text-lg font-semibold">{step.title}</h2>
             <div className="mt-3 space-y-3 text-sm">
               <p>
