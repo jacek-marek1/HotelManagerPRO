@@ -262,6 +262,9 @@ Każdy krok przewodnika ma oznaczenie rodzaju problemu (pigułka obok numeru kro
 ### 52. Kolory statusów w podsumowaniu obłożenia
 Liczby w kartach „Dziś" i „Jutro" jako pigułki z wypełnieniem i obrysem w kolorze statusu (Zajęty czerwony, Wolny zielony, Sprzątanie żółty, Naprawa szary; `STATUS_FILL` + nowe `STATUS_STROKE`), żeby właściciel od razu rozpoznał obłożenie po kolorach.
 
+### 53. Pigułki obłożenia bez wypełnienia
+Na prośbę Jacka pigułki z liczbami w kartach Dziś/Jutro tylko z obrysem (cienki `border` 1 px w kolorze statusu, biało-kartowe tło, tekst w ciemnym odcieniu statusu); nowe `STATUS_TEXT`.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

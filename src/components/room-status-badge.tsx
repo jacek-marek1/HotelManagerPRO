@@ -15,6 +15,14 @@ export const STATUS_FILL: Record<DayStatus, string> = {
   repair: "bg-slate-200 text-slate-900",
 };
 
+/** Sam kolor tekstu statusu (dla pigułek bez wypełnienia). */
+export const STATUS_TEXT: Record<DayStatus, string> = {
+  free: "text-emerald-900",
+  occupied: "text-red-900",
+  cleaning: "text-amber-900",
+  repair: "text-slate-900",
+};
+
 /** Obrys w kolorze statusu (do pigułek z liczbami w podsumowaniu obłożenia). */
 export const STATUS_STROKE: Record<DayStatus, string> = {
   free: "border-emerald-400",
