@@ -135,31 +135,17 @@ const STEPS: Step[] = [
   },
   {
     targets: ['[data-tour="search"]', '[data-tour="table"]'],
-    title: "Filtr po każdym statusie",
+    title: "Status pokoi i filtry w jednej tabeli",
     kind: "logic",
     focus: "extra",
     problem:
-      "W oryginale do wyboru były tylko pokoje zajęte i wolne, a sprzątanie i naprawa trafiały do nieczytelnej opcji „Inne”.",
+      "W oryginale do wyboru były tylko pokoje zajęte i wolne, a sprzątanie i naprawa trafiały do nieczytelnej opcji „Inne”. Naprawa była tylko w uwagach, a status ustawiano ręcznie, niezależnie od dat.",
     solution:
-      "Każdy status ma własną pozycję filtra: Wolny, Zajęty, Sprzątanie i Naprawa. Filtry łączą się ze sobą w jednej tabeli. Przewodnik ustawił piętro 1, co najmniej 2 osoby i status „Zajęty”, a po wybraniu terminu status dotyczy właśnie tych dni.",
+      "Status wylicza się z dat i stanu pokoju, a kolor i tekst mówią to samo (naprawa pokazuje datę końca). Każdy status ma własną pozycję filtra, a filtry łączą się ze sobą w jednej tabeli. Przewodnik ustawił piętro 1, co najmniej 2 osoby i status „Zajęty”.",
     enter: (api) => {
       api.clearFilters();
       api.setFilters({ guests: 2, floor: "P1", status: "occupied" });
     },
-  },
-  {
-    targets: [
-      '[data-tour="table"] thead th:nth-child(3)',
-      '[data-tour="table"] tbody td:nth-child(3)',
-    ],
-    title: "Status pokoi dziś w jednym miejscu",
-    kind: "logic",
-    focus: "extra",
-    problem:
-      "Naprawa była tylko w uwagach, „Wolne” ukrywało sprzątanie, a status ustawiano ręcznie w edycji, niezależnie od dat.",
-    solution:
-      "Status wylicza się z dat i stanu pokoju. Kolor i tekst mówią to samo, a naprawa pokazuje datę końca. Przewodnik wyczyścił filtry.",
-    enter: (api) => api.clearFilters(),
   },
   {
     targets: ['[data-slot="sheet-content"]'],
