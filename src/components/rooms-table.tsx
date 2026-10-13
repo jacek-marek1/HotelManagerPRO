@@ -51,24 +51,28 @@ export function RoomsTable({
   onDelete,
 }: Props) {
   return (
-    <Table>
+    <Table className="table-fixed">
       <TableHeader className="bg-slate-100">
         <TableRow className="hover:bg-slate-100">
-          <TableHead className="font-semibold text-slate-900">Pokój</TableHead>
-          <TableHead className="font-semibold text-slate-900">
+          <TableHead className="w-[9%] font-semibold text-slate-900">
+            Pokój
+          </TableHead>
+          <TableHead className="w-[11%] font-semibold text-slate-900">
             Pojemność
           </TableHead>
-          <TableHead className="font-semibold text-slate-900">
+          <TableHead className="w-[16%] font-semibold text-slate-900">
             {search ? "Status w terminie" : "Status dziś"}
           </TableHead>
-          <TableHead className="font-semibold text-slate-900">
+          <TableHead className="w-[28%] font-semibold text-slate-900">
             Gość i pobyt
           </TableHead>
-          <TableHead className="font-semibold text-slate-900 text-right">
+          <TableHead className="w-[10%] font-semibold text-slate-900 text-right">
             Cena / noc
           </TableHead>
-          <TableHead className="font-semibold text-slate-900">Uwagi</TableHead>
-          <TableHead className="font-semibold text-slate-900 text-right">
+          <TableHead className="w-[12%] font-semibold text-slate-900">
+            Uwagi
+          </TableHead>
+          <TableHead className="w-[14%] font-semibold text-slate-900 text-right">
             Akcje
           </TableHead>
         </TableRow>
@@ -131,7 +135,7 @@ export function RoomsTable({
               <TableCell className="text-right">
                 {money(room.pricePerNight)}
               </TableCell>
-              <TableCell className="max-w-44 whitespace-normal text-muted-foreground">
+              <TableCell className="whitespace-normal text-muted-foreground">
                 {room.notes || "–"}
               </TableCell>
               <TableCell className="text-right whitespace-nowrap">
