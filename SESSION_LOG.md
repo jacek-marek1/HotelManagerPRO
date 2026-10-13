@@ -229,6 +229,10 @@ Weryfikacja w Chrome: krok 7 z panelem (telefon, e-mail, suma 1250 PLN, uwagi), 
 ### 43. Treść ekranu powitalnego przewodnika
 Opis zastąpiony tekstem Jacka („Cześć, przygotowałem krótki przewodnik po moim redesignie…"); przyciski „Tak" → „Zaczynamy", „Nie" → „Rezygnuję" (zinterpretowane z niepełnego polecenia); z drugiego akapitu usunięte pytanie „Czy chcesz przejść…", bo nie pasuje do nowych przycisków.
 
+### 44. Przewodnik: krok o filtrze statusów (8 kroków)
+Dodany krok „Filtr po każdym statusie": problem (w oryginale tylko pokoje zajęte i wolne, sprzątanie i naprawa jako „Inne") → rozwiązanie (osobna pozycja filtra dla Wolny / Zajęty / Sprzątanie / Naprawa). Przewodnik sam wybiera status „Sprzątanie" (lista: 103, 109, 209). Opis uwzględnia, że termin wybiera się osobno w kalendarzu (przy wybranym terminie filtr statusu dziś jest ukryty, więc statusy i daty nie działają razem). `TourApi.setStatus`, `data-tour="status-filter"`; dymek przewodnika poszerzony do 440 px, żeby mniej zasłaniał tabelę.
+Weryfikacja w Chrome: modal „8 krótkich kroków", krok 6 z filtrem statusu i przefiltrowaną listą. Po poszerzeniu dymka nie sprawdzano ponownie wyglądu.
+
 ## Stan na teraz
 - Lokalnie: `npm run dev` → http://localhost:3000. `tsc` i `eslint` bez błędów.
 - Lokalne repo git założone przez create-next-app (bez commitów od nas). GitHub i Vercel: **nietknięte**, czekają na decyzję Jacka.

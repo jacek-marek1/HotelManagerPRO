@@ -22,6 +22,7 @@ export interface TourSearch {
 export interface TourApi {
   applySearch: (s: TourSearch) => void;
   clearFilters: () => void;
+  setStatus: (status: string) => void;
   showSummary: (open: boolean) => void;
   /** Otwiera panel szczegółów rezerwacji o danym id (null = zamyka). */
   openDetails: (reservationId: string | null) => void;
@@ -96,6 +97,18 @@ const STEPS: Step[] = [
         guests: 4,
         floor: "P2",
       }),
+  },
+  {
+    targets: ['[data-tour="status-filter"]', '[data-tour="table"]'],
+    title: "Filtr po każdym statusie",
+    problem:
+      "W oryginale do wyboru były tylko pokoje zajęte i wolne, a sprzątanie i naprawa trafiały do nieczytelnej opcji „Inne”.",
+    solution:
+      "Każdy status ma własną pozycję filtra: Wolny, Zajęty, Sprzątanie i Naprawa. Termin wybiera się osobno w kalendarzu, wtedy lista pokazuje pokoje dostępne w całym terminie. Przewodnik wybrał dla Ciebie status „Sprzątanie”.",
+    enter: (api) => {
+      api.clearFilters();
+      api.setStatus("cleaning");
+    },
   },
   {
     targets: [
@@ -243,7 +256,7 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
   };
 
   // Położenie dymku: pod podświetleniem, nad nim, z prawej, z lewej albo przy dolnej krawędzi okna.
-  const W = 380;
+  const W = 440;
   const GAP = 16;
   let cardTop = Math.max(8, viewport.h - cardH - GAP);
   let cardLeft = Math.max(GAP, (viewport.w - W) / 2);

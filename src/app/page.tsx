@@ -158,6 +158,10 @@ export default function Home() {
       setStatus("all");
       setPage(1);
     },
+    setStatus: (st) => {
+      setStatus(st as StatusFilter);
+      setPage(1);
+    },
     showSummary: setSummaryOpen,
     openDetails: setDetailsId,
     reset: () => {

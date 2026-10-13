@@ -134,7 +134,7 @@ export function AvailabilitySearch(p: Props) {
             </Select>
           </div>
           {!p.searchActive && (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2" data-tour="status-filter">
               <Label>Status dziś</Label>
               <Select
                 value={p.status}
