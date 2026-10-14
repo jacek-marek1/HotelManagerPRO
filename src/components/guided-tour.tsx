@@ -217,6 +217,7 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
   const [rect, setRect] = useState<Rect | null>(null);
   const [viewport, setViewport] = useState({ w: 0, h: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
+  const welcomeRef = useRef<HTMLDivElement>(null);
   const [cardH, setCardH] = useState(280);
 
   // Modal powitalny przy świeżym wejściu (chyba że odrzucony w tej sesji).
@@ -339,7 +340,8 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
   return (
     <>
       <Dialog open={welcomeOpen} onOpenChange={(o) => !o && decline()}>
-        <DialogContent>
+        {/* Fokus startowy na samym oknie, żeby żaden przycisk nie miał obwódki zaraz po otwarciu. */}
+        <DialogContent ref={welcomeRef} initialFocus={welcomeRef}>
           <DialogHeader>
             <DialogTitle className="text-[22px] leading-tight">
               Przewodnik po prototypie
