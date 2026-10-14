@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { CalendarIcon } from "lucide-react";
 import { pl } from "date-fns/locale";
-import type { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -40,6 +39,7 @@ import {
   formatDate,
   formatNights,
   fromISO,
+  nextRange,
   nightsBetween,
   toISO,
 } from "@/lib/dates";
@@ -280,10 +280,17 @@ function EditForm({
                   from: arrival ? fromISO(arrival) : undefined,
                   to: departure ? fromISO(departure) : undefined,
                 }}
-                onSelect={(r: DateRange | undefined) => {
+                onSelect={(_, day) => {
+                  const r = nextRange(
+                    {
+                      from: arrival ? fromISO(arrival) : undefined,
+                      to: departure ? fromISO(departure) : undefined,
+                    },
+                    day,
+                  );
                   setDatesTouched(true);
-                  setArrival(r?.from ? toISO(r.from) : "");
-                  setDeparture(r?.to ? toISO(r.to) : "");
+                  setArrival(toISO(r.from));
+                  setDeparture(r.to ? toISO(r.to) : "");
                 }}
               />
             </PopoverContent>

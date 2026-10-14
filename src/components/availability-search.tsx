@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TODAY, formatDate, fromISO } from "@/lib/dates";
+import { TODAY, formatDate, fromISO, nextRange } from "@/lib/dates";
 import type { DayStatus } from "@/lib/types";
 import { STATUS_LABEL, STATUS_ORDER } from "./room-status-badge";
 
@@ -207,7 +207,7 @@ function DatePicker(p: Props & { label: string }) {
           numberOfMonths={2}
           defaultMonth={fromISO(TODAY)}
           selected={p.range}
-          onSelect={p.onRangeChange}
+          onSelect={(_, day) => p.onRangeChange(nextRange(p.range, day))}
           disabled={{ before: fromISO(TODAY) }}
         />
       </PopoverContent>

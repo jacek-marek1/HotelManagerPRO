@@ -33,3 +33,17 @@ export function formatNights(n: number): string {
   const teen = n % 100 >= 12 && n % 100 <= 14;
   return `${n} ${last >= 2 && last <= 4 && !teen ? "noce" : "nocy"}`;
 }
+
+/**
+ * Wybór zakresu w kalendarzu: kliknięcie przy pustym lub kompletnym zakresie
+ * zaczyna nowy zakres (przyjazd), kolejne ustawia wyjazd. Dzięki temu nie da się
+ * rozciągać ani zawężać starego zakresu ani zaznaczyć dwóch różnych terminów.
+ */
+export function nextRange(
+  current: { from?: Date; to?: Date } | undefined,
+  clicked: Date,
+): { from: Date; to?: Date } {
+  if (!current?.from || current.to || clicked <= current.from)
+    return { from: clicked };
+  return { from: current.from, to: clicked };
+}
