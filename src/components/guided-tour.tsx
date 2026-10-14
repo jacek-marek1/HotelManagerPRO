@@ -357,7 +357,7 @@ export function GuidedTour({ api, runId, onActiveChange }: Props) {
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={decline}>
-              Pomiń przewodnik
+              Pomijam przewodnik
             </Button>
             <Button onClick={start}>Zaczynamy</Button>
           </DialogFooter>
